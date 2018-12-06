@@ -1,0 +1,245 @@
+secondaryTabs:
+  fields:
+    _cc:
+        label: 'pixel.shop::lang.fields.credit_card'
+        type: section
+        span: left
+        tab: 'pixel.shop::lang.fields.credit_card'
+
+    cc_is_active:
+        label: 'pixel.shop::lang.fields.active'
+        type: switch
+        span: auto
+        tab: 'pixel.shop::lang.fields.credit_card'
+        comment: 'pixel.shop::lang.messages.method_active'
+
+    cc_default:
+        label: 'pixel.shop::lang.fields.default_gateway'
+        type: dropdown
+        tab: 'pixel.shop::lang.fields.credit_card'
+        span: auto
+        options:
+          stripe: Stripe
+          paypal_pro: PayPal Pro
+
+    _stripe:
+        label: 'Stripe'
+        type: section
+        span: full
+        tab: 'pixel.shop::lang.fields.credit_card'
+        trigger:
+          action: show
+          field: cc_default
+          condition: value[stripe]
+
+    stripe_api_key:
+        label: 'API Key'
+        type: text
+        span: auto
+        placeholder: '••••••••••••••••••••••••••••••••'
+        tab: 'pixel.shop::lang.fields.credit_card'
+        trigger:
+          action: show
+          field: cc_default
+          condition: value[stripe]
+
+    _paypal_pro:
+        label: 'PayPal Pro'
+        type: section
+        span: full
+        tab: 'pixel.shop::lang.fields.credit_card'
+        trigger:
+          action: show
+          field: cc_default
+          condition: value[paypal_pro]
+
+    paypal_pro_username:
+        label: 'Username'
+        type: text
+        span: auto
+        tab: 'pixel.shop::lang.fields.credit_card'
+        trigger:
+          action: show
+          field: cc_default
+          condition: value[paypal_pro]
+
+    paypal_pro_password:
+        label: 'Password'
+        type: password
+        span: auto
+        tab: 'pixel.shop::lang.fields.credit_card'
+        trigger:
+          action: show
+          field: cc_default
+          condition: value[paypal_pro]
+
+    paypal_pro_signature:
+        label: 'Signature'
+        type: text
+        span: auto
+        placeholder: '••••••••••••••••••••••••••••••••'
+        tab: 'pixel.shop::lang.fields.credit_card'
+        trigger:
+          action: show
+          field: cc_default
+          condition: value[paypal_pro]
+
+    cc_countries:
+        label: 'pixel.shop::lang.fields.allowed_countries'
+        comment: 'pixel.shop::lang.messages.allowed_countries'
+        type: checkboxlist
+        cssClass: inline-options
+        tab: 'pixel.shop::lang.fields.credit_card'
+
+    _bank_transfer:
+        label: 'pixel.shop::lang.fields.bank_transfer'
+        type: section
+        span: auto
+        tab: 'pixel.shop::lang.fields.bank_transfer'
+
+    bank_transfer_is_active:
+        label: 'pixel.shop::lang.fields.active'
+        type: switch
+        span: auto
+        tab: 'pixel.shop::lang.fields.bank_transfer'
+        comment: 'pixel.shop::lang.messages.method_active'
+
+    _bank_transfer_message:
+        type: partial
+        span: full
+        path: $/pixel/shop/models/gatewayssettings/_bank_transfer_message.htm
+        tab: 'pixel.shop::lang.fields.bank_transfer'
+
+    bank_transfer_owner:
+        label: 'pixel.shop::lang.fields.owner'
+        type: text
+        span: auto
+        tab: 'pixel.shop::lang.fields.bank_transfer'
+
+    bank_transfer_details:
+        label: 'pixel.shop::lang.fields.details'
+        type: text
+        span: auto
+        placeholder: 'pixel.shop::lang.messages.bank_transfer_details_comment'
+        tab: 'pixel.shop::lang.fields.bank_transfer'
+
+    bank_transfer_customer_information:
+        label: 'pixel.shop::lang.fields.bank_customer_information'
+        type: textarea
+        size: tiny
+        span: full
+        comment: 'pixel.shop::lang.messages.bank_customer_information'
+        tab: 'pixel.shop::lang.fields.bank_transfer'
+
+    bank_transfer_countries:
+        label: 'pixel.shop::lang.fields.allowed_countries'
+        comment: 'pixel.shop::lang.messages.allowed_countries'
+        type: checkboxlist
+        cssClass: inline-options
+        tab: 'pixel.shop::lang.fields.bank_transfer'
+
+    _cash_on_delivery:
+        label: 'pixel.shop::lang.fields.cash_on_delivery'
+        type: section
+        span: auto
+        tab: 'pixel.shop::lang.fields.cash_on_delivery'
+
+    cash_on_delivery_is_active:
+        label: 'pixel.shop::lang.fields.active'
+        type: switch
+        span: auto
+        tab: 'pixel.shop::lang.fields.cash_on_delivery'
+        comment: 'pixel.shop::lang.messages.method_active'
+
+    _cash_on_delivery_message:
+        type: partial
+        span: full
+        path: $/pixel/shop/models/gatewayssettings/_cash_on_delivery_message.htm
+        tab: 'pixel.shop::lang.fields.cash_on_delivery'
+
+    cash_on_delivery_customer_information:
+        label: 'pixel.shop::lang.fields.bank_customer_information'
+        type: textarea
+        size: tiny
+        span: full
+        comment: 'pixel.shop::lang.messages.delivery_customer_information'
+        tab: 'pixel.shop::lang.fields.cash_on_delivery'
+
+    cash_on_delivery_countries:
+        label: 'pixel.shop::lang.fields.allowed_countries'
+        comment: 'pixel.shop::lang.messages.allowed_countries'
+        type: checkboxlist
+        cssClass: inline-options
+        tab: 'pixel.shop::lang.fields.cash_on_delivery'
+
+    _paypal:
+        label: 'pixel.shop::lang.fields.paypal'
+        type: section
+        span: auto
+        tab: 'pixel.shop::lang.fields.paypal'
+
+    paypal_is_active:
+        label: 'pixel.shop::lang.fields.active'
+        type: switch
+        span: auto
+        tab: 'pixel.shop::lang.fields.paypal'
+        comment: 'pixel.shop::lang.messages.method_active'
+
+    _paypal_message:
+        type: partial
+        span: full
+        path: $/pixel/shop/models/gatewayssettings/_paypal_message.htm
+        tab: 'pixel.shop::lang.fields.paypal'
+
+    paypal_email:
+        label: 'Username Email'
+        type: text
+        span: auto
+        tab: 'pixel.shop::lang.fields.paypal'
+
+    paypal_countries:
+        label: 'pixel.shop::lang.fields.allowed_countries'
+        comment: 'pixel.shop::lang.messages.allowed_countries'
+        type: checkboxlist
+        cssClass: inline-options
+        tab: 'pixel.shop::lang.fields.paypal'
+
+    _pixelpay:
+        label: 'pixel.shop::lang.fields.pixelpay'
+        type: section
+        span: auto
+        tab: 'pixel.shop::lang.fields.pixelpay'
+
+    pixelpay_is_active:
+        label: 'pixel.shop::lang.fields.active'
+        type: switch
+        span: auto
+        tab: 'pixel.shop::lang.fields.pixelpay'
+        comment: 'pixel.shop::lang.messages.method_active'
+
+    _pixelpay_message:
+        type: partial
+        span: full
+        path: $/pixel/shop/models/gatewayssettings/_pixelpay_message.htm
+        tab: 'pixel.shop::lang.fields.pixelpay'
+
+    pixelpay_app:
+        label: 'Key ID'
+        type: text
+        span: auto
+        placeholder: '0000000000'
+        tab: 'pixel.shop::lang.fields.pixelpay'
+
+    pixelpay_hash:
+        label: 'Secret Key'
+        type: text
+        span: auto
+        placeholder: '••••••••••••••••••••••••••••••••'
+        tab: 'pixel.shop::lang.fields.pixelpay'
+
+    pixelpay_countries:
+        label: 'pixel.shop::lang.fields.allowed_countries'
+        comment: 'pixel.shop::lang.messages.allowed_countries'
+        type: checkboxlist
+        cssClass: inline-options
+        tab: 'pixel.shop::lang.fields.pixelpay'

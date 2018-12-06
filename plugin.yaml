@@ -1,0 +1,6 @@
+plugin:
+    name: 'pixel.shop::lang.plugin.name'
+    description: 'pixel.shop::lang.plugin.description'
+    author: Pixel
+    icon: oc-icon-shopping-cart
+    homepage: 'https://plugins.pixel.hn'

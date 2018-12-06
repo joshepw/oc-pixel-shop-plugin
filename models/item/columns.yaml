@@ -1,0 +1,53 @@
+columns:
+    image:
+        label: ''
+        type: partial
+        width: 44px
+        cssClass: 'image-list'
+        searchable: false
+        sortable: false
+        path: $/pixel/shop/partials/_image.htm
+    name:
+        label: 'pixel.shop::lang.fields.name'
+        type: partial
+        searchable: true
+        sortable: true
+    sales_count:
+        label: 'Sales'
+        type: number
+        width: 60px
+        searchable: false
+    views_count:
+        label: 'Views'
+        type: number
+        width: 60px
+        searchable: false
+    categories: 
+        label: 'pixel.shop::lang.fields.categories'
+        type: text
+        relation: categories
+        select: name
+        searchable: true
+        width: 120px
+        default: - - - - -
+    model:
+        label: 'pixel.shop::lang.fields.cod'
+        type: text
+        searchable: true
+        sortable: true
+        width: 120px
+    type:
+        label: 'pixel.shop::lang.fields.type'
+        type: partial
+        path: $/pixel/shop/partials/_type.htm
+        width: 120px
+        searchable: false
+        sortable: true
+    price:
+        label: 'pixel.shop::lang.fields.base_price'
+        type: partial
+        path: $/pixel/shop/partials/_price.htm
+        searchable: false
+        sortable: true
+        width: 150px
+        cssClass: text-right

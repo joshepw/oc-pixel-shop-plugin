@@ -1,0 +1,15 @@
+<?php Block::put('breadcrumb') ?>
+    <ul>
+        <li><a href="<?= Backend::url('pixel/shop/categories') ?>">Categories</a></li>
+        <li><?= e($this->pageTitle) ?></li>
+    </ul>
+<?php Block::endPut() ?>
+
+<?php if($this->checkRecords() == 0): ?>
+	<section class="no-records-content">
+		<img src="<?= url('/plugins/pixel/shop/assets/empty_box.svg') ?>" alt="" width="200" height="200">
+		<h3><?= trans('backend::lang.list.no_records') ?></h3>
+	</section>	
+<?php endif; ?>
+
+<?= $this->reorderRender() ?>

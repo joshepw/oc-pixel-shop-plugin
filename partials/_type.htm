@@ -1,0 +1,19 @@
+<?php if($record->deleted_at): ?>
+	<span class="btn btn-danger btn-xs">
+		<strong><i class="icon-trash"></i> <?= trans('pixel.shop::lang.fields.deleted') ?></strong>
+	</span>
+<?php else: ?>
+	<?php switch($value): 
+		case 'service': ?>
+		<span class="btn btn-success btn-xs">
+			<strong><i class="icon-briefcase"></i> <?= trans('pixel.shop::lang.fields.service') ?></strong>
+		</span>
+		<?php break; ?>
+
+		<?php case 'product': ?>
+		<span class="btn btn-primary btn-xs">
+			<strong><i class="icon-cube"></i> <?= trans('pixel.shop::lang.fields.product') ?></strong>
+		</span>
+		<?php break; ?>
+	<?php endswitch; ?>
+<?php endif; ?>

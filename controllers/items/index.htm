@@ -1,0 +1,31 @@
+<?php
+	use Pixel\Shop\Models\Item;
+
+	$out_of_stock = Item::where('quantity', '<=', 0)->count();
+	$low_stock = Item::where('quantity', '<=', 3)->where('quantity', '>', 0)->count();
+?>
+
+<div class="title-header">
+	<div class="pull-right">
+		<?php if($out_of_stock > 0): ?>
+		<div class="scoreboard-item title-value">
+			<h4><?= Lang::get("pixel.shop::lang.messages.out_of_stock")?></h4>
+			<p class="oc-icon-ban"><?= $out_of_stock ?></p>
+			<p class="description"><?= strtoupper(e(trans('pixel.shop::lang.menu.items'))) ?></p>
+		</div>
+		<?php endif ?>
+
+		<?php if($low_stock > 0): ?>
+		<div class="scoreboard-item title-value">
+			<h4><?= Lang::get("pixel.shop::lang.messages.low_stock")?></h4>
+			<p class="oc-icon-arrow-circle-down"><?= $low_stock ?></p>
+			<p class="description"><?= strtoupper(e(trans('pixel.shop::lang.menu.items'))) ?></p>
+		</div>
+		<?php endif ?>
+	</div>
+
+	<h3><?= trans('pixel.shop::lang.menu.manage') ?></h3>
+	<h2><?= e($this->pageTitle) ?></h2>
+</div>
+
+<?= $this->listRender() ?>

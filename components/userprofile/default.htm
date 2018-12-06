@@ -1,0 +1,99 @@
+{% if not user %}
+
+	<div class="account-container">
+		<div class="row">
+			<div class="col-sm-6 col-md-4 col-md-offset-4">
+				<div class="account-signin-container">
+					<h1 class="text-center login-title">{{ 'pixel.shop::component.user.sign_in'|trans }}</h1>
+					<div class="account-wall">
+						<img class="profile-img" src="{{ '/plugins/pixel/shop/assets/img/photo.png'|app }}" alt="">
+						<form class="form-signin" data-request="onSignin" data-request-success="location.reload()" novalidate data-request-flash data-request-validate>
+							<p class="form-errors">
+								<small class="invalid-feedback text-danger" data-validate-for="username"></small>
+								<small class="invalid-feedback text-danger" data-validate-for="password"></small>
+							</p>
+
+							<input name="username" type="text" class="form-control first" placeholder="Email" required autofocus>
+							<input name="password" type="password" class="form-control last" placeholder="Password" required>
+
+							<button class="btn btn-lg btn-primary btn-block" type="submit">
+								{{ 'pixel.shop::component.user.sign_in_button'|trans }}
+							</button>
+						</form>
+					</div>
+					<a href="#" class="text-center new-account">{{ 'pixel.shop::component.user.register'|trans }}</a>
+				</div>
+
+				<div class="account-register-container" style="display: none">
+					<h1 class="text-center login-title">{{ 'pixel.shop::component.user.register'|trans }}</h1>
+					<div class="account-wall">
+						<img class="profile-img" src="{{ '/plugins/pixel/shop/assets/img/photo.png'|app }}" alt="">
+						<form class="form-signin" data-request="onRegister" data-request-success="location.reload()" novalidate data-request-flash data-request-validate>
+							<p class="form-errors">
+								<small class="invalid-feedback text-danger" data-validate-for="name"></small>
+								<small class="invalid-feedback text-danger" data-validate-for="username"></small>
+								<small class="invalid-feedback text-danger" data-validate-for="password"></small>
+							</p>
+
+							<input name="name" type="text" class="form-control first" placeholder="Name" required autofocus>
+							<input name="email" type="text" class="form-control last" placeholder="Email" required>
+
+							<input name="password" type="password" class="form-control first" placeholder="Password" required>
+							<input name="password_confirmation" type="password" class="form-control last" placeholder="Password" required>
+
+							<button class="btn btn-lg btn-primary btn-block" type="submit">
+								{{ 'pixel.shop::component.user.register_button'|trans }}
+							</button>
+						</form>
+					</div>
+					<a href="#" class="text-center returning-account">{{ 'pixel.shop::component.user.sign_in'|trans }}</a>
+				</div>
+			</div>
+		</div>
+	</div>
+
+{% else %}
+
+	<div class="account-container">
+		{% if not user.is_activated %}
+
+		<h3>{{ 'pixel.shop::component.user.is_activated'|trans }}</h3>
+		<p>{{ 'pixel.shop::component.user.is_activated_comment'|trans }}</p>
+
+		{% endif %}
+
+
+		<ul class="nav nav-tabs">
+			<li class="active"><a data-toggle="tab" href="#account">{{ 'pixel.shop::component.user.account'|trans }}</a></li>
+			<li><a data-toggle="tab" href="#orders">{{ 'pixel.shop::component.user.orders'|trans }}</a></li>
+			<li><a data-toggle="tab" href="#favorites">{{ 'pixel.shop::component.user.favorites'|trans }}</a></li>
+
+			<li class="pull-right"><a href="#" data-request="onLogOut" data-request-success="location.reload()">{{ 'pixel.shop::component.user.logout'|trans }}</a></li>			
+		</ul>
+
+		<div class="tab-content">
+			<div id="account" class="tab-pane fade in active">
+				<h3>{{ 'pixel.shop::component.user.account'|trans }}</h3>
+				<hr>
+				{% partial '@account' %}
+			</div>
+
+			<div id="orders" class="tab-pane fade">
+				<h3>{{ 'pixel.shop::component.user.orders'|trans }}</h3>
+				<hr>
+				<div id="user-orders">
+					{% partial '@orders' %}
+				</div>
+			</div>
+
+			<div id="favorites" class="tab-pane fade">
+				<h3>{{ 'pixel.shop::component.user.favorites'|trans }}</h3>
+				<hr>
+				<div id="user-favorites">
+					{% partial '@favorites' %}
+				</div>
+			</div>
+		</div>
+	</div>
+
+{% endif %}

@@ -1,0 +1,15 @@
+<input name="<?= $this->fieldName ?>" class="form-control" id="slider-<?= $this->getId() ?>" data-slider-id='<?= $this->fieldName ?>-slider' type="text" data-slider-min="<?= $this->start ?>" data-slider-max="<?= $this->end ?>" data-slider-step="<?= $this->step ?>" data-slider-value="<?= $this->value ?>"/>
+<p><?= json_encode($this->options) ?></p>
+<script type="text/javascript">
+	$('#slider-<?= $this->getId() ?>').slider({
+		tooltip: 'always',
+		formatter: function (value){
+			return <?= $format ?>;
+		},
+		<?php 
+			if($this->options)
+				foreach ($this->options as $key => $value)
+					echo $key.':'.$value.','
+		?>
+	})
+</script>

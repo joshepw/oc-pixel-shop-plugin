@@ -1,0 +1,14 @@
+title: 'pixel.shop::lang.menu.items'
+modelClass: Pixel\Shop\Models\Item
+list: $/pixel/shop/models/item/columns.yaml
+recordUrl: 'pixel/shop/items/update/:id'
+noRecordsMessage: 'backend::lang.list.no_records'
+recordsPerPage: '50'
+showSetup: false
+showCheckboxes: true
+showSorting: 1
+filter: config_filter.yaml
+toolbar:
+    buttons: list_toolbar
+    search:
+        prompt: 'backend::lang.list.search_prompt'

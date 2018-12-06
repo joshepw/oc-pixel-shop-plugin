@@ -1,0 +1,83 @@
+<table class="table table-hover table-content order-items">
+	<thead>
+		<tr>
+			<th><?= trans('pixel.shop::lang.fields.description') ?></th>
+			<th width="100" class="text-right"><?= trans('pixel.shop::lang.fields.price') ?></th>
+			<th width="30" class="text-center"><?= trans('pixel.shop::lang.fields.qty') ?></th>
+			<th width="100" class="text-right"><?= trans('pixel.shop::lang.fields.total') ?></th>
+		</tr>
+	</thead>
+	<tbody>
+		<?php foreach ($value as $item): ?>
+		<tr>
+			<td>
+				<b><?= $item['title'] ?></b>
+				<?php if(!empty($item['description'])): ?>
+				<br><?= $item['description'] ?>
+				<?php endif; ?>
+			</td>
+			<td class="text-right">
+				<?= Currency::format($item['price']) ?>
+			</td>
+			<td class="text-center">
+				<?= $item['quantity'] ?>
+			</td>
+			<!-- <td class="text-right">
+				0.00
+			</td> -->
+			<td class="text-right">
+				<b><?= Currency::format($item['total']) ?></b>
+			</td>
+		</tr>
+		<?php endforeach ?>
+
+		<?php if($formModel->coupon): ?>
+		<tr>
+			<td>
+				<b><?= trans('pixel.shop::lang.fields.coupon') ?></b>
+				<br>
+				<b class="text-success"><?= $formModel->coupon->code ?></b>
+			</td>
+			<td class="text-right">
+				- -
+			</td>
+			<td class="text-center">
+				- -
+			</td>
+			<!-- <td class="text-right">
+				0.00
+			</td> -->
+			<td class="text-right">
+				<b class="text-success">-<?= $formModel->coupon->getValueLabel() ?></b>
+			</td>
+		</tr>
+		<?php endif; ?>
+
+		<?php if($formModel->shipping_total > 0): ?>
+		<tr>
+			<td class="text-right" colspan="3">
+				<b><?= trans('pixel.shop::lang.fields.shipping') ?></b>
+			</td>
+			<td class="text-right">
+				<b><?= Currency::format($formModel->shipping_total) ?></b>
+			</td>
+		</tr>
+		<?php endif; ?>
+		<tr>
+			<td class="text-right" colspan="3">
+				<b><?= trans('pixel.shop::lang.fields.tax') ?></b>
+			</td>
+			<td class="text-right">
+				<b><?= Currency::format($formModel->tax_total) ?></b>
+			</td>
+		</tr>
+		<tr>
+			<td class="text-right" colspan="3">
+				<b><?= trans('pixel.shop::lang.fields.grand_total') ?></b>
+			</td>
+			<td class="text-right">
+				<b><?= $formModel->getFormatedTotal() ?></b>
+			</td>
+		</tr>
+	</tbody>
+</table>

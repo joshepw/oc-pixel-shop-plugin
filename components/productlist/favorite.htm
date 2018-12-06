@@ -1,0 +1,8 @@
+<input type="hidden" name="id" value="{{ product.id }}">
+<button type="submit" class="shop__favorite-button">
+	{% if product.isFavorite() %}
+		<span class="fas fa-star" aria-hidden="true"></span>
+	{% else %}
+		<span class="fas fa-star fas-disabled" aria-hidden="true"></span>
+	{% endif %} 
+</button>

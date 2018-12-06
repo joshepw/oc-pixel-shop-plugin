@@ -1,0 +1,14 @@
+title: 'pixel.shop::lang.menu.orders'
+modelClass: Pixel\Shop\Models\Order
+list: $/pixel/shop/models/order/columns.yaml
+recordUrl: 'pixel/shop/orders/update/:id'
+noRecordsMessage: 'backend::lang.list.no_records'
+recordsPerPage: '50'
+showSetup: false
+showCheckboxes: true
+showSorting: 1
+toolbar:
+    buttons: list_toolbar
+    search:
+        prompt: 'backend::lang.list.search_prompt'
+recordOnClick: '$.popup({ handler: "onUpdateForm", size: "huge", extraData: { comment_mode: 1, record_id: ":id", layout: "sidebar", sidebar: "orders" } })'

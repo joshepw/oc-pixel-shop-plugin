@@ -1,0 +1,207 @@
+.shop__cart-button{
+	display: block;
+	position: fixed;
+	max-height: 56px;
+	margin: 0px;
+	z-index: 99998;
+}
+
+.shop__cart-button a{
+	position: relative;
+	text-decoration: none;
+}
+
+.shop__cart-button.shop__position-top-left{
+	top: 10px;
+	left: 10px;
+}
+
+.shop__cart-button.shop__position-top-right{
+	top: 10px;
+	right: 10px;
+}
+
+.shop__cart-button.shop__position-bottom-left{
+	bottom: 10px;
+	left: 10px;
+}
+
+.shop__cart-button.shop__position-bottom-right{
+	bottom: 10px;
+	right: 10px;
+}
+
+.shop__cart-button .shop__items-count{
+	position: absolute;
+	display: inline-block;
+	top: 18px;
+	padding: 2px 8px;
+	border-radius: 6px;
+	background-color: #fff;
+	z-index: 99999;
+	border: 2px solid transparent;
+	opacity: 0;
+	font-weight: bolder;
+	font-size: 16px;
+	line-height: 16px;
+}
+
+.shop__cart-button.active .shop__items-count{
+	opacity: 1;
+}
+
+.shop__cart-button.notify .shop__items-count{
+	opacity: 0 !important;
+}
+
+.shop__cart-button.shop__position-top-left .shop__items-count,
+.shop__cart-button.shop__position-bottom-left .shop__items-count{
+	right: -18px;
+}
+
+.shop__cart-button.shop__position-top-right .shop__items-count,
+.shop__cart-button.shop__position-bottom-right .shop__items-count{
+	left: -18px;
+}
+
+.shop__cart-button .shop__button-container{
+	width: 58px;
+	height: 58px;
+	overflow: hidden;
+	padding: 8px;
+
+	color: #FFF;
+
+	border-radius: 29px;
+	-webkit-box-shadow: 0 0 20px rgba(0,0,0,0.2);
+	box-shadow: 0 0 20px rgba(0,0,0,0.2);
+
+	-webkit-transition: 0.3s cubic-bezier(.175, .885, .32, 1.275);
+	-o-transition: 0.3s cubic-bezier(.175, .885, .32, 1.275);
+	transition: 0.3s cubic-bezier(.175, .885, .32, 1.275);
+}
+
+.shop__cart-button.shop__position-top-left .shop__button-container,
+.shop__cart-button.shop__position-bottom-left .shop__button-container{
+	-webkit-transform: translateX(-100px);
+	-ms-transform: translateX(-100px);
+	-o-transform: translateX(-100px);
+	transform: translateX(-100px);
+}
+
+.shop__cart-button.shop__position-top-right .shop__button-container,
+.shop__cart-button.shop__position-bottom-right .shop__button-container{
+	-webkit-transform: translateX(100px);
+	-ms-transform: translateX(100px);
+	-o-transform: translateX(100px);
+	transform: translateX(100px);
+}
+
+.shop__cart-button.active .shop__button-container{
+	-webkit-transform: translateX(0px);
+	-ms-transform: translateX(0px);
+	-o-transform: translateX(0px);
+	transform: translateX(0px);
+}
+
+.shop__cart-button.notify .shop__button-container{
+	width: 250px;
+
+	background-color: #00AE69 !important;
+
+	animation: 0.3s sizeUp linear;
+	-webkit-animation: 0.3s sizeUp linear;
+}
+
+.shop__cart-button.empty .shop__empty-cart-icon{
+	display: block;
+}
+
+.shop__cart-button.empty .shop__full-cart-icon{
+	display: none;
+}
+
+.shop__cart-button .shop__empty-cart-icon{
+	display: none;
+	width: 42px;
+	height: 42px;
+}
+
+.shop__cart-button .shop__full-cart-icon{
+	display: block;
+	width: 42px;
+	height: 42px;
+}
+
+.shop__cart-button .shop__button-info{
+	display: block;
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	padding-top: 10px;
+}
+
+.shop__cart-button .shop__button-info label{
+	display: block;
+	margin: 0px;
+	color: #fff;
+	padding-left: 54px;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	font-size: 12px;
+	line-height: 1.5;
+	opacity: 0;
+
+	-webkit-transition: 0.3s;
+	-o-transition: 0.3s;
+	transition: 0.3s;
+}
+
+.shop__cart-button .shop__button-info span{
+	display: block;
+	color: #fff;
+	padding-left: 54px;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	font-size: 12px;
+	opacity: 0;
+
+	-webkit-transition: 0.3s;
+	-o-transition: 0.3s;
+	transition: 0.3s;
+}
+
+.shop__cart-button.notify .shop__button-info label,
+.shop__cart-button.notify .shop__button-info span{
+	opacity: 1;
+}
+
+@-webkit-keyframes sizeUp {
+	0%   {  
+		width: 58px;
+	}
+	10%  { 
+		width: 58px;
+	}
+	90%  {
+		width: 270px;
+	}
+	100% { 
+		width: 250px;
+	}
+}
+
+@keyframes sizeUp {
+	0%   { 
+		width: 58px;
+	}
+	10%  { 
+		width: 58px;
+	}
+	90%  {
+		width: 270px;
+	}
+	100% { 
+		width: 250px;
+	}
+}

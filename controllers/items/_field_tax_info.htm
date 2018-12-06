@@ -1,0 +1,9 @@
+<?php if($model->getTaxOptions() == null || count($model->getTaxOptions()) < 1): ?>
+	<div class="callout fade in callout-info no-subheader">
+		<div class="header">
+			<i class="icon-info"></i>
+			<h3><?= e(trans('pixel.shop::lang.messages.no_tax_title')) ?></h3>
+			<p><?= trans('pixel.shop::lang.messages.no_tax_content', ['url' => url('backend/system/settings/update/pixel/shop/sales')]) ?></p>
+		</div>
+	</div>
+<?php endif; ?>

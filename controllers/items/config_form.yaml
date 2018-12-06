@@ -1,0 +1,10 @@
+name: 'pixel.shop::lang.menu.item'
+modelClass: Pixel\Shop\Models\Item
+form: $/pixel/shop/models/item/fields.yaml
+defaultRedirect: pixel/shop/items
+create:
+    redirect: 'pixel/shop/items/update/:id'
+    redirectClose: pixel/shop/items
+update:
+    redirect: pixel/shop/items
+    redirectClose: pixel/shop/items

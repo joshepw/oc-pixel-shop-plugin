@@ -1,0 +1,37 @@
+columns:
+    id:
+        label: 'pixel.shop::lang.fields.order_id'
+        type: partial
+        searchable: true
+        sortable: true
+        path: ~/plugins/pixel/shop/controllers/orders/_order_id.htm
+    customer_email:
+        label: 'pixel.shop::lang.fields.email'
+        type: partial
+        searchable: true
+    status:
+        label: 'pixel.shop::lang.fields.status'
+        type: partial
+        sortable: true
+    gateway:
+        label: 'pixel.shop::lang.fields.payment_method'
+        type: partial
+        sortable: true
+    created_at:
+        label: 'pixel.shop::lang.fields.date'
+        type: timesince
+        sortable: true
+    total:
+        label: 'pixel.shop::lang.fields.total'
+        type: currency
+        cssClass: text-right
+
+    customer_first_name:
+        invisible: true
+        sortable: false
+        searchable: true
+
+    customer_last_name:
+        invisible: true
+        sortable: false
+        searchable: true

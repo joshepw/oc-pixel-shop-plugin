@@ -1,0 +1,25 @@
+scopes:
+  category:
+      label: pixel.shop::lang.fields.categories
+      modelClass: Pixel\Shop\Models\Category
+      nameFrom: name
+      scope: FilterCategories
+
+  brand:
+      label: pixel.shop::lang.fields.brand
+      modelClass: Pixel\Shop\Models\Brand
+      nameFrom: name
+      conditions: brand_id in (:filtered)
+
+  type:
+      label: pixel.shop::lang.fields.type
+      type: group
+      conditions: type in (:filtered)
+      options:
+        product: Product
+        service: Service
+
+  deleted:
+      label: pixel.shop::lang.fields.deleted
+      type: checkbox
+      scope: withTrashed

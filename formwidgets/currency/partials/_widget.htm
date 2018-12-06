@@ -1,0 +1,49 @@
+<div data-owl="money" class="owl-money" data-alias="<?= $this->alias ?>">
+	<input type="text"
+		name="<?= $this->fieldName ?>"
+		class="form-control owl-money-input <?= $config['onSale'] ? 'text-danger' : '' ?>"
+		placeholder="<?= $config['placeholder'] ?>"
+		id="value-<?= $this->fieldName ?>" 
+		<?= $field->disabled ? 'disabled="disabled"' : '' ?>
+		<?= $field->getAttributes() ?> />
+
+	<script type="text/javascript">
+		$(function() {
+			$('[data-owl="money"][data-alias="<?= $this->alias ?>"] input[name="<?= $this->fieldName ?>"]').maskMoney({
+				thousands: "<?= $config['thousands'] ?>",
+				decimal: "<?= $config['decimal'] ?>",
+				suffix: "<?= $config['suffix'] ?>",
+				prefix: "<?= $config['prefix'] ?>",
+				allowNegative: <?= $config['allowNegative'] ?>
+			})<?php if ($loadValue) echo ".maskMoney('mask', $loadValue)" ?>
+
+			$('input[name="<?= $this->fieldName ?>"]').keyup(function(event) {
+				$('.owl-money input + span').html($('.owl-money input + span').data('actual-price'));
+			});
+
+			$('.trigger-currency-field input[type="checkbox"]').change(function(){
+				if($(this).is(':checked')){
+					$('.owl-money input + span').removeClass('old-input-hide');
+				}else{
+					$('.owl-money input + span').addClass('old-input-hide');
+				}
+			})
+
+			<?php if($this->mode == 'currency'): ?>
+			$('#wrap-<?= $config['customField'] ?> .owl-money-currency').click(function(event) {
+				$('#owl-<?= $config['customField'] ?>').text($(this).data('code'));
+				$('#<?= $config['customField'] ?>').val($(this).data('code'));
+			});
+			<?php endif; ?>
+
+			<?php if($this->mode == 'condition'): ?>
+			$('#condition-<?= $this->fieldName ?>').change(function(event) {
+				$('#value-<?= $this->fieldName ?>').prop('disabled', !this.checked);
+			});
+
+			<?php if(!$this->model->$config['customField']): ?>$('#value-<?= $this->fieldName ?>').prop('disabled', true);<?php endif; ?>
+			<?php endif; ?>
+		});
+	</script>
+
+</div>

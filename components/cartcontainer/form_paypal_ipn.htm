@@ -1,0 +1,21 @@
+<img src="{{ '/plugins/pixel/shop/assets/img/loading.svg'|app }}" alt="" width="50" height="50" style="display: block; text-align: center; margin: 0 auto">
+
+<form action="{{ settings.paypal_use_sandbox ? "https://www.sandbox.paypal.com/cgi-bin/webscr" : "https://www.paypal.com/cgi-bin/webscr" }}" method="post" id="paypal-form">
+	<input type="hidden" name="cmd" value="_xclick">
+	<input type="hidden" name="business" value="{{ settings.paypal_email }}">
+	<input type="hidden" name="item_name" value="Order #{{ order.getOrderID() }}">
+	<input type="hidden" name="amount" value="{{ order.total }}">
+	<input type="hidden" name="currency_code" value="{{ order.currency }}">
+	<input type="hidden" name="return" value="{{ return_url }}">
+	<input type="hidden" name="cancel_return" value="{{ cancel_return_url }}">
+	<input type="hidden" name="custom" value="{{ order.id }}"/>
+	<input type="hidden" name="notify_url" value="{{ url('/api/pixel/shop/paypal-response') }}">
+</form>
+<script>
+	var callback = function(){ document.getElementById("paypal-form").submit() };
+
+	if (document.readyState === "complete" || (document.readyState !== "loading" && !document.documentElement.doScroll))
+		callback();
+	else
+		document.addEventListener("DOMContentLoaded", callback);
+</script>

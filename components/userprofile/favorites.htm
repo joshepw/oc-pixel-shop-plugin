@@ -1,0 +1,28 @@
+<section class="products-container">
+	<div class="container">
+
+		{% for productGroup in favorites.chunk(4) %}
+			<div class="row">
+				{% for product in productGroup %}
+					{% partial '@product' product=product.item %}
+				{% endfor %}
+			</div>
+		{% else %}
+			<div class="row">
+				<div class="col-md-12">
+					<div class="text-center">
+						<i class="fas fa-search fa-6x"></i>
+						<h1>{{ 'pixel.shop::component.cart.no_results'|trans }}</h1>
+					</div>
+				</div>
+			</div>
+		{% endfor %}
+		
+	</div>
+</section>
+
+<section class="products-pagination">
+	<div class="container">
+		{{ products.render|raw }}
+	</div>
+</section>

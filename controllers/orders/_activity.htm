@@ -1,0 +1,8 @@
+<?php if(!empty($value)): ?>
+	
+<?php else: ?>
+	<section class="no-records-content no-records-tiny">
+		<img src="<?= url('/plugins/pixel/shop/assets/timeline.svg') ?>" alt="" width="100" height="100">
+		<h4><?= trans('pixel.shop::lang.messages.empty_activities') ?></h4>
+	</section>
+<?php endif; ?>

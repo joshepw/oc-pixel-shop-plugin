@@ -1,0 +1,62 @@
+<div class="shop__cart-checkout">
+	<div class="row" id="checkout-container">
+		{% if order %}
+			{% partial '@order_summary' %}
+		{% else %}
+
+		<div class="col-md-4" id="shop__cart-partial">
+			{% partial '@cart' %}
+		</div>
+
+		<div class="col-md-8">
+			<form novalidate="" data-request="onSendCheckout" data-request-flash data-request-validate>
+				{% partial '@customer_information' %}
+
+				{% partial '@shipping_address' %}
+
+				{% partial '@billing_address' %}
+
+				<hr>
+	
+				{% if user %}
+				<div class="checkbox">
+					<label for="same-address">
+						<input type="checkbox" name="is_ship_same_bill" id="same-address" {% if user.is_ship_same_bill or user.is_ship_same_bill == null %}checked="checked"{% endif %}><b>{{ 'pixel.shop::component.cart.is_ship_same_bill'|trans }}</b>
+					</label>
+				</div>
+				{% else %}
+				<div class="checkbox">
+					<label for="same-address">
+						<input type="checkbox" name="is_ship_same_bill" id="same-address" checked="checked"><b>{{ 'pixel.shop::component.cart.is_ship_same_bill'|trans }}</b>
+					</label>
+				</div>
+				{% endif %}
+
+				{% if user %}
+				<div class="checkbox">
+					<label class="custom-control-label" for="save-info">
+						<input type="checkbox" name="is_save_for_later" id="save-info"><b>{{ 'pixel.shop::component.cart.is_save_for_later'|trans }}</b>
+					</label>
+				</div>
+				{% endif %}
+				
+				<hr>
+
+				<div class="shop__methods-list">
+					{% partial '@methods' %}
+				</div>
+
+				<div class="row" id="form-bag">
+					<div class="col-md-6">
+						<a href="{{ products_page|page }}" class="btn btn-primary btn-block"><i class="fas fa-shopping-cart"></i> {{ 'pixel.shop::component.cart.continue_shopping'|trans }}</a>
+					</div>
+					<div class="col-md-6">
+						<button class="btn btn-success btn-block" type="submit" data-attach-loading><i class="fas fa-credit-card"></i> {{ 'pixel.shop::component.cart.place_order'|trans }}</button>
+					</div>
+				</div>
+			</form>
+		</div>
+		
+		{% endif %}
+	</div>
+</div>	

@@ -1,0 +1,57 @@
+<legend><?= trans('pixel.shop::lang.fields.customer_info') ?></legend>
+<p>
+	<b><?= trans('pixel.shop::lang.fields.name') ?>: </b>
+	<br>
+	<?= $formModel->getCustomerFullName() ?>
+</p>
+<p>
+	<b><?= trans('pixel.shop::lang.fields.email') ?>: </b>
+	<br>
+	<a href="mailto:<?= $formModel->customer_email ?>"><?= $formModel->customer_email ?></a>
+</p>
+<?php if($formModel->customer_phone): ?>
+<p>
+	<b><?= trans('pixel.shop::lang.fields.phone') ?>: </b>
+	<br>
+	<a href="tel:<?= $formModel->customer_phone ?>"><?= $formModel->customer_phone ?></a>
+</p>
+<?php endif ?>
+<p>
+	<b><?= trans('pixel.shop::lang.fields.billing_address') ?>: </b>
+	<br>
+	<?php if(!empty($formModel->billing_address['first_line'])): ?>
+		<?= $formModel->billing_address['first_line'] ?>
+	<?php endif ?>
+	<?php if(!empty($formModel->billing_address['zip'])): ?>
+		<br><?= trans('pixel.shop::lang.fields.postal_code') ?> <?= $formModel->billing_address['zip'] ?>
+	<?php endif ?>
+	<?php if(!empty($formModel->billing_address['city'])): ?>
+		<br><?= $formModel->billing_address['city'] ?>
+	<?php endif ?>
+	<?php if(!empty($formModel->billing_address['state'])): ?>
+		, <?= $formModel->billing_address['state'] ?>
+	<?php endif ?>
+	<?php if(!empty($formModel->billing_address['country'])): ?>
+		<br><?= $formModel->billing_address['country'] ?>
+	<?php endif ?>
+	
+</p>
+<p>
+	<b><?= trans('pixel.shop::lang.fields.shipping_address') ?>: </b>
+	<br>
+	<?php if(!empty($formModel->shipping_address['first_line'])): ?>
+		<?= $formModel->shipping_address['first_line'] ?>
+	<?php endif ?>
+	<?php if(!empty($formModel->shipping_address['zip'])): ?>
+		<br><?= trans('pixel.shop::lang.fields.postal_code') ?> <?= $formModel->shipping_address['zip'] ?>
+	<?php endif ?>
+	<?php if(!empty($formModel->shipping_address['city'])): ?>
+		<br><?= $formModel->shipping_address['city'] ?>
+	<?php endif ?>
+	<?php if(!empty($formModel->shipping_address['state'])): ?>
+		, <?= $formModel->shipping_address['state'] ?>
+	<?php endif ?>
+	<?php if(!empty($formModel->shipping_address['country'])): ?>
+		<br><?= $formModel->shipping_address['country'] ?>
+	<?php endif ?>
+</p>

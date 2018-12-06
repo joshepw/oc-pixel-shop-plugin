@@ -1,0 +1,10 @@
+name: 'pixel.shop::lang.menu.brand'
+modelClass: Pixel\Shop\Models\Brand
+form: $/pixel/shop/models/brand/fields.yaml
+defaultRedirect: pixel/shop/brands
+create:
+    redirect: 'pixel/shop/brands/update/:id'
+    redirectClose: pixel/shop/brands
+update:
+    redirect: pixel/shop/brands
+    redirectClose: pixel/shop/brands

@@ -1,0 +1,27 @@
+<div class="text-danger" data-validate-for="gateway"></div>
+<ul class="list-group">
+	{% for method in methods_list %}
+	<li class="list-group-item">
+		<div class="list-radio">
+			<input 
+				type="radio" 
+				value="{{ method.gateway }}" 
+				name="gateway" 
+				{% if method.gateway == cart.gateway %}
+				checked="checked" 
+				{% endif %}
+				id="method-{{ method.gateway }}">
+			<label for="method-{{ method.gateway }}">{{ method.title }}</label>
+		</div>
+		<div class="list-partial">
+			{{ method.partial|raw }}
+		</div>
+	</li>
+	{% endfor %}
+</ul>
+
+<div class="errors-bag">
+	{% if errorMessage or input('errorMessage') %}
+	<div class="alert alert-danger">{{ errorMessage|default(input('errorMessage')) }}</div>
+	{% endif %}
+</div>

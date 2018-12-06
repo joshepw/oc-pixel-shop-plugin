@@ -1,0 +1,6 @@
+columns:
+    name:
+        label: 'pixel.shop::lang.fields.name'
+        type: text
+        searchable: true
+        sortable: true

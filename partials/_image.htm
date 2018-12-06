@@ -1,0 +1,5 @@
+<?php if($value): ?>
+	<img src="<?= $value->getThumb(38,38,'crop') ?>" alt="">
+<?php else: ?>
+	<i class="icon-ban"></i>
+<?php endif; ?>

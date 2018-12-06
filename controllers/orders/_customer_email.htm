@@ -1,0 +1,6 @@
+<div style="display: block; margin: -8px auto">
+	<?php $strLimit = 32; ?>
+	<?= strlen($record->customer_fullname) > $strLimit ? substr($record->customer_fullname,0,$strLimit)."..." : $record->customer_fullname ?>
+	<br>
+	<small class="text-info"><?= strlen($value) > $strLimit ? substr($value,0,$strLimit)."..." : $value ?></small>
+</div>

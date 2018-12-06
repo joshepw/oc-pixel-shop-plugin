@@ -1,0 +1,126 @@
+<form data-request="onAddToCart" data-request-flash>
+	<h1 id="product-title">
+		{{ product.name }}
+	</h1>
+	<h4 id="product-option-title"></h4>
+	<div class="text-uppercase row-border">
+		{% if product.is_on_sale %}
+			<span class="label label-success">{{ 'pixel.shop::lang.frontend.onsale'|trans }}</span>
+		{% endif %}
+
+		{% if product.quantity > 0 %}
+			<span class="label label-success">{{ 'pixel.shop::lang.frontend.instock'|trans }}</span>
+		{% endif %}
+
+		{% if not product.isInfiniteQuantity() and product.quantity == 0 %}
+			<span class="label label-danger">{{ 'pixel.shop::lang.frontend.soldout'|trans }}</span>
+		{% endif %}
+	</div>
+
+	<hr>
+
+	<div class="form-group">
+		<h3 id="product-price" class="shop__product-price">
+			<span class="shop__product-price-amount" data-currency="{{ product.getDefaultCurrencySymbol() }}">
+				{{ product.getPrice()|currency }}
+			</span>
+
+			<input type="hidden" name="base_price" value="{{ product.getPrice(false) }}">
+			<input type="hidden" name="old_price" value="{{ product.getOldPrice(false) }}">
+
+			<input type="hidden" name="base_price_with_tax" value="{{ product.getPrice() }}">
+			<input type="hidden" name="old_price_with_tax" value="{{ product.getOldPrice() }}">
+
+			{% if product.is_on_sale %}
+				&nbsp;
+				<small class="shop__product-old-price">
+					<strike class="text-danger">
+						<span class="shop__product-price-old" data-currency="{{ product.getDefaultCurrencySymbol() }}">{{ product.getOldPrice()|currency }}</span>
+					</strike>
+				</small>
+			{% endif %}
+		</h3>
+	</div>
+
+	{% if product.brand %}
+	<div class="form-group">
+		{{ 'pixel.shop::lang.frontend.brand'|trans }}
+
+		{% if (product.brand.url) %}
+			<strong><a href="{{ product.brand.url }}">{{ product.brand.name }}</a></strong>
+		{% else %}
+			<strong>{{ product.brand.name }}</strong>
+		{% endif %}
+	</div>
+	{% endif %}
+
+	<div class="form-group">
+		<div class="product-detail-description ">
+			{{ product.description|raw }}
+		</div>
+	</div>
+
+	<br>
+
+	{% if product.attachments|length > 0 %}
+		<hr>
+		<h4>{{ 'pixel.shop::lang.frontend.attachments'|trans }}</h4>
+		{% for file in product.attachments %}
+			<a href="{{ file.path }}" target="_blank"><i class="fas fa-download"></i> {{ file.title ?  file.title : file.file_name }}</a><br />
+		{% endfor %}
+		<hr>
+	{% endif  %}
+
+	{% if product.is_with_variants %}
+		{% for variant in product.variants %}
+			<div class="form-group row">
+				<label class="col-md-3 text-right">{{ variant.variant }}</label>
+				<div class="col-md-6">
+					<select name="option[{{ product.slugOption(variant.variant) }}]" class="form-control shop__product-option" data-label="{{ variant.variant }}" data-slug="{{ variant.id }}">
+						<option value="" data-quantity="">{{ 'pixel.shop::lang.frontend.select_option'|trans }}</option>
+
+						{% for option in variant.items %}
+							{% if product.checkIfOutStock(option.quantity) %}
+								<option value="{{ option.ref }}" data-price="{{ product.getPriceOption(option.price) }}" data-tax={{ product.getTaxOption(option.price) }} data-quantity="{{ option.quantity }}" disabled="disabled">
+									{{ option.val }} ({{ 'pixel.shop::lang.messages.out_of_stock'|trans }})
+								</option>
+							{% else %}
+								<option value="{{ option.ref }}" data-price="{{ product.getPriceOption(option.price) }}" data-tax={{ product.getTaxOption(option.price) }} data-quantity="{{ option.quantity }}">
+									{{ option.val }}
+								</option>
+							{% endif %}
+						{% endfor %}
+					</select>
+				</div>
+			</div>
+		{% endfor %}
+	{% endif %}
+
+	{% if product.quantity > 0 or product.isInfiniteQuantity() %}
+		<div class="form-group row">
+			<label class="col-md-3 text-right">{{ 'pixel.shop::lang.fields.quantity'|trans }}</label>
+			<div class="col-md-3 text-right">
+				<div class="number-input shop__product-qty">
+					<button type="button" onclick="this.parentNode.querySelector('input[type=number]').stepDown()" ></button>
+					<input name="quantity" type="number" class="form-control text-center" value="1" min="1">
+					<button type="button" onclick="this.parentNode.querySelector('input[type=number]').stepUp()" class="plus"></button>
+				</div>
+			</div>
+		</div>
+
+		<input type="hidden" name="id" value="{{ product.id }}">
+		<input type="hidden" name="price" value="{{ product.price }}">
+		<input type="hidden" name="options" value="">
+		<input type="hidden" name="options_index" value="">
+		<button type="submit" class="btn btn-primary btn-block btn-footer" data-attach-loading>
+			<span class="fas fa-shopping-cart" aria-hidden="true"></span> 
+			{{ 'pixel.shop::lang.frontend.addtocart'|trans }}
+		</button>
+	{% endif %}
+</form>
+
+<hr>
+
+<div class="share-buttons pull-right">
+	{% partial '@share-buttons' %}
+</div>

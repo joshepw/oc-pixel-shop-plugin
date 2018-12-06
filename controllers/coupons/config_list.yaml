@@ -1,0 +1,14 @@
+title: 'pixel.shop::lang.menu.coupons'
+modelClass: Pixel\Shop\Models\Coupon
+list: $/pixel/shop/models/coupon/columns.yaml
+recordUrl: 'pixel/shop/coupons/update/:id'
+noRecordsMessage: 'backend::lang.list.no_records'
+recordsPerPage: '50'
+showSetup: true
+showCheckboxes: true
+showSorting: 1
+toolbar:
+    buttons: list_toolbar
+    search:
+        prompt: 'backend::lang.list.search_prompt'
+recordOnClick: '$.popup({ handler: ''onUpdateForm'', extraData: { comment_mode: 1, record_id: '':id'' } })'

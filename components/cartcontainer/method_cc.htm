@@ -1,0 +1,43 @@
+<div class="row">
+	<div class="col-md-6">
+		<div class="form-group">
+			<label>{{ 'pixel.shop::component.cart.name_card'|trans }}</label>
+			<input name="cc_name" type="text" class="form-control" placeholder="Full name as displayed on card">
+			<div class="invalid-feedback" data-validate-for="cc_name"></div>
+		</div>
+	</div>
+	<div class="col-md-6">
+		<div class="form-group">
+			<label>{{ 'pixel.shop::component.cart.card_number'|trans }}</label>
+			<input name="cc_number" type="text" class="form-control" placeholder="•••• •••• •••• ••••">
+			<div class="invalid-feedback" data-validate-for="cc_number"></div>
+		</div>
+	</div>
+</div>
+<div class="row">
+	<div class="col-md-3">
+		<div class="form-group">
+			<label>{{ 'pixel.shop::component.cart.expiration'|trans }}</label>
+			<input name="cc_exp" type="text" class="form-control" placeholder="•• / ••">
+			<div class="invalid-feedback" data-validate-for="cc_exp"></div>
+		</div>
+	</div>
+	<div class="col-md-3">
+		<div class="form-group">
+			<label>CVV</label>
+			<input name="cc_cvv" type="text" class="form-control" placeholder="•••">
+			<div class="invalid-feedback" data-validate-for="cc_cvv"></div>
+		</div>
+	</div>
+	<div class="col-md-6">
+		<div class="form-group">
+			<input type="hidden" name="cc_default" value="{{ settings.cc_default }}">
+			<label>{{ 'pixel.shop::component.cart.card_accept'|trans }}</label>
+			<br>
+			<img src="{{ '/plugins/pixel/shop/assets/img/icon-visa.svg'|app }}" alt="" width="32" height="32">
+			<img src="{{ '/plugins/pixel/shop/assets/img/icon-mastercard.svg'|app }}" alt="" width="32" height="32">
+			<img src="{{ '/plugins/pixel/shop/assets/img/icon-amex.svg'|app }}" alt="" width="32" height="32">
+			<img src="{{ '/plugins/pixel/shop/assets/img/icon-discover.svg'|app }}" alt="" width="32" height="32">
+		</div>
+	</div>
+</div>

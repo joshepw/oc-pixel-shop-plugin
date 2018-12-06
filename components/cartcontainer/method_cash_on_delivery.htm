@@ -1,0 +1,15 @@
+<div>
+	<img src="{{ '/plugins/pixel/shop/assets/img/icon-cash_on_delivery.svg'|app }}" alt="" width="32" height="32" style="float: left; margin-right: 8px">
+	<p style="line-height: 32px">
+		{{ 'pixel.shop::component.cart.cash_on_delivery_comment'|trans }}
+	</p>
+
+	<div class="row">
+		{% if settings.cash_on_delivery_customer_information %}
+		<div class="col-md-12">
+			<label>{{ 'pixel.shop::lang.fields.information'|trans }}</label>
+			<p>{{ settings.cash_on_delivery_customer_information }}</p>
+		</div>
+		{% endif %}
+	</div>
+</div>

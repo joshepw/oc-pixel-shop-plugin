@@ -1,0 +1,11 @@
+{% put meta %}
+	<title>{{ product.title }}</title>
+	<meta name="description" content="{{ product.seo_summary }}">
+	<meta name="keywords" content="{{ product.keywords }}">
+	<meta property="og:title" content="{{ product.title }}" />
+	<meta property="og:url" content="{{ url_current()|url_encode }}" />
+	<meta property="og:description" content="{{ product.seo_summary }}" />
+	<meta property="og:image" content="{{ product.getMainImage().thumb(600, 315, 'crop')|app }}" />
+{% endput %}
+
+{% partial '@product' %}

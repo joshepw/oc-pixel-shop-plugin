@@ -1,0 +1,10 @@
+1.0.1:
+    - 'Initialize plugin.'
+    - builder_table_create_pixel_shop_brands.php
+    - builder_table_create_pixel_shop_categories.php
+    - builder_table_create_pixel_shop_items.php
+    - builder_table_create_pixel_shop_cat_by_item.php
+    - builder_table_create_pixel_shop_orders.php
+    - builder_table_create_pixel_shop_coupons.php
+    - create_rainlab_extend_location.php
+    - create_rainlab_extend_users.php

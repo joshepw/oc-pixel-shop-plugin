@@ -1,0 +1,10 @@
+name: 'pixel.shop::lang.menu.coupon'
+modelClass: Pixel\Shop\Models\Coupon
+form: $/pixel/shop/models/coupon/fields.yaml
+defaultRedirect: pixel/shop/coupons
+create:
+    redirect: 'pixel/shop/coupons/update/:id'
+    redirectClose: pixel/shop/coupons
+update:
+    redirect: pixel/shop/coupons
+    redirectClose: pixel/shop/coupons

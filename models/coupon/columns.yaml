@@ -1,0 +1,33 @@
+columns:
+    code:
+        label: pixel.shop::lang.fields.code
+        searchable: true
+        type: partial
+        
+    is_active:
+        label: pixel.shop::lang.fields.active
+        type: switch
+        
+    valid_from:
+        label: pixel.shop::lang.fields.valid_from
+        type: date
+
+    valid_to:
+        label: pixel.shop::lang.fields.valid_to
+        type: date
+        
+    minimum_value_cart:
+        label: pixel.shop::lang.fields.minimum_value_cart
+        type: currency
+        searchable: true
+        
+    value:
+        label: pixel.shop::lang.fields.value
+        searchable: false
+        type: partial
+
+    used_count:
+        label: pixel.shop::lang.fields.used_count
+        type: number
+        searchable: true
+        default: 0

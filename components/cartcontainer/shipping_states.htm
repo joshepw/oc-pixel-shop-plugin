@@ -1,0 +1,10 @@
+<option value="">{{ 'pixel.shop::component.cart.choose'|trans }}</option>
+{% for state in shipping_states %}
+	<option 
+		value="{{ state.code }}" 
+		{% if user.shipping_address.state == state.code or cart.shipping_address.state == state.code %}
+		selected="selected"
+		{% endif %}>
+		{{ state.name }}
+	</option>
+{% endfor %}

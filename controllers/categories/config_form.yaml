@@ -1,0 +1,11 @@
+name: 'pixel.shop::lang.menu.category'
+modelClass: Pixel\Shop\Models\Category
+form: $/pixel/shop/models/category/fields.yaml
+defaultRedirect: pixel/shop/categories
+create:
+    redirect: 'pixel/shop/categories/update/:id'
+    redirectClose: pixel/shop/categories
+update:
+    redirect: pixel/shop/categories
+    redirectClose: pixel/shop/categories
+preview: {  }

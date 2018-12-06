@@ -1,0 +1,55 @@
+fields:
+    _default_image:
+        label: 'pixel.shop::lang.fields.default_image'
+        type: section
+        span: left
+
+    _taxes:
+        label: 'pixel.shop::lang.fields.tax'
+        type: section
+        span: right
+
+    default_image:
+        type: fileupload
+        mode: image
+        span: left
+
+    price_with_tax:
+        label: pixel.shop::lang.fields.price_with_tax
+        type: switch
+        span: right
+
+    taxes:
+        prompt: 'Add new item'
+        span: right
+        type: repeater
+        form:
+            fields:
+                name:
+                    label: 'pixel.shop::lang.fields.name'
+                    oc.commentPosition: ''
+                    span: auto
+                    type: text
+                percent:
+                    label: 'pixel.shop::lang.fields.percent'
+                    oc.commentPosition: ''
+                    span: auto
+                    type: number
+    _merchant:
+        label: 'pixel.shop::lang.fields.merchant_info'
+        type: section
+        span: full
+
+    shop_name:
+        label: pixel.shop::lang.fields.name
+        type: text
+        span: auto
+    shop_email:
+        label: pixel.shop::lang.fields.email
+        type: text
+        span: auto
+    shop_address:
+        label: pixel.shop::lang.fields.address
+        type: textarea
+        size: tiny
+        span: full

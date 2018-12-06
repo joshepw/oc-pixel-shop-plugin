@@ -1,0 +1,43 @@
+<tr class="item-option" data-option-pending>
+	<td>
+		<input type="hidden" class="input-option-ref" value="<?= @$option['ref'] ?? str_random(12) ?>">
+		<input 
+			type="text" 
+			value="<?= @$option['val'] ?>" 
+			maxlength="30" 
+			class="form-control input-sm input-option-value" 
+			placeholder="<?= trans('pixel.shop::lang.messages.option_placeholder') ?>">
+	</td>
+	<td>
+		<input 
+			type="text" 
+			maxlength="15" 
+			value="<?= @$option['code'] ?>" 
+			class="form-control input-sm input-option-code" 
+			placeholder="- - - -">
+	</td>
+	<td>
+		<input 
+			type="text" 
+			maxlength="9" 
+			value="<?= @$option['quantity'] ?>" 
+			class="form-control input-sm text-right input-option-quantity" 
+			placeholder="&infin;">
+	</td>
+	<td>
+		<input 
+			type="text" 
+			<?= (@$option['price']) ? 'data-price="'.@$option['price'].'"' : '' ?>
+			value="<?= @$option['price'] ?>" 
+			class="form-control input-sm text-right input-option-price-diff" 
+			placeholder="0.00">
+	</td>
+	<td>
+		<i class="icon-bars handle"></i>
+	</td>
+	<td>
+		<a href="#" class="input-option-delete" data-option-delete>
+			<i class="icon-times"></i>
+		</a>
+	</td>
+</tr>

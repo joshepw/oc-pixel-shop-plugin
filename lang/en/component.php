@@ -1,0 +1,66 @@
+<?php
+
+return [
+	'user' => [
+		'sign_in' => 'Returning Customer',
+		'register' => 'Register for an account',
+		'orders' => 'Order History',
+		'favorites' => 'My Favorites',
+		'account' => 'Account Details',
+		'logout' => 'Logout',
+		'sign_in_button' => 'Sing in',
+		'register_button' => 'Register',
+		'save_details' => 'Save Details',
+		'desactivate_account' => 'Deactivate account',
+		'desactivate_account_question' => 'Deactivate your account?',
+		'desactivate_account_comment' => 'Your account will be disabled and your details removed from the site. You can reactivate your account any time by signing back in.',
+		'desactivate_account_password' => 'To continue, please enter your password:',
+		'desactivate_account_confirm' => 'Confirm Deactivate Account',
+		'desactivate_account_cancel' => 'I changed my mind',
+		'is_activated' => 'Your email address has not yet been verified.',
+		'is_activated_comment' => 'You should verify your account otherwise it may be deleted. Please check your email to verify.',
+	],
+	'order' => [
+		'not_confirmed' => 'YOUR ORDER IS NOT CONFIRMED',
+    	'not_confirmed_comment' => 'This transaction has been altered or is invalid.',
+    	'confirmed' => 'YOUR ORDER IS CONFIRMED',
+    	'confirmed_comment' => 'An email has been sent to your mail address :email.',
+    	'from' => 'Order from',
+    	'to' => 'Order to',
+	],
+	'cart' => [
+		'notify_title' => 'Product added to the cart',
+        'notify_description' => 'Click here to checkout',
+        'order_summary' => 'Order Summary',
+        'payment_method_notes' => 'Payment method notes',
+        'your_cart' => 'Your cart',
+        'cart_empty' => 'Cart is empty',
+        'empty_the_cart' => 'Empty the cart',
+        'redeem' => 'Redeem',
+        'continue_shopping' => 'Continue shopping',
+        'promo_code' => 'Promo code',
+        'customer_information' => 'Customer information',
+        'choose' => 'Choose...',
+        'shipping_address' => 'Shipping address',
+        'billing_address' => 'Billing address',
+        'optional' => 'Optional',
+        'is_ship_same_bill' => 'Billing address is the same as my shipping address',
+        'is_save_for_later' => 'Save this information for next time',
+        'place_order' => 'Place Order',
+        'bank_transfer_comment' => 'Please transfer the total amount (:total) to our bank account.',
+        'cash_on_delivery_comment' => 'You pay for the merchandise upon delivery.',
+        'paypal_comment' => 'When you click <b>"Place Order"</b>, you will be taken to the <b>PayPal</b> website.',
+        'pixelpay_comment' => 'On the next page your payment is processed through <b style="color: #226DF6">PixelPay&reg;</b><br> <b style="color: #226DF6">We do not store data</b> from credit or debit cards<br> All transactions travel <b style="color: #226DF6">encrypted and secure</b>',
+
+        'name_card' => 'Name on card',
+        'card_number' => 'Credit card number',
+        'expiration' => 'Expiration',
+        'card_accept' => 'We accept these credit cards.',
+
+        'filter_by_category' => 'Filter by Category',
+        'no_results' => 'There are no results to show.',
+        'return' => 'Return'
+	]
+];
+
+?>

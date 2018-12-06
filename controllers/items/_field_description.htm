@@ -1,0 +1,11 @@
+<?php if($value): ?>
+<a href="javascript:;" 
+	data-toggle="tooltip"
+    data-placement="left"
+    data-delay="100"
+    data-html="true"
+    title="<?= e(nl2br($value)) ?>" 
+    class="btn btn-default btn-xs">
+	<span class="icon-eye"></span>
+</a>
+<?php endif ?>

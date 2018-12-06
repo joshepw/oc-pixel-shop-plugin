@@ -1,0 +1,44 @@
+<div class="table-responsive">
+	<table class="table table-hover">
+		<thead>
+			<tr>
+				<th width="80">{{ 'pixel.shop::lang.fields.order'|trans }}</th>
+				<th width="140">{{ 'pixel.shop::lang.fields.date'|trans }}</th>
+				<th>{{ 'pixel.shop::lang.fields.items'|trans }}</th>
+				<th width="180">{{ 'pixel.shop::lang.fields.status'|trans }}</th>
+				<th width="120" class="text-right">{{ 'pixel.shop::lang.fields.total'|trans }}</th>
+				<th width="50">{{ 'pixel.shop::lang.fields.action'|trans }}</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for order in user.orders %}
+			<tr>
+				<th>
+					#{{ order.getOrderID() }}
+				</th>
+				<td>
+					{{ order.created_at.diffForHumans() }}
+				</td>
+				<td>
+					{% for item in order.items %}
+						<small>x{{ item.quantity }} &nbsp; {{ item.title }} ({{ item.total|currency({in:order.currency}) }})</small><br>
+					{% endfor %}
+				</td>
+				<td>
+					<span class="label label-default status-{{ order.status }}">
+						{{ ('pixel.shop::lang.status.' ~ order.status)|trans }}
+					</span>
+				</td>
+				<td class="text-right">
+					{{ order.total|currency({in: order.currency}) }}
+				</td>
+				<td>
+					<a href="#" data-request="onLoadOrder" data-request-data="id: {{ order.id }}" class="btn btn-default btn-xs">
+						<i class="fas fa-search"></i> {{ 'pixel.shop::lang.fields.view'|trans }}
+					</a>
+				</td>
+			</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+</div>

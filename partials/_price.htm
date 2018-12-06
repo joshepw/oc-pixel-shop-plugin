@@ -1,0 +1,10 @@
+<?php if($record->is_with_variants): ?>
+	 ~ <?= CurrencyShop::getCurrency($value, $record->currency) ?>
+<?php elseif($record->is_on_sale): ?>
+	<small class="text-danger">
+		<strike><?= CurrencyShop::getCurrency($record->old_price, $record->currency) ?></strike>
+	</small>
+	<?= CurrencyShop::getCurrency($value, $record->currency) ?> 
+<?php else: ?>
+	<?= CurrencyShop::getCurrency($value, $record->currency) ?>
+<?php endif ?>

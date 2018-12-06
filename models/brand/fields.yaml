@@ -1,0 +1,26 @@
+fields:
+    name:
+        label: 'pixel.shop::lang.fields.name'
+        oc.commentPosition: ''
+        span: full
+        type: text
+        cssClass: oc-icon-font
+    show_in_menu:
+        label: pixel.shop::lang.fields.show_in_menu
+        span: full
+        type: switch
+    _meta_section:
+        type: section
+        comment: SEO Meta Tags
+    meta_keywords:
+        label: 'pixel.shop::lang.fields.keywords'
+        type: taglist
+        mode: string
+        separator: comma
+        cssClass: oc-icon-search
+    meta_description:
+        label: 'pixel.shop::lang.fields.description'
+        span: full
+        type: textarea
+        size: tiny
+        cssClass: oc-icon-pencil-square-o

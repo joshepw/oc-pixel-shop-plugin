@@ -1,0 +1,21 @@
+fields:
+    id:
+        span: full
+        type: partial
+        cssClass: scoreboard-modal-wrap
+
+    _actions:
+        span: full
+        type: partial
+
+    items:
+        type: partial
+
+# secondaryTabs:
+#     fields:
+#         items:
+#             type: partial
+#             tab: 'pixel.shop::lang.fields.items'
+#         activity:
+#             type: partial
+#             tab: 'pixel.shop::lang.fields.activity'

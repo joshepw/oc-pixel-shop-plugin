@@ -1,0 +1,7 @@
+<?php if ($this->user->hasAccess($this->config->permission)): ?>
+	<a href="javascript:;" onclick="$.popup({ handler: '<?= $this->getEventHandler('onCreateModal') ?>', extraData: { comment_mode: 1} })" class="pull-right btn btn-primary btn-xs oc-icon-plus"><?= e(trans('backend::lang.form.create')) ?></a>
+<?php endif; ?>
+
+<div class="relation-widget" id="<?= $this->getId() ?>">
+    <?= $this->makePartial('field_'.$field->type, ['field' => $field]) ?>
+</div>

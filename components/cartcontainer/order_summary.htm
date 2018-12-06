@@ -1,0 +1,192 @@
+<div class="col-md-8 col-md-offset-2">
+	<div class="shop__order-summary">
+
+		{% if input('thanks') or thanks %}
+		<div class="shop__order-thanks">
+			{% if validationFailed %}
+			<i class="fas fa-exclamation-circle fa-3x pull-left text-danger"></i>
+			<h3>{{ 'pixel.shop::component.order.not_confirmed'|trans }}</h3>
+			<p>{{ 'pixel.shop::component.order.not_confirmed_comment'|trans }}</p>
+			{% else %}
+			<i class="fas fa-check-circle fa-3x pull-left text-success"></i>
+			<h3>{{ 'pixel.shop::component.order.confirmed'|trans }}</h3>
+			<p>{{ 'pixel.shop::component.order.confirmed_comment'|trans({email: order.customer_email}) }}</p>
+			{% endif %}
+		</div>
+		<hr>
+		{% endif %}
+
+		<div class="order-header text-center">
+			<h2>{{ 'pixel.shop::component.cart.order_summary'|trans }}</h2>
+			<span class="badge badge-status status-{{ order.status }}">
+				<b>{{ ('pixel.shop::lang.status.' ~ order.status)|trans }}</b>
+			</span>
+		</div>
+
+		<div class="row">
+			<div class="col-md-6">
+				<div class="seller-info text-left">
+					<label>{{ 'pixel.shop::component.order.from'|trans }}</label>
+					<p>
+						<strong>{{ order.getShopName() }}</strong> <br>
+						<small class="text-primary">{{ order.getShopEmail() }}</small> <br>
+						{{ order.getShopAddress()|nl2br }}
+					</p>
+				</div>
+			</div>
+
+			<div class="col-md-6">
+				<div class="customer-info text-right">
+					<label>{{ 'pixel.shop::component.order.to'|trans }}</label>
+					<p>
+						<strong>{{ order.customer_fullname }}</strong> <br>
+						<small class="text-primary">{{ order.customer_email }}</small> <br>
+						{{ order.billing_address.first_line }} <br>
+
+						{% if order.billing_address.city %}
+						{{ order.billing_address.city }}, 
+						{% endif %}
+
+						{% if order.billing_address.state %}
+						{{ order.billing_address.state }}, 
+						{% endif %}
+
+						{% if order.billing_address.country %}
+						{{ order.billing_address.country }}
+						{% endif %}
+						<br>
+
+						{% if order.billing_address.zip %}
+						{{ 'pixel.shop::lang.fields.postal_code'|trans }}: {{ order.billing_address.zip }}
+						{% endif %}
+					</p>
+				</div>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-md-6">
+				<div class="text-left">
+					<label>Order ID</label>
+					<p>#{{ order.getOrderID() }}</p>
+				</div>
+			</div>
+			<div class="col-md-6">
+				<div class="text-right">
+					<label>{{ 'pixel.shop::lang.fields.gateway'|trans }}</label>
+					<p>
+						<img style="margin: -6px 6px; display: inline-block;" src="{{ url('/plugins/pixel/shop/assets/img/icon-' ~ order.gateway ~ '.svg') }}" alt="" width="32" height="32">
+						<b>{{ ('pixel.shop::lang.fields.' ~ order.gateway)|trans }}</b>
+					</p>
+				</div>
+			</div>
+		</div>
+
+		<div class="order-items">
+			<table class="table">
+				<thead>
+					<tr>
+						<th>
+							<span>{{ 'pixel.shop::lang.fields.description'|trans }}</span>
+						</th>
+						<th width="100" class="text-right">
+							<span>{{ 'pixel.shop::lang.fields.price'|trans }}</span>
+						</th>
+						<th width="30" class="text-center">
+							<span>{{ 'pixel.shop::lang.fields.qty'|trans }}</span>
+						</th>
+						<th width="100" class="text-right">
+							<span>{{ 'pixel.shop::lang.fields.total'|trans }}</span>
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for item in order.items %}
+					<tr>
+						<td>
+							<strong>{{ item.title }}</strong>
+							{% if item.description %}
+							<br>
+							<small>{{ item.description }}</small>
+							{% endif %}
+						</td>
+						<td class="text-right">
+							{{ item.price|currency }}
+						</td>
+						<td class="text-center">
+							x{{ item.quantity }}
+						</td>
+						<td class="text-right">
+							{{ item.total|currency }}
+						</td>
+					</tr>
+					{% endfor %}
+					{% if order.coupon %}
+					<tr>
+						<td>
+							{{ 'pixel.shop::lang.fields.coupon'|trans }} <br>
+							<small class="text-success">{{ order.coupon.code }}</small>
+						</td>
+						<td class="text-right">
+							- -
+						</td>
+						<td class="text-center">
+							- -
+						</td>
+						<td class="text-right">
+							<span class="text-success">-{{ order.coupon.getValueLabel() }}</span>
+						</td>
+					</tr>
+					{% endif %}
+					<tr>
+						<td class="border-top">
+							<strong>{{ 'pixel.shop::lang.fields.shipping'|trans }}</strong>
+						</td>
+						<td colspan="3" class="text-right border-top">
+							{{ order.shipping_total|currency }}
+						</td>
+					</tr>
+					<tr>
+						<td class="border-top">
+							<strong>{{ 'pixel.shop::lang.fields.tax'|trans }}</strong>
+						</td>
+						<td colspan="3" class="text-right border-top">
+							{{ order.tax_total|currency }}
+						</td>
+					</tr>
+					<tr>
+						<td class="border-top">
+							<strong>{{ 'pixel.shop::lang.fields.grand_total'|trans }}</strong>
+						</td>
+						<td colspan="3" class="text-right border-top">
+							<span class="h3">
+								{{ order.total|currency }}
+							</span>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+
+		{% if order.note %}
+		<hr>
+		<div class="order-notes">
+			<label>{{ 'pixel.shop::lang.fields.note'|trans }}</label>
+			<p>{{ order.note }}</p>
+		</div>
+		{% endif %}
+
+		{% if order.gateway == 'bank_transfer' %}
+		<hr>
+		<label>{{ 'pixel.shop::component.cart.payment_method_notes'|trans|upper }}</label>
+		{% partial '@method_bank_transfer' cart=order %}
+		{% endif %}
+
+		{% if order.gateway == 'cash_on_delivery' %}
+		<hr>
+		<label>{{ 'pixel.shop::component.cart.payment_method_notes'|trans|upper }}</label>
+		{% partial '@method_cash_on_delivery' %}
+		{% endif %}
+	</div>
+
+</div>

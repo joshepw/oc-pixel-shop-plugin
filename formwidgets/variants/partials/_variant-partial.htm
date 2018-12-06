@@ -1,0 +1,72 @@
+<?php $var_id = @$variant['id'] ?? str_random(12); ?>
+<div class="variant-item" data-variant-pending>
+	<table class="table table-form table-hover wrapper-variants" data-delete-message="<?= trans('pixel.shop::lang.messages.delete_unique') ?>" id="vr-<?= $var_id ?>">
+		<thead>
+			<tr>
+				<th>
+					<input type="hidden" class="input-option-id" value="<?= $var_id ?>">
+					<input 
+						type="text" 
+						value="<?= @$variant['variant'] ?>" 
+						maxlength="30" 
+						class="form-control input-sm input-option-variant" 
+						placeholder="<?= trans('pixel.shop::lang.messages.variant_placeholder') ?>">
+				</th>
+				<th class="padd-th"><?= trans('pixel.shop::lang.fields.code') ?></th>
+				<th width="100" class="padd-th text-right"><?= trans('pixel.shop::lang.fields.quantity') ?></th>
+				<th width="160" class="padd-th text-right"><?= trans('pixel.shop::lang.fields.price_diff') ?></th>
+				<th width="20"></th>
+				<th width="20"></th>
+			</tr>
+		</thead>
+		<tbody>
+			<?php if(@$variant['items']): ?>
+				<?php foreach ($variant['items'] as $option): ?>
+					<?= $this->makePartial('option-partial', ['option' => $option]) ?>
+				<?php endforeach ?>
+			<?php endif ?>
+		</tbody>
+		<tfoot>
+			<tr>
+				<td colspan="6">
+					<div class="pull-right switch-field">
+						<div class="field-switch">
+							<p class="help-block"><b><?= trans('pixel.shop::lang.fields.optional') ?></b></p>
+						</div>
+						<label class="custom-switch">
+							<input 
+								type="checkbox" 
+								class="input-option-optional" 
+								value="<?= @$variant['optional'] ? 1 : 0 ?>" 
+								<?= @$variant['optional'] ? 'checked="checked"':'' ?>>
+							<span><span>On</span><span>Off</span></span>
+							<a class="slide-button"></a>
+						</label>
+					</div>
+
+					<a href="#" class="btn btn-primary btn-sm oc-icon-plus" data-option-new>
+						<?= trans('pixel.shop::lang.messages.add_option') ?>
+					</a>
+
+					<a href="#" class="btn btn-danger btn-sm oc-icon-trash" data-variant-delete>
+						<?= trans('pixel.shop::lang.messages.delete_variant') ?>
+					</a>
+				</td>
+			</tr>
+		</tfoot>
+	</table>
+
+	<script>
+		jQuery(document).ready(function($) {
+			var dragger = tableDragger(document.getElementById('vr-<?= $var_id ?>'), {
+				mode: 'row',
+				dragHandler: '.handle',
+				onlyBody: true,
+			});
+
+			dragger.on('drop',function(from, to){
+				Variant.onRefreshValues();
+			});
+		});
+	</script>
+</div>

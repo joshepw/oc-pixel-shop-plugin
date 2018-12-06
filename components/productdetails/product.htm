@@ -1,0 +1,25 @@
+<div class="product-detail">
+	{% if not product %}
+
+		<div class="row">
+			<div class="col-sm-12">
+				<h2>{{ 'pixel.shop::lang.frontend.product_not_found'|trans }}</h2>
+			</div>
+		</div>
+
+	{% else %}
+
+		<div class="row">
+			<div class="col-sm-6">
+				{% partial '@gallery' product=product %}
+			</div>
+
+			<div class="col-sm-6">
+				{% partial '@details' product=product %}
+			</div>
+
+			<div class="clearfix"></div>
+		</div>
+
+	{% endif %}
+</div>

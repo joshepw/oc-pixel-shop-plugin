@@ -1,0 +1,5 @@
+<?php if($record->isValid()): ?>
+	<b class="text-success"><?= $value ?></b>
+<?php else: ?>
+	<b class="text-danger"><strike><?= $value ?></strike></b>
+<?php endif ?>

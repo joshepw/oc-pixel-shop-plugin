@@ -1,0 +1,13 @@
+<span class="xzoom-container">
+	<img class="xzoom" src="{{ product.image.getThumb(450, 'auto') }}" xoriginal="{{ product.image.getPath() }}" width="450" />
+
+	{% if product.gallery.count > 0 %}
+	<div class="xzoom-thumbs">
+		{% for image in product.gallery %}
+		<a href="{{ image.getPath() }}">
+			<img class="xzoom-gallery" width="80" src="{{ image.getThumb(450, 'auto') }}">
+		</a>
+		{% endfor %}
+	</div>
+	{% endif %}
+</span>

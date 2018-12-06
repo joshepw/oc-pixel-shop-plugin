@@ -1,0 +1,18 @@
+<div data-control="toolbar" class="toolbar-modal">
+	<div class="pull-right" style="margin-top: 4px;">
+		<img style="float: left; margin: -6px 6px;" src="<?= url('/plugins/pixel/shop/assets/img/icon-'. $formModel->gateway .'.svg') ?>" alt="" width="32" height="32">
+		<b><?= trans('pixel.shop::lang.fields.'.$formModel->gateway) ?></b>		
+	</div>
+
+	<?php if($formModel->status == 'await_pay'): ?>
+		<button data-request="onChangeStatus" data-request-confirm="<?= trans('pixel.shop::lang.messages.status_confirm') ?>" data-request-data="status: 'await_fulfill', order_id: '<?= $formModel->id ?>'" class="btn btn-success btn-sm oc-icon-check">Mark as Paid</button>
+	<?php endif ?>
+
+	<?php if($formModel->status == 'await_fulfill'): ?>
+		<button data-request="onChangeStatus" data-request-confirm="<?= trans('pixel.shop::lang.messages.status_confirm') ?>" data-request-data="status: 'completed', order_id: '<?= $formModel->id ?>'" class="btn btn-success btn-sm oc-icon-check">Mark as complete</button>
+	<?php endif ?>
+
+	<?php if($formModel->status != 'completed' && $formModel->status != 'cancelled'): ?>
+		<button data-request="onChangeStatus" data-request-confirm="<?= trans('pixel.shop::lang.messages.status_confirm') ?>" data-request-data="status: 'cancelled', order_id: '<?= $formModel->id ?>'" class="btn btn-danger btn-sm oc-icon-ban">Cancel Order</button>
+	<?php endif ?>
+</div>

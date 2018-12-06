@@ -1,0 +1,176 @@
+.shop__cart-checkout{
+	max-width: 992px;
+	margin: 20px auto;
+	display: block;
+}
+
+.shop__cart-checkout .shop__cart-item-title{
+	margin-top: 2px !important;
+	margin-bottom: 2px !important;
+	font-weight: bolder;
+}
+
+.shop__cart-checkout .list-group-item .shop__cart-delete-item{
+	position: absolute;
+	bottom: 10px;
+	right: 20px;
+
+	opacity: 0;
+
+	-webkit-transition: 0.3s;
+	-o-transition: 0.3s;
+	transition: 0.3s;
+
+	-webkit-transform: translateX(20px);
+	-ms-transform: translateX(20px);
+	-o-transform: translateX(20px);
+	transform: translateX(20px);
+}
+
+.shop__cart-checkout .list-group-item:hover .shop__cart-delete-item{
+	opacity: 1;
+
+	-webkit-transform: translateX(0px);
+	-ms-transform: translateX(0px);
+	-o-transform: translateX(0px);
+	transform: translateX(0px);
+}
+
+.shop__cart-checkout .list-radio input{
+	display: inline-block;
+	margin-right: 10px;
+	float: left;
+}
+
+.shop__cart-checkout .list-partial{
+	display: block;
+}
+
+.shop__cart-checkout .invalid-feedback{
+	color: #C43730;
+	font-size: 12px;
+}
+
+input[name="cc_number"]{
+	-webkit-transition: background-image 0.3s linear;
+	-o-transition: background-image 0.3s linear;
+	transition: background-image 0.3s linear;
+
+	background-image: url(../img/icon-no-card.svg);
+	background-size: 32px 32px;
+	background-repeat: no-repeat;
+	background-position: right center;
+	background-position: right 6px center;
+}
+
+input[data-type="visa"]{
+	background-image: url(../img/icon-visa.svg);
+}
+
+input[data-type="mastercard"]{
+	background-image: url(../img/icon-mastercard.svg);
+}
+
+input[data-type="amex"]{
+	background-image: url(../img/icon-amex.svg);
+}
+
+input[data-type="discover"]{
+	background-image: url(../img/icon-discover.svg);
+}
+
+.shop__order-summary{
+	position: relative;
+    word-wrap: break-word;
+    border: 1px solid #edf2f9;
+    border-radius: .5rem;
+    background-color: #fff;
+    background-clip: border-box;
+
+	margin-bottom: 1.5rem;
+    border-color: #edf2f9;
+    box-shadow: 0 0.75rem 1.5rem rgba(18,38,63,.03);
+
+    padding: 20px;
+}
+
+.shop__order-summary .order-header > .badge-status{
+	border-radius: 3px;
+	padding: 6px 12px;
+}
+
+.status-pending{
+	background-color: #FFA738 !important;
+	color: #FFF !important;
+}
+.status-await_pay{
+	background-color: #EA7D37 !important;
+	color: #FFF !important;
+}
+.status-await_fulfill{
+	background-color: #2A99D6 !important;
+	color: #FFF !important;
+}
+.status-paid{
+	background-color: #00BC9E !important;
+	color: #FFF !important;
+}
+.status-cancelled{
+	background-color: #EC4A41 !important;
+	color: #FFF !important;
+}
+.status-completed{
+	background-color: #00AE69 !important;
+	color: #FFF !important;
+}
+
+.shop__order-summary .text-mute{
+	color: #95aac9!important;
+}
+
+.shop__order-summary label{
+	letter-spacing: .08em;
+	color: #95aac9!important;
+	text-transform: uppercase!important;
+	margin-bottom: 10px;
+	font-size: 11px;
+	font-weight: 500;
+    line-height: 1.1;
+    margin-top: 0px;
+}
+
+.shop__order-summary .order-header{
+	display: block;
+	margin: 32px auto 52px;
+}
+
+.shop__order-summary .order-header h2{
+	line-height: 1.1;
+	font-size: 24px;
+	margin: 4px;
+}
+
+.shop__order-summary .order-items{
+	display: block;
+	margin-top: 32px;
+}
+
+.shop__order-summary hr{
+	margin: 36px auto;
+	border: 0;
+    border-top: 1px solid #e3ebf6;
+}
+
+.shop__order-thanks{
+	display: block;
+	text-align: left;
+	margin-top: 20px;
+}
+
+.shop__order-thanks i{
+	margin: 3px 12px;
+}
+
+.shop__order-thanks h3{
+	margin: 0px !important;
+}

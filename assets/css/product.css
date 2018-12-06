@@ -1,0 +1,175 @@
+/* Compatibility styles for frameworks like bootstrap, foundation e.t.c */
+.xzoom-source img, .xzoom-preview img, .xzoom-lens img {
+	display: block;
+	max-width: none;
+	max-height: none;
+	-webkit-transition: none;
+	-moz-transition: none;
+	-o-transition: none;
+	transition: none;
+}
+/* --------------- */
+
+/* xZoom Styles below */
+.xzoom-container { 
+	display: block;
+	padding: 20px;
+	max-width: 450px;
+	margin: 10px auto;
+}
+
+.xzoom-thumbs {
+	text-align: center;
+	margin-bottom: 10px;
+}
+
+.xzoom { 
+	width: 100%;
+	height: auto;
+	margin-bottom: 10px;
+	border-radius: 6px;
+	overflow: hidden;
+
+	-webkit-box-shadow: 0px 0px 15px 0px rgba(0,0,0,0.2);
+	-moz-box-shadow: 0px 0px 15px 0px rgba(0,0,0,0.2);
+	box-shadow: 0px 0px 15px 0px rgba(0,0,0,0.2);  
+}
+
+/* Thumbs */
+.xzoom-gallery{
+	border: 1px solid #cecece;
+	margin-left: 5px;
+	margin-bottom: 10px;
+	border-radius: 5px;
+}
+
+.xzoom-source, .xzoom-hidden {
+	display: block;
+	position: static;
+	float: none;
+	clear: both;
+}
+
+/* Everything out of border is hidden */
+.xzoom-hidden {
+	overflow: hidden;
+}
+
+/* Preview */
+.xzoom-preview {
+	border: 1px solid #888;
+	background: #333;
+	box-shadow: -0px -0px 10px rgba(0,0,0,0.50);
+}
+
+/* Lens */
+.xzoom-lens {
+	border: 1px solid #555;
+	box-shadow: -0px -0px 10px rgba(0,0,0,0.50);
+	cursor: crosshair;
+}
+
+/* Loading */
+.xzoom-loading {
+	background-position: center center;
+	background-repeat: no-repeat;
+	border-radius: 100%;
+	opacity: .7;
+	background: url(../img/xloading.gif);
+	width: 48px;
+	height: 48px;
+}
+
+/* Additional class that applied to thumb when it is active */
+.xactive {
+	-webkit-box-shadow: 0px 0px 3px 0px rgba(74,169,210,1);
+	-moz-box-shadow: 0px 0px 3px 0px rgba(74,169,210,1);
+	box-shadow: 0px 0px 3px 0px rgba(74,169,210,1); 
+	border: 1px solid #4aaad2;
+}
+
+/* Caption */
+.xzoom-caption {
+	position: absolute;
+	bottom: -43px;
+	left: 0;
+	background: #000;
+	width: 100%;
+	text-align: left;
+}
+
+.xzoom-caption span {
+	color: #fff;
+	font-family: Arial, sans-serif;
+	display: block;
+	font-size: 0.75em;
+	font-weight: bold;
+	padding: 10px;
+}
+
+/* Input Number */
+input[type="number"] {
+	-webkit-appearance: textfield;
+	-moz-appearance: textfield;
+	appearance: textfield;
+}
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+	-webkit-appearance: none;
+}
+
+.number-input {
+	display: inline-flex;
+	margin-left: -4px;
+	margin-right: -4px;
+}
+
+.number-input,
+.number-input * {
+	box-sizing: border-box;
+}
+
+.number-input button {
+	outline:none;
+	-webkit-appearance: none;
+	background-color: transparent;
+	border: none;
+	align-items: center;
+	justify-content: center;
+	width: 3rem;
+	height: 3rem;
+	display: inline-block;
+	cursor: pointer;
+	margin: 5px 4px;
+	position: relative;
+	background-color: #eee;
+	border-radius: 3px;
+	border: 1px solid #ddd;
+}
+
+.number-input button:before,
+.number-input button:after {
+	display: inline-block;
+	position: absolute;
+	content: '';
+	width: 1rem;
+	height: 2px;
+	background-color: #212121;
+	transform: translate(-50%, -50%);
+}
+.number-input button.plus:after {
+	transform: translate(-50%, -50%) rotate(90deg);
+}
+
+.number-input input[type=number] {
+	/*font-family: sans-serif;
+	max-width: 5rem;
+	padding: .5rem;
+	border: solid #ddd;
+	border-width: 0 2px;
+	font-size: 2rem;
+	height: 3rem;
+	font-weight: bold;
+	text-align: center;*/
+}

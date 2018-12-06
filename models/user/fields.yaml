@@ -1,0 +1,17 @@
+# ===================================
+#  Extended Rainlab User model
+# ===================================
+
+billing_address:
+    label: pixel.shop::lang.fields.billing_address
+    type: partial
+    path: $/pixel/shop/models/user/_address.htm
+
+shipping_address:
+    label: pixel.shop::lang.fields.shipping_address
+    type: partial
+    path: $/pixel/shop/models/user/_address.htm
+    trigger:
+        action: hide
+        field: is_ship_same_bill
+        condition: checked

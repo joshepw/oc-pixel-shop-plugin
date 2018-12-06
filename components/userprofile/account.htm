@@ -1,0 +1,218 @@
+<form data-request="onUpdate" data-request-success="location.reload()" data-request-files data-request-validate data-request-flash>
+
+	<div class="container">
+		<div class="row">
+
+			<div class="col-sm-4">
+				<div class="user-avatar-image" data-src="{{ user.getAvatarThumb(300) }}"></div>
+				<input type="file" name="avatar" accept="image/*">
+			</div>
+
+			<div class="col-sm-8">
+				<div class="row">
+					<div class="col-sm-4">
+						<div class="form-group">
+							<label for="accountName">{{ 'pixel.shop::lang.fields.first_name'|trans }}</label>
+							<input name="name" type="text" class="form-control" value="{{ user.name }}">
+						</div>
+					</div>
+
+					<div class="col-sm-4">
+						<div class="form-group">
+							<label for="accountName">{{ 'pixel.shop::lang.fields.last_name'|trans }}</label>
+							<input name="surname" type="text" class="form-control" value="{{ user.surname }}">
+						</div>
+					</div>
+
+					<div class="col-sm-4">
+						<div class="form-group">
+							<label for="accountEmail">{{ 'pixel.shop::lang.fields.email'|trans }}</label>
+							<input name="email" type="email" class="form-control" value="{{ user.email }}">
+						</div>
+					</div>
+
+					<div class="col-sm-6">
+						<div class="form-group">
+							<label for="accountPassword">{{ 'pixel.shop::lang.fields.new_password'|trans }}</label>
+							<input name="password" type="password" class="form-control">
+						</div>
+					</div>
+
+					<div class="col-sm-6">
+						<div class="form-group">
+							<label for="accountPasswordConfirm">{{ 'pixel.shop::lang.fields.confirm_new_password'|trans }}</label>
+							<input name="password_confirmation" type="password" class="form-control">
+						</div>
+					</div>
+					
+				</div>
+
+				<h4>{{ 'pixel.shop::component.cart.shipping_address'|trans }}</h4>
+				<div class="row">
+					<div class="col-md-6">
+						<div class="form-group">
+							<label>{{ 'pixel.shop::lang.fields.address'|trans }}</label>
+							<input type="text" class="form-control" placeholder="1234 Main St" value="{{ user.shipping_address.first_line }}" name="shipping_address[first_line]">
+							<div class="invalid-feedback" data-validate-for="shipping_address.first_line"></div>
+						</div>
+					</div>
+					<div class="col-md-6">
+						<div class="form-group">
+							<label>{{ 'pixel.shop::lang.fields.address_alt'|trans }} <span class="text-muted">({{ 'pixel.shop::component.cart.optional'|trans }})</span></label>
+							<input type="text" class="form-control" placeholder="Apartment or suite" value="{{ user.shipping_address.second_line }}" name="shipping_address[second_line]">
+						</div>
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="col-shipping col-md-3">
+						<div class="form-group">
+							<label>{{ 'pixel.shop::lang.fields.country'|trans }}</label>
+							<select 
+								class="form-control" 
+								name="shipping_address[country]" 
+								data-request="onShippingCountrySelect" 
+								data-request-success="Profile.setShippingCountryOnSelect(data)">
+								<option value="">{{ 'pixel.shop::component.cart.choose'|trans }}</option>
+								{% for country in countries %}
+								<option 
+									value="{{ country.code }}" 
+									{% if user.shipping_address.country == country.code %}
+									selected="selected"
+									{% endif %}>
+									{{ country.name }}
+								</option>
+								{% endfor %}
+							</select>
+							<div class="invalid-feedback" data-validate-for="shipping_address.country"></div>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group">
+							<label>{{ 'pixel.shop::lang.fields.state'|trans }}</label>
+							<select class="form-control" name="shipping_address[state]">
+								{% partial '@states' states=shipping_states user_state=user.shipping_address.state %}
+							</select>
+							<div class="invalid-feedback" data-validate-for="shipping_address.state"></div>
+						</div>
+					</div>
+					<div class="col-shipping col-md-3">
+						<div class="form-group">
+							<label>{{ 'pixel.shop::lang.fields.city'|trans }}</label>
+							<input type="text" class="form-control" name="shipping_address[city]" value="{{ user.shipping_address.city }}">
+							<div class="invalid-feedback" data-validate-for="shipping_address.city"></div>
+						</div>
+					</div>
+					<div class="col-shipping-zip col-md-2">
+						<div class="form-group">
+							<label>{{ 'pixel.shop::lang.fields.zip'|trans }}</label>
+							<input type="hidden" name="shipping_zip_required">
+							<input type="text" class="form-control" name="shipping_address[zip]" value="{{ user.shipping_address.zip }}">
+							<div class="invalid-feedback" data-validate-for="shipping_address.zip"></div>
+						</div>
+					</div>
+				</div>
+
+				<h4 class="shop__billing-elements">{{ 'pixel.shop::component.cart.billing_address'|trans }}</h4>
+				<div class="row shop__billing-elements">
+					<div class="col-md-6">
+						<div class="form-group">
+							<label>{{ 'pixel.shop::lang.fields.address'|trans }}</label>
+							<input type="text" class="form-control" placeholder="1234 Main St" value="{{ user.billing_address.first_line }}" name="billing_address[first_line]">
+							<div class="invalid-feedback" data-validate-for="billing_address.first_line"></div>
+						</div>
+					</div>
+					<div class="col-md-6">
+						<div class="form-group">
+							<label>{{ 'pixel.shop::lang.fields.address_alt'|trans }} <span class="text-muted">({{ 'pixel.shop::component.cart.optional'|trans }})</span></label>
+							<input type="text" class="form-control" placeholder="Apartment or suite" value="{{ user.billing_address.second_line }}" name="billing_address[second_line]">
+						</div>
+					</div>
+				</div>
+
+				<div class="row shop__billing-elements">
+					<div class="col-shipping col-md-3">
+						<div class="form-group">
+							<label>{{ 'pixel.shop::lang.fields.country'|trans }}</label>
+							<select 
+								class="form-control" 
+								name="billing_address[country]" 
+								data-request="onShippingCountrySelect" 
+								data-request-success="Profile.setShippingCountryOnSelect(data)">
+								<option value="">{{ 'pixel.shop::component.cart.choose'|trans }}</option>
+								{% for country in countries %}
+								<option 
+									value="{{ country.code }}" 
+									{% if user.billing_address.country == country.code %}
+									selected="selected"
+									{% endif %}>
+									{{ country.name }}
+								</option>
+								{% endfor %}
+							</select>
+							<div class="invalid-feedback" data-validate-for="billing_address.country"></div>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group">
+							<label>{{ 'pixel.shop::lang.fields.state'|trans }}</label>
+							<select class="form-control" name="billing_address[state]">
+								{% partial '@states' states=shipping_states user_state=user.billing_address.state %}
+							</select>
+							<div class="invalid-feedback" data-validate-for="billing_address.state"></div>
+						</div>
+					</div>
+					<div class="col-shipping col-md-3">
+						<div class="form-group">
+							<label>{{ 'pixel.shop::lang.fields.city'|trans }}</label>
+							<input type="text" class="form-control" name="billing_address[city]" value="{{ user.billing_address.city }}">
+							<div class="invalid-feedback" data-validate-for="billing_address.city"></div>
+						</div>
+					</div>
+					<div class="col-shipping-zip col-md-2">
+						<div class="form-group">
+							<label>{{ 'pixel.shop::lang.fields.zip'|trans }}</label>
+							<input type="hidden" name="shipping_zip_required">
+							<input type="text" class="form-control" name="billing_address[zip]" value="{{ user.billing_address.zip }}">
+							<div class="invalid-feedback" data-validate-for="billing_address.zip"></div>
+						</div>
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="col-sm-12">
+						<div class="checkbox">
+							<label for="same-address">
+								<input type="checkbox" name="is_ship_same_bill" id="same-address" {% if user.is_ship_same_bill or user.is_ship_same_bill == null %}checked="checked"{% endif %}><b>{{ 'pixel.shop::component.cart.is_ship_same_bill'|trans }}</b>
+							</label>
+						</div>
+						<hr>
+						<button type="submit" class="btn btn-success">{{ 'pixel.shop::component.user.save_details'|trans }}</button>
+						<a href="javascript:;" class="btn btn-default" onclick="$('#accountDeactivateForm').toggle()">{{ 'pixel.shop::component.user.desactivate_account'|trans }}</a>
+
+						<div class="clearfix"></div>
+
+						<div id="accountDeactivateForm" style="display: none">
+							<form data-request="onDeactivate" data-request-success="location.reload()" data-request-validate data-request-flash>
+								<hr />
+								<h3>{{ 'pixel.shop::component.user.desactivate_account_question'|trans }}</h3>
+								<p>{{ 'pixel.shop::component.user.desactivate_account_comment'|trans }}</p>
+								<div class="form-group">
+									<label for="accountDeletePassword">{{ 'pixel.shop::component.user.desactivate_account_password'|trans }}</label>
+									<input name="password" type="password" class="form-control" id="accountDeletePassword" />
+								</div>
+								<button type="submit" class="btn btn-danger">
+									{{ 'pixel.shop::component.user.desactivate_account_confirm'|trans }}
+								</button>
+								<a class="btn btn-link" href="javascript:;" onclick="$('#accountDeactivateForm').toggle()">
+									{{ 'pixel.shop::component.user.desactivate_account_cancel'|trans }}
+								</a>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</form>

@@ -1,0 +1,8 @@
+name: 'pixel.shop::lang.menu.order'
+modelClass: Pixel\Shop\Models\Order
+form: $/pixel/shop/models/order/fields.yaml
+defaultRedirect: pixel/shop/orders
+update:
+    title: ''
+    redirect: pixel/shop/orders
+    redirectClose: pixel/shop/orders

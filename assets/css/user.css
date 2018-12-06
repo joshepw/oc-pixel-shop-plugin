@@ -1,0 +1,175 @@
+.account-container{
+	display: block;
+	margin: 40px auto;
+}
+
+.user-avatar-image{
+	display: block;
+	width: 280px;
+	height: 280px;
+	border-radius: 6px;
+	-webkit-box-shadow: 0 0 12px rgba(120,120,120,0.1);
+	box-shadow: 0 0 12px rgba(120,120,120,0.1);
+	margin-bottom: 12px;
+
+	background-color: #ECF0F1;
+	background-size: cover;
+	background-position: center;
+	background-repeat: no-repeat;
+	background-image: url(../add_user.svg);
+}
+
+.form-signin{
+	max-width: 330px;
+	padding: 15px;
+	margin: 0 auto;
+}
+.form-signin .form-signin-heading, .form-signin .checkbox{
+	margin-bottom: 10px;
+}
+.form-signin .checkbox{
+	font-weight: normal;
+}
+.form-signin .form-control{
+	position: relative;
+	font-size: 16px;
+	height: auto;
+	padding: 10px;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+.form-signin .form-control:focus{
+	z-index: 2;
+}
+.form-signin input.first{
+	margin-bottom: -1px;
+	border-bottom-left-radius: 0;
+	border-bottom-right-radius: 0;
+}
+.form-signin input.regular{
+	margin-bottom: -1px;
+	border-radius: 0;
+}
+.form-signin input.last{
+	margin-bottom: 10px;
+	border-top-left-radius: 0;
+	border-top-right-radius: 0;
+}
+.account-wall{
+	margin-top: 20px;
+	padding: 40px 10px 20px 10px;
+	background-color: #f7f7f7;
+	-moz-box-shadow: 0px 2px 12px rgba(0, 0, 0, 0.2);
+	-webkit-box-shadow: 0px 2px 12px rgba(0, 0, 0, 0.2);
+	box-shadow: 0px 2px 12px rgba(0, 0, 0, 0.2);
+	border-radius: 6px;
+}
+.account-wall .checkbox input{
+	position: relative !important;
+	margin: 0 4px;
+}
+.login-title{
+	color: #555;
+	font-size: 18px;
+	font-weight: 400;
+	display: block;
+}
+.profile-img{
+	width: 96px;
+	height: 96px;
+	margin: 0 auto 10px;
+	display: block;
+	-moz-border-radius: 50%;
+	-webkit-border-radius: 50%;
+	border-radius: 50%;
+}
+.need-help{
+	margin-top: 10px;
+}
+.new-account, .returning-account{
+	display: block;
+	margin-top: 10px;
+}
+
+.form-errors small{
+	display: block;
+}
+
+.status-pending{
+	background-color: #FFA738 !important;
+	color: #FFF !important;
+}
+.status-await_pay{
+	background-color: #EA7D37 !important;
+	color: #FFF !important;
+}
+.status-await_fulfill{
+	background-color: #2A99D6 !important;
+	color: #FFF !important;
+}
+.status-paid{
+	background-color: #00BC9E !important;
+	color: #FFF !important;
+}
+.status-cancelled{
+	background-color: #EC4A41 !important;
+	color: #FFF !important;
+}
+.status-completed{
+	background-color: #00AE69 !important;
+	color: #FFF !important;
+}
+
+
+.shop__order-summary{
+	position: relative;
+    word-wrap: break-word;
+    border: 1px solid #edf2f9;
+    border-radius: .5rem;
+    background-color: #fff;
+    background-clip: border-box;
+
+	margin-bottom: 1.5rem;
+    border-color: #edf2f9;
+    box-shadow: 0 0.75rem 1.5rem rgba(18,38,63,.03);
+
+    padding: 20px;
+}
+
+.shop__order-summary .text-mute{
+	color: #95aac9!important;
+}
+
+.shop__order-summary label{
+	letter-spacing: .08em;
+	color: #95aac9!important;
+	text-transform: uppercase!important;
+	margin-bottom: 10px;
+	font-size: 11px;
+	font-weight: 500;
+    line-height: 1.1;
+    margin-top: 0px;
+}
+
+.shop__order-summary .order-header{
+	display: block;
+	margin: 32px auto 52px;
+}
+
+.shop__order-summary .order-header h2{
+	line-height: 1.1;
+	font-size: 24px;
+	margin: 4px;
+}
+
+.shop__order-summary .order-items{
+	display: block;
+	margin-top: 32px;
+}
+
+.shop__order-summary hr{
+	margin: 36px auto;
+	border: 0;
+    border-top: 1px solid #e3ebf6;
+}

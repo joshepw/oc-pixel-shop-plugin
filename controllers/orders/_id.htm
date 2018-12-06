@@ -1,0 +1,24 @@
+<div class="scoreboard scoreboard-modal">
+	<div data-control="toolbar">
+		<div class="scoreboard-item title-value">
+			<h4><?= trans('pixel.shop::lang.fields.order_id') ?></h4>
+			<p><?= $formModel->getOrderID() ?></p>
+			<p class="description btn btn-default btn-sm status-<?= $formModel->status ?>">
+				<b><?= trans('pixel.shop::lang.status.' . $formModel->status) ?></b>
+			</p>
+			<?php if($formModel->is_paid): ?>
+				<?php if($formModel->is_confirmed): ?>
+					<img src="<?= url('/plugins/pixel/shop/assets/img/icon-ok-check.svg') ?>" alt="" width="32" height="32" data-toggle="tooltip" data-delay="100" title="<?= trans('pixel.shop::lang.messages.ok_check') ?>">
+				<?php else: ?>
+					<img src="<?= url('/plugins/pixel/shop/assets/img/icon-wait-check.svg') ?>" alt="" width="32" height="32" data-toggle="tooltip" data-delay="100" title="<?= trans('pixel.shop::lang.messages.wait_check') ?>">
+				<?php endif ?>
+			<?php endif ?>
+		</div>
+
+		<div class="scoreboard-item title-value pull-right text-right">
+			<h4><?= Lang::get("pixel.shop::lang.fields.grand_total") ?></h4>
+			<p><?= $formModel->getFormatedTotal() ?></p>
+			<p class="description"><?= trans('pixel.shop::lang.fields.date') ?>: <b><?= $formModel->created_at->toFormattedDateString() ?></b></p>
+		</div>
+	</div>
+</div>
