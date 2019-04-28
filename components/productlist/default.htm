@@ -3,15 +3,25 @@
 	<div class="container">
 		{% if showCategoriesFilter %}
 		
-		{% if categoryList|length > 6 %}
+		{% if categoryList|length > 2 %}
 		<div class="dropdown">
 			<button id="btnGroupCategories" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 				<i class="fas fa-filter"></i> {{ 'pixel.shop::component.cart.filter_by_category'|trans }}
 			</button>
 			<ul class="dropdown-menu" aria-labelledby="btnGroupCategories">
-				{% for category in categoryList %}
+				{% for category in categoryList if category.nest_depth == 0 %}
 					<li class="{% if activeCategory.slug == category.slug %}active{% endif %}">
 						<a href="{{ category.url }}" class="dropdown-item">{{ category.name }}</a>
+
+						{% if category.children|length > 0 %}
+						<ul class="sub-category">
+							{% for item in categoryList if item.parent.id == category.id %}
+							<li class="{% if activeCategory.slug == item.slug %}active{% endif %}">
+								<a href="{{ item.url }}">{{ item.name }}</a>
+							</li>
+							{% endfor %}
+						</ul>
+						{% endif %}
 					</li>
 				{% endfor %}
 			</ul>
@@ -26,6 +36,7 @@
 
 		{% endif %}
 
+		{% if showSearchBar %}
 		<form method="get" class="products-search">
 			<div class="input-group">
 				<input name="search" type="text" class="form-control" placeholder="Search ..." aria-label="Search" value="{{ input('search') }}">
@@ -34,6 +45,7 @@
 				</div>
 			</div>
 		</form>
+		{% endif %}
 	</div>
 </section>
 {% endif %}

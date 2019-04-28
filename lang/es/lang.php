@@ -338,6 +338,7 @@
         'used' => 'Usado',
         'refurbished' => 'Reformado',
         'select_option' => '-- Por favor seleccione una opción --',
+        'related_products' => 'Productos Relacionados'
     ],
     'coupon_codes' => [
         'code_5' => 'El código de cupón no es válido o no existe.',

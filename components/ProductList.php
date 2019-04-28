@@ -68,8 +68,11 @@ class ProductList extends ComponentBase
 					'is_on_sale' => 'On Sale',
 					'id' => 'ID',
 					'code' => 'Code or SKU',
-					'quantity' => 'Quantity',
+					'quantity' => 'Quantity',	
 					'updated_at' => 'Updated At',
+					'created_at' => 'Created At',
+					'sales_count' => 'Sales count',
+					'views_count' => 'Views count'
 				]
 			],   
 			'sort' => [
@@ -85,10 +88,25 @@ class ProductList extends ComponentBase
 				'type'        => 'dropdown',
 				'default'     => 'product',
 			],
+			'categoryPage' => [
+				'title'       => 'Products page by category',
+				'type'        => 'dropdown',
+				'default'     => 'products',
+			],
 			'showCategoriesFilter' => [
 				'title'		  => 'Show categories filter',
 				'type'		  => 'checkbox',
 				'default'     => false,
+			],
+			'showSearchBar' => [
+				'title'		  => 'Show search bar',
+				'type'		  => 'checkbox',
+				'default'     => false,
+			],
+			'showQuickAdd' => [
+				'title'		  => 'Quick "add to cart"',
+				'type'		  => 'checkbox',
+				'default'     => true,
 			]
         ];
     }
@@ -101,6 +119,8 @@ class ProductList extends ComponentBase
 		$settings = $this->page['shopSetting'] = SalesSettings::instance();
 
 		$this->page['showCategoriesFilter'] = $this->property('showCategoriesFilter');
+		$this->page['showSearchBar'] = $this->property('showSearchBar');
+		$this->page['showQuickAdd'] = $this->property('showQuickAdd');
 	}
 
     // LOAD MODELS
@@ -159,10 +179,13 @@ class ProductList extends ComponentBase
 	}
 
     // OPTIONS
-    public function getProductPageOptions()
-	{
+    public function getProductPageOptions(){
 		return Page::sortBy('baseFileName')->lists('baseFileName', 'baseFileName');
 	} 
+
+	public function getCategoryPageOptions(){
+		return Page::sortBy('baseFileName')->lists('baseFileName', 'baseFileName');
+	}
 
 	public function getCategoryFilterOptions(){
 		$list = Category::lists('name', 'slug');
@@ -177,7 +200,7 @@ class ProductList extends ComponentBase
 			return;
 
 		$categories = Category::all();
-		$page = $this->page->code;
+		$page = $this->property('categoryPage');
 		$list = array();
 		
 		$empty = new Category();

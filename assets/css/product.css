@@ -173,3 +173,44 @@ input[type=number]::-webkit-outer-spin-button {
 	font-weight: bold;
 	text-align: center;*/
 }
+
+.related-header {
+	margin-top: 28px;
+    padding-bottom: 6px;
+}
+
+.related-item{
+	margin-bottom: 25px;
+}
+
+.related-item .label{
+	font-size: 10px;
+}
+
+.related-item .media-body > a{
+	font-size: 12px;
+}
+
+.related-image{
+	margin-right: 8px;
+	margin-bottom: 24px;
+}
+
+.related-category{
+	margin: 6px 0 0;
+	padding: 0px;
+	font-weight: bold;
+	font-size: 10px !important;
+	color: #AAA;
+}
+
+.related-category.to-right{
+	float: right;
+}
+
+.related-description{
+	margin-top: 2px;
+	font-size: 12px !important;
+	margin-bottom: 0 !important;
+	line-height: 14px;
+}

@@ -76,7 +76,7 @@ trait CartTrait{
 
     	Flash::success(trans('pixel.shop::lang.messages.cart_clear'));
 
-    	return [ '#shop__cart-partial' => $this->renderPartial('@cart', [ 'cart' => $cart ]) ];
+    	return [ '#shop__cart-partial' => $this->renderPartial('@cart', [ 'cart' => $cart, 'product_page' => $this->property('productPage') ]) ];
     }
 
     protected function onClearCoupon(){

@@ -1,0 +1,19 @@
+
+<span 
+    <?php 
+    
+    if($record->quantity == null){
+    	echo "class='btn btn-default btn-xs oc-icon-check' style='background-color: #00AE69; color: #fff'";
+    }
+    elseif ($record->quantity == 0) {
+        echo "class='btn btn-default btn-xs oc-icon-ban' style='background-color: #FF5C5F; color: #fff'";
+    }
+    elseif ($record->quantity < 5) {
+        echo "class='btn btn-default btn-xs oc-icon-arrow-circle-down' style='background-color: #FFA74D; color: #fff'";
+    }
+    else {
+        echo "class='btn btn-default btn-xs oc-icon-check' style='background-color: #00AE69; color: #fff'";
+    }
+    ?>>
+    <b><?= $record->quantity ?? '&infin;' ?></b>
+</span>

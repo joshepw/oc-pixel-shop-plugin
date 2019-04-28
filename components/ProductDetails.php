@@ -55,6 +55,7 @@ class ProductDetails extends ComponentBase{
 
         $this->page['product'] = $product;
         $this->page['shopSetting'] = SalesSettings::instance();
+        $this->page['relatedProducts'] = $this->getRelatedProducts($product);
 
         $product->setUrl($this->page->code, $this->controller);
 
@@ -64,4 +65,24 @@ class ProductDetails extends ComponentBase{
             $this->page->meta_keywords = $product->meta_keywords;
         }
     }
+
+
+    public function getRelatedProducts($product){	
+		$list = $product->categories->lists('id');
+
+		$products = Item::whereHas('categories', function($query) use ($list){
+			$query->whereIn('id', $list);
+		})->where('id','<>', $product->id)
+			->where('is_visible', 1)
+			->orderBy('views_count', 'desc')
+			->orderBy('sales_count', 'desc')
+			->take(16)
+			->get();
+
+		foreach ($products as $product) {
+			$product->setUrl($this->page->code, $this->controller);
+		}
+
+		return $products;
+	}
 }

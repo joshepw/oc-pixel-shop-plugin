@@ -222,6 +222,9 @@ Profile.checkSameAddress = function(el){
 }
 
 jQuery(document).ready(function($) {
+	var hash = window.location.hash;
+  		hash && $('ul.nav a[href="' + hash + '"]').tab('show');
+
 	if($('[name="shipping_address[country]"]').val())
 		Profile.evalAddressSelect($('[name="shipping_address[country]"]').val(), 'shipping');
 

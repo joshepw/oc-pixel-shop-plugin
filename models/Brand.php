@@ -22,6 +22,9 @@ class Brand extends Model{
 		'slug' => 'name'
 	];
 
+	public $implement = ['@RainLab.Translate.Behaviors.TranslatableModel'];
+	public $translatable = ['name'];
+
 	// PROPERTIES
 	public $timestamps = false;
 	protected $fillable = ['name'];

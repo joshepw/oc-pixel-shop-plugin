@@ -39,6 +39,10 @@
 					</small>
 					{% endif %}
 
+					{% if product.categories|length > 0 %}
+					<p><small><i class="fas fa-tag"></i> {{ product.categories.lists('name')|join(', ') }}</small></p>
+					{% endif %}
+
 					{% if product.short_description %}
 						<p class="shop__product-short-description">{{ str_limit( product.short_description, 120,'...')|nl2br  }}</p>
 					{% endif %}
@@ -47,6 +51,7 @@
 
 			{% if product.quantity > 0 or product.quantity == null %}
 			<form data-request="onAddToCart" data-request-flash>
+				{% if showQuickAdd %}
 				{% if product.is_with_variants and product.variants|length > 0 %}
 				<a href="{{ product.url }}" class="btn btn-primary btn-block btn-footer">
 					<span class="fas fa-info-circle" aria-hidden="true"></span> 
@@ -60,6 +65,13 @@
 					<span class="fas fa-shopping-cart" aria-hidden="true"></span> 
 					{{ 'pixel.shop::lang.frontend.addtocart'|trans }}
 				</button>
+				{% endif %}
+
+				{% else %}
+				<a href="{{ product.url }}" class="btn btn-primary btn-block btn-footer">
+					<span class="fas fa-info-circle" aria-hidden="true"></span> 
+					{{ 'pixel.shop::lang.frontend.moreinfo'|trans }}
+				</a>
 				{% endif %}
 			</form>
 			{% else %}

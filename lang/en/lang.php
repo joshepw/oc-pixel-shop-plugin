@@ -342,7 +342,8 @@
         'note' => 'Note',
         'used' => 'Used',
 		'refurbished' => 'Refurbished',
-		'select_option' => '-- Please select an option --'
+		'select_option' => '-- Please select an option --',
+		'related_products' => 'Related Products'
     ],
     'coupon_codes' => [
     	'code_5' => 'The coupon code is invalid or does not exist.',

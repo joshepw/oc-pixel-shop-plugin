@@ -17,6 +17,10 @@
 		{% endif %}
 	</div>
 
+	{% if product.categories|length > 0 %}
+	<p><small><i class="fas fa-tag"></i> {{ product.categories.lists('name')|join(', ') }}</small></p>
+	{% endif %}
+
 	<hr>
 
 	<div class="form-group">

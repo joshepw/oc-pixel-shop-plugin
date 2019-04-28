@@ -7,7 +7,7 @@
 				type="radio" 
 				value="{{ method.gateway }}" 
 				name="gateway" 
-				{% if method.gateway == cart.gateway %}
+				{% if method.gateway == cart.gateway or methods_list|length == 1 %}
 				checked="checked" 
 				{% endif %}
 				id="method-{{ method.gateway }}">

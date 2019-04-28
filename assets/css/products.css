@@ -486,3 +486,34 @@
 .fas-disabled:hover{
 	color: #FFA63B;
 }
+
+.dropdown-menu .sub-category{
+	list-style: none;
+	padding-left: 0px;
+}
+
+.dropdown-menu .sub-category > li > a{
+	display: block;
+    padding: 3px 20px 3px 32px;
+    clear: both;
+    font-weight: normal;
+    line-height: 1.6;
+    color: #333333;
+    white-space: nowrap;
+}
+
+.dropdown-menu .sub-category > li.active > a{
+	color: #ffffff;
+    text-decoration: none;
+    outline: 0;
+    background-color: #3097d1;
+}
+
+
+}
+
+.dropdown-menu .sub-category > li > a:hover{
+	text-decoration: none;
+    color: #262626;
+    background-color: #f5f5f5;
+}

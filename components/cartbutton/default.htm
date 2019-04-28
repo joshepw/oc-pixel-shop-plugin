@@ -6,7 +6,7 @@
 </style>
 
 {% if this.page.id != cart_page %}
-<div class="shop__cart-button shop__position-{{ cart_position }} {% if cart_count < 1 %}empty{% endif %}">
+<div class="shop__cart-button shop__position-{{ cart_position }} {% if cart_count < 1 %}empty{% endif %} {% if hide_on_empty %}hide-on-empty{% endif %}">
 	<a href="{{ cart_page|page }}">
 		<span class="shop__items-count shop__cart-button-text-accent shop__cart-button-border" id="cart_count">{{ cart_count }}</span>
 		<div class="shop__button-container shop__cart-button-accent">

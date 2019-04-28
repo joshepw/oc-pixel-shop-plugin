@@ -141,6 +141,15 @@ tabs:
               field: is_with_variants
               condition: checked
 
+        short_description:
+            label: 'pixel.shop::lang.fields.short_description'
+            oc.commentPosition: ''
+            span: full
+            type: textarea
+            size: tiny
+            cssClass: oc-icon-edit
+            tab: 'pixel.shop::lang.fields.details'
+
         _gallery:
             label: 'pixel.shop::lang.fields.gallery'
             type: section

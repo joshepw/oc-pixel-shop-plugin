@@ -1,0 +1,33 @@
+{% if relatedProducts|length > 1 %}
+<div class="container">
+	<legend class="related-header">
+		<i class="fas fa-tags"></i> {{ 'pixel.shop::lang.frontend.related_products'|trans }}
+	</legend>
+
+	{% for productGroup in relatedProducts.chunk(4) %}
+	<div class="row">
+		{% for product in productGroup %}
+		<div class="col-md-3">
+
+			<div class="media related-item">
+				<a class="pull-left" href="{{ product.url }}">
+					<img class="media-object related-image" src="{{ product.image.thumb(80,80,'crop') }}" alt="Image" width="40">
+				</a>
+				<div class="media-body">
+					{% if product.brand %}
+						<span class="label label-default">{{ product.brand.name|upper }}</span>
+						<h5 class="related-category to-right">{{ product.getCategoriesNames() }}</h5>
+					{% endif %}
+					<p class="related-description"><strong>{{ product.name }}</strong></p>
+					<a href="{{ product.url }}">
+						<i class="fas fa-plus"></i> {{ 'pixel.shop::lang.frontend.moreinfo'|trans }}
+					</a>
+				</div>
+			</div>
+
+		</div>
+		{% endfor %}
+	</div>
+	{% endfor %}
+</div>
+{% endif %}

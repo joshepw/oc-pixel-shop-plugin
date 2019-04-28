@@ -43,6 +43,11 @@ columns:
         width: 120px
         searchable: false
         sortable: true
+    quantity:
+        label: pixel.shop::lang.fields.quantity
+        type: partial
+        width: 120px
+        path: ~/plugins/pixel/shop/partials/_quantity_column.htm
     price:
         label: 'pixel.shop::lang.fields.base_price'
         type: partial

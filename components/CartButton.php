@@ -49,7 +49,12 @@ class CartButton extends ComponentBase
 					'bottom-left' => 'Bottom left',
 					'bottom-right' => 'Bottom right'
 				]
-			],
+            ],
+            'hideOnEmpty' => [
+                'title'       => 'Hide on empty',
+                'type'        => 'checkbox',
+                'default'     => false
+            ]
         ];
     }
 
@@ -67,6 +72,7 @@ class CartButton extends ComponentBase
 		$this->page['cart_position'] = $this->property('position');
 		$this->page['cart_color_bg'] = $this->property('colorBG');
 		$this->page['cart_color'] = $this->property('color');
-		$this->page['cart_page'] = $this->property('cartPage');
+        $this->page['cart_page'] = $this->property('cartPage');
+        $this->page['hide_on_empty'] = $this->property('hideOnEmpty');
 	}
 }

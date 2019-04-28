@@ -324,7 +324,7 @@ trait PaymentTrait{
 	}
 
 	protected function preparePixelPay($order){
-		$pixelDomain = 'https://pay.pixel.hn';
+		$pixelDomain = 'https://www.pixelpay.app';
 		$apiURL = '/hosted/payment/october';
 
 		$json = json_encode($order->items);
@@ -339,9 +339,9 @@ trait PaymentTrait{
 			'order_id' => $order->id,
 			'order_content' => $order_content,
 			'order_currency' => null,
-			'order_tax_amount' => floatval($order->tax_total),
-			'order_shipping_amount' => floatval($order->shipping_total),
-			'order_amount' => floatval($order->total),
+			'order_tax_amount' => number_format(floatval($order->tax_total), 2, '.', ''),
+			'order_shipping_amount' => number_format(floatval($order->shipping_total), 2, '.', ''),
+			'order_amount' => number_format(floatval($order->total), 2, '.', ''),
 			'customer_first_name' => $order->customer_first_name,
 			'customer_last_name' => $order->customer_last_name,
 			'customer_email' => $order->customer_email,

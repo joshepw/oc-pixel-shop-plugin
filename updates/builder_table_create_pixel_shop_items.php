@@ -41,6 +41,7 @@ class BuilderTableCreatePixelShopItems extends Migration
 
             $table->text('variants')->nullable();
             $table->text('description')->nullable();
+            $table->string('short_description', 300)->nullable();
             $table->text('tax')->nullable();
 
             $table->timestamps();

@@ -18,8 +18,8 @@ class Item extends Model{
 		'name' => 'required|min:3|max:180',
 		'code' => 'min:3|max:180',
 		'price' => 'required',
-		'variants.*.variant' => 'required|min:1|max:60',
-		'variants.*.items.*.val' => 'required|min:1|max:60',
+		'variants.*.variant' => 'required_if:is_with_variants,on|max:60',
+		'variants.*.items.*.val' => 'required_if:is_with_variants,on|max:60',
 	];
 
 	public $attributeNames = [
@@ -43,7 +43,7 @@ class Item extends Model{
 	public $timestamps = false;
 	public $table = 'pixel_shop_items';
 	public $implement = ['@RainLab.Translate.Behaviors.TranslatableModel'];
-	public $translatable = ['name', 'short_description', 'template'];
+	public $translatable = ['name', 'short_description', 'description'];
 	protected $jsonable = ['tax', 'variants'];
 
 	// RELACIONES
@@ -265,5 +265,11 @@ class Item extends Model{
 
 	public function slugOption($text){
 		return str_slug($text);
+	}
+
+	public function getCategoriesNames(){
+		$categories = $this->categories->lists('name');
+
+		return implode(',' , $categories);
 	}
 }
