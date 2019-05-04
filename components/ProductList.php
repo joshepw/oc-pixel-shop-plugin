@@ -12,7 +12,10 @@ use Pixel\Shop\Components\CartTrait;
 
 class ProductList extends ComponentBase
 {
-	use CartTrait;
+    use CartTrait;
+    
+    public $products = array();
+	public $settings = array();
 
     public function componentDetails()
     {
@@ -107,7 +110,13 @@ class ProductList extends ComponentBase
 				'title'		  => 'Quick "add to cart"',
 				'type'		  => 'checkbox',
 				'default'     => true,
-			]
+            ],
+            'typeCategoriesFilter' => [
+				'title'       => 'Categories Filter Type',
+				'default'     => 'dropdown',
+				'type'        => 'dropdown',
+				'options'     => ['dropdown'=>'Dropdown', 'buttons'=>'Buttons Group']
+			], 
         ];
     }
 
@@ -115,12 +124,13 @@ class ProductList extends ComponentBase
 	{
 		$this->addCss('/plugins/pixel/shop/assets/css/products.css');
 
-		$products = $this->page['products'] = $this->loadProducts();
-		$settings = $this->page['shopSetting'] = SalesSettings::instance();
+		$this->products = $this->page['products'] = $this->loadProducts();
+		$this->settings = $this->page['shopSetting'] = SalesSettings::instance();
 
-		$this->page['showCategoriesFilter'] = $this->property('showCategoriesFilter');
+        $this->page['showCategoriesFilter'] = $this->property('showCategoriesFilter');
 		$this->page['showSearchBar'] = $this->property('showSearchBar');
 		$this->page['showQuickAdd'] = $this->property('showQuickAdd');
+        $this->page['typeCategoriesFilter'] = $this->property('typeCategoriesFilter');
 	}
 
     // LOAD MODELS
@@ -142,7 +152,7 @@ class ProductList extends ComponentBase
 		$take = $this->property('take');
 		$orderBy = $this->property('orderBy');
 		$orderSort = $this->property('sort');
-		$products = null;
+	$products = null;
 
 		$this->page['categoryList'] = $this->getCategoryList();
 

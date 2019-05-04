@@ -15,7 +15,8 @@ class Index extends Controller{
 		'pixel.shop.items',
 		'pixel.shop.categories',
 		'pixel.shop.brands',
-		'pixel.shop.shop'
+        'pixel.shop.orders',
+        'pixel.shop.coupons'
 	];
 
 	public function __construct()

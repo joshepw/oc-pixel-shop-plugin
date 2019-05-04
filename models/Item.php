@@ -116,8 +116,9 @@ class Item extends Model{
 		if(SalesSettings::get('taxes')){
 			foreach (SalesSettings::get('taxes') as $value)
 				$options[$value['percent']] = $value['name'].' ('.$value['percent'].'%)';
-			return $options;
-		}
+        }
+        
+		return $options;
 	}
 	
 	public function getCurrencyOptions(){

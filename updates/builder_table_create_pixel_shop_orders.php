@@ -11,9 +11,9 @@ class BuilderTableCreatePixelShopOrders extends Migration
         {
             $table->engine = 'InnoDB';
             $table->increments('id')->unsigned();
-            $table->boolean('is_paid');
-            $table->boolean('is_confirmed');
-            $table->boolean('is_fulfill');
+            $table->boolean('is_paid')->nullable()->default(false);
+            $table->boolean('is_confirmed')->nullable()->default(false);
+            $table->boolean('is_fulfill')->nullable()->default(false);
             
             $table->text('billing_address')->nullable();
             $table->text('shipping_address')->nullable();

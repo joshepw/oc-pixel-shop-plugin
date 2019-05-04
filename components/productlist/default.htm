@@ -3,7 +3,7 @@
 	<div class="container">
 		{% if showCategoriesFilter %}
 		
-		{% if categoryList|length > 2 %}
+		{% if typeCategoriesFilter == 'dropdown' %}
 		<div class="dropdown">
 			<button id="btnGroupCategories" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 				<i class="fas fa-filter"></i> {{ 'pixel.shop::component.cart.filter_by_category'|trans }}
@@ -53,7 +53,7 @@
 <section class="products-container">
 	<div class="container">
 
-		{% for productGroup in products.chunk(4) %}
+		{% for productGroup in __SELF__.products.chunk(4) %}
 			<div class="row">
 				{% for product in productGroup %}
 					{% partial '@product' product=product %}

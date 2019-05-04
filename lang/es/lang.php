@@ -6,6 +6,11 @@
         'sales_settings_description' => 'Gestionar detalles de ventas, impuestos y descuentos',
         'gateways_settings' => 'Métodos de pago',
         'gateways_settings_description' => 'Configurar y activar métodos de pago',
+        'access_orders' => 'Acceso a Ordenes',
+        'access_items' => 'Acceso a Artículos',
+        'access_categories' => 'Acceso a Categorías',
+        'access_brands' => 'Acceso a Marcas',
+        'access_coupons' => 'Acceso a Cupones',
     ],
     'menu' => [
         'shop' => 'Tienda',

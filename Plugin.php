@@ -47,19 +47,14 @@ class Plugin extends PluginBase{
 
 	// REGISTER PERMISSIONS
 	public function registerPermissions() {
-		return [
-			'netsti.shop.access_settings' => [ 'tab' => 'netsti.shop::lang.plugin.name', 'label' => 'netsti.shop::lang.plugin.access_settings' ],
-			
-			'netsti.shop.orders' => [ 'tab' => 'netsti.shop::lang.plugin.name', 'label' => 'netsti.shop::lang.plugin.access_orders' ],
-			'netsti.shop.products' => [ 'tab' => 'netsti.shop::lang.plugin.name', 'label' => 'netsti.shop::lang.plugin.access_products' ],
-			'netsti.shop.categories' => [ 'tab' => 'netsti.shop::lang.plugin.name', 'label' => 'netsti.shop::lang.plugin.access_categories' ],
-			'netsti.shop.brands' => [ 'tab' => 'netsti.shop::lang.plugin.name', 'label' => 'netsti.shop::lang.plugin.access_brands' ],
-			'netsti.shop.taxes' => [ 'tab' => 'netsti.shop::lang.plugin.name', 'label' => 'netsti.shop::lang.plugin.access_taxes' ],
-			'netsti.shop.carriers' => [ 'tab' => 'netsti.shop::lang.plugin.name', 'label' => 'netsti.shop::lang.plugin.access_carriers' ],
-			'netsti.shop.orderstatuses' => [ 'tab' => 'netsti.shop::lang.plugin.name', 'label' => 'netsti.shop::lang.plugin.access_orderstatuses' ],
-			'netsti.shop.coupons' => [ 'tab' => 'netsti.shop::lang.plugin.name', 'label' => 'netsti.shop::lang.plugin.access_coupons' ],
-			'netsti.shop.paymentgateways' => [ 'tab' => 'netsti.shop::lang.plugin.name', 'label' => 'netsti.shop::lang.plugin.access_paymentgateways' ],
-			'netsti.shop.access_import_export' => [ 'tab' => 'netsti.shop::lang.plugin.name', 'label' => 'netsti.shop::lang.plugin.access_import_export' ]
+		return [			
+			'pixel.shop.orders' => [ 'tab' => 'pixel.shop::lang.plugin.name', 'label' => 'pixel.shop::lang.plugin.access_orders' ],
+			'pixel.shop.items' => [ 'tab' => 'pixel.shop::lang.plugin.name', 'label' => 'pixel.shop::lang.plugin.access_items' ],
+			'pixel.shop.categories' => [ 'tab' => 'pixel.shop::lang.plugin.name', 'label' => 'pixel.shop::lang.plugin.access_categories' ],
+			'pixel.shop.brands' => [ 'tab' => 'pixel.shop::lang.plugin.name', 'label' => 'pixel.shop::lang.plugin.access_brands' ],
+			'pixel.shop.coupons' => [ 'tab' => 'pixel.shop::lang.plugin.name', 'label' => 'pixel.shop::lang.plugin.access_coupons' ],
+			'pixel.shop.gateways_settings' => [ 'tab' => 'pixel.shop::lang.plugin.name', 'label' => 'pixel.shop::lang.plugin.gateways_settings' ],
+			'pixel.shop.sales_settings' => [ 'tab' => 'pixel.shop::lang.plugin.name', 'label' => 'pixel.shop::lang.plugin.sales_settings' ]
 		];
 	}
 
@@ -121,7 +116,8 @@ class Plugin extends PluginBase{
 				'class'       => 'Pixel\Shop\Models\SalesSettings',
 				'category'    => 'pixel.shop::lang.menu.shop',
 				'order'       => 100,
-				'keywords'    => 'crm customer relationship management invoice estimate'
+                'keywords'    => 'crm customer relationship management invoice estimate',
+                'permissions' => ['pixel.shop.sales_settings']
 			],
 			'gateways' => [
 				'label'       => 'pixel.shop::lang.plugin.gateways_settings',
@@ -130,7 +126,8 @@ class Plugin extends PluginBase{
 				'class'       => 'Pixel\Shop\Models\GatewaysSettings',
 				'category'    => 'pixel.shop::lang.menu.shop',
 				'order'       => 101,
-				'keywords'    => 'management gateways payment method'
+                'keywords'    => 'management gateways payment method',
+                'permissions' => ['pixel.shop.gateways_settings']
 			]
 		];
 	}

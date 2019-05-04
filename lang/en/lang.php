@@ -5,7 +5,12 @@
         'sales_settings' => 'Sales Preferences',
         'sales_settings_description' => 'Manage sales details, taxes and discounts',
         'gateways_settings' => 'Payment Methods',
-        'gateways_settings_description' => 'Configure and activate payment methods.'
+        'gateways_settings_description' => 'Configure and activate payment methods.',
+        'access_orders' => 'Access Orders',
+        'access_items' => 'Access Items',
+        'access_categories' => 'Access Categories',
+        'access_brands' => 'Access Brands',
+        'access_coupons' => 'Access Coupons',
     ],
     'menu' => [
         'shop' => 'Shop',
