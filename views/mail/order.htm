@@ -18,6 +18,48 @@ body {
 	color: #586667;
 }
 
+.badge-status{
+    display: inline-block;
+    min-width: 10px;
+    padding: 3px 7px;
+    font-size: 14px;
+    font-weight: bold;
+    color: #ffffff;
+    line-height: 1;
+    vertical-align: middle;
+    white-space: nowrap;
+    text-align: center;
+    background-color: #777777;
+    border-radius: 10px;
+    border-radius: 3px;
+    padding: 6px 12px;
+}
+
+.status-pending{
+    background-color: #FFA738 !important;
+    color: #FFF !important;
+}
+.status-await_pay{
+    background-color: #EA7D37 !important;
+    color: #FFF !important;
+}
+.status-await_fulfill{
+    background-color: #2A99D6 !important;
+    color: #FFF !important;
+}
+.status-paid{
+    background-color: #00BC9E !important;
+    color: #FFF !important;
+}
+.status-cancelled{
+    background-color: #EC4A41 !important;
+    color: #FFF !important;
+}
+.status-completed{
+    background-color: #00AE69 !important;
+    color: #FFF !important;
+}
+
 @media only screen and (max-width: 640px) {
 	body {
 		padding: 0 !important;
@@ -88,6 +130,7 @@ body {
 				</tr>
 				<tr style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
 					<td class="content-block" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0 0 20px;" valign="top">
+                        <div class="badge-status status-{{ order.status }}">{{ ('pixel.shop::lang.status.' ~ order.status)|trans }}</div>
 						<h2 class="aligncenter" style="font-family: 'Helvetica Neue',Helvetica,Arial,'Lucida Grande',sans-serif; box-sizing: border-box; font-size: 24px; color: #000; line-height: 1.2em; font-weight: 400; text-align: center; margin: 40px 0 0;" align="center">{{ 'pixel.shop::mail.thanks_shopping'|trans }}</h2>
 						<h5 style="font-family: 'Helvetica Neue',Helvetica,Arial,'Lucida Grande',sans-serif; box-sizing: border-box; font-size: 16px; line-height: 1.2em; font-weight: 400; text-align: center; margin: 6px 0 0;" align="center">
 							<b>{{ ('pixel.shop::mail.status.' ~ order.status)|trans }}</b>
@@ -99,7 +142,7 @@ body {
 						<table class="invoice" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; text-align: left; width: 90%; margin: 20px auto;">
 							<tr style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
 								<td style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 5px 0;" valign="top">
-									<b>{{ 'pixel.shop::lang.components.order_to'|trans }}</b>
+									<b>{{ 'pixel.shop::component.order.to'|trans }}</b>
 									<br style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 10px; margin: 0;" />
 									{{ order.customer_fullname }}
 									<br style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 10px; margin: 0;" />

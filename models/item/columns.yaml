@@ -30,7 +30,7 @@ columns:
         searchable: true
         width: 120px
         default: - - - - -
-    model:
+    code:
         label: 'pixel.shop::lang.fields.cod'
         type: text
         searchable: true

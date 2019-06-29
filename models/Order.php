@@ -106,15 +106,13 @@ class Order extends Model
     }
 
     public function sendNotification(){
-    	if($this->is_paid && !$this->is_fulfill){
-    		$order = $this;
-    		$vars = [ 'order' => $order ];
+        $order = $this;
+        $vars = [ 'order' => $order ];
 
-    		Mail::send('pixel.shop::mail.order', $vars, function($message) use ($order) {
-    			$message->to($order->customer_email, $order->customer_fullname);
-    			$message->subject(trans('pixel.shop::mail.receipt'));
-    		});
-    	}
+        Mail::send('pixel.shop::mail.order', $vars, function($message) use ($order) {
+            $message->to($order->customer_email, $order->customer_fullname);
+            $message->subject(trans('pixel.shop::mail.receipt'));
+        });
     }
 
     public function reduceInventory($increment = false){
