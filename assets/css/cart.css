@@ -174,3 +174,43 @@ input[data-type="discover"]{
 .shop__order-thanks h3{
 	margin: 0px !important;
 }
+
+.img-responsive {
+    display: block;
+    max-width: 100%;
+    height: auto;
+}
+
+.payment-info .info {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    font-size: 12px
+}
+
+.payment-info .info img {
+    margin-right: 10px
+}
+
+.payment-info .info p {
+    flex: 1;
+    font-size: 11px;
+    margin: 0px;
+}
+
+.payment-info .info p b {
+    color: #4275F2
+}
+
+.payment-info{
+    display: block;
+    margin-bottom: 32px
+}
+
+.payment-info > hr {
+    margin: 10px 0px !important;
+    border: 0;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    box-sizing: content-box;
+    height: 0;
+}

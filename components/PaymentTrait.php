@@ -1,7 +1,9 @@
 <?php namespace Pixel\Shop\Components;
 
+use Log;
 use Flash;
 use Redirect;
+use stdClass;
 use Validator;
 use Exception;
 use Carbon\Carbon;
@@ -102,7 +104,12 @@ trait PaymentTrait{
 
 		$cart->shipping_address = input('shipping_address');
 		$cart->billing_address = input('is_ship_same_bill' == 'on') ? input('shipping_address') : input('billing_address');
-		$cart->notes = input('notes');
+        $cart->notes = input('notes');
+        
+        Log::debug(json_encode([
+            'shipping' => input('shipping_address'),
+            'billing' => input('billing_address')
+        ]));
 
 		$cart->gateway = input('gateway');
 		$cart->save();
@@ -337,7 +344,6 @@ trait PaymentTrait{
 			'order_cancel' => $this->controller->currentPageUrl() . "?order_id=$order->id&cancel=true",
 			'order_complete' => $this->controller->currentPageUrl() . "?order_id=$order->id&thanks=true",
 			'order_id' => $order->id,
-			'order_content' => $order_content,
 			'order_currency' => null,
 			'order_tax_amount' => number_format(floatval($order->tax_total), 2, '.', ''),
 			'order_shipping_amount' => number_format(floatval($order->shipping_total), 2, '.', ''),
@@ -350,9 +356,56 @@ trait PaymentTrait{
 			'zip' => $order->billing_address['zip'],
 			'city' => $order->billing_address['city'],
 			'state' => $order->billing_address['state'],
-			'country' => $order->billing_address['country'],
-		];
+            'country' => $order->billing_address['country'],
+            'json' => true
+        ];
+        
+        $response = $this->doPostRequest($pixelDomain . $apiURL, $fields);
 
-		return redirect($pixelDomain . $apiURL . '?' . http_build_query($fields));
-	}
+        if($response->success){
+            $data = $response->body;
+            $json = json_decode($data);
+
+            if(property_exists($json, 'success') && $json->success){
+                return redirect($json->url);
+            }else{
+                if(property_exists($json, 'message')){
+                    Flash::error($json->message);
+                }else{
+                    Flash::error(trans("pixel.shop::component.payment.request_error"));
+                }
+            }
+        }else{
+            Flash::error(trans("pixel.shop::component.payment.request_error"));
+        }
+    }
+    
+    protected function doPostRequest($url, $data){
+        $response = new stdClass();
+        $response->success = false;
+        $response->code = null;
+        $response->body = null;
+
+        try {
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_POST, true);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+            $body = curl_exec($ch);
+            $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+            
+            curl_close($ch);
+
+            $response->success = true;
+            $response->body = $body;
+            $response->code = $code;
+
+            return $response;
+        } catch (Throwable $th) {
+            report($th);
+            return $response;
+        }
+    }
 }

@@ -50,7 +50,7 @@ return [
         'bank_transfer_comment' => 'Por favor transfiera la cantidad total (:total) a nuestra cuenta bancaria.',
         'cash_on_delivery_comment' => 'Usted paga por la mercancía a la entrega.',
         'paypal_comment' => 'Cuando haga clic en <b>"Realizar pedido"</b>, se lo llevará al sitio web de <b>PayPal</b>.',
-        'pixelpay_comment' => 'En la página siguiente, su pago se procesa a través de <b style="color: #226DF6">PixelPay &reg;</b><br><b style="color: #226DF6">No almacenamos datos</b> de Tarjetas de crédito o débito<br>Todas las transacciones viajan <b style="color: #226DF6">encriptadas y seguras</b>',
+        'pixelpay_comment' => 'En la página siguiente, su pago se procesa a través de <b style="color: #226DF6">PixelPay &reg;</b><br><b style="color: #226DF6">No guardamos información de la tarjeta. La transacción es <b style="color: #226DF6">encriptada y segura</b>',
 
         'name_card' => 'Nombre en la tarjeta',
         'card_number' => 'Numero de la tarjeta',
@@ -60,7 +60,10 @@ return [
         'filter_by_category' => 'Filtrar por Categoría',
         'no_results' => 'No hay resultados para mostrar.',
         'return' => 'Regresar'
-	]
+    ],
+    "payment" => [
+        "request_error" => "Error al enviar los datos a PixelPay",
+    ]
 ];
 
 ?>
