@@ -214,3 +214,121 @@ input[data-type="discover"]{
     box-sizing: content-box;
     height: 0;
 }
+
+#shop__cart-partial{
+    /* float:right; */
+}
+
+#shop__cart-steps{
+    margin-top: 48px;
+}
+
+.row.small-gutter{
+    margin-left: -5px;
+    margin-right: -5px;
+}
+
+.row.small-gutter [class*='col-'] {
+    padding-right: 5px;
+    padding-left: 5px;
+}
+
+.--wizard{
+    display: block;
+    width: 100%;
+    /* border-right: 1px solid #eee; */
+}
+
+.--wizard a{
+    outline: 0
+}
+
+.--wizard > .--steps .current-info{
+    position: absolute;
+    left: -999em
+}
+
+.--wizard > .--content > .--title{
+    position: absolute;
+    left: -999em
+}
+
+.--wizard > .--steps > ul {
+    /* display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: row; */
+    list-style: none !important;
+    margin: 0;
+    padding: 10px 16px;
+    background-color: #eee;
+    border-radius: 6px;
+}
+
+.--wizard > .--steps > ul > li {
+    /* width: 100%; */
+    display: inline;
+    font-size: 16px;
+}
+
+.--wizard > .--steps > ul > li+li:before {
+    padding: 8px 20px;
+    color: black;
+    content: "›";
+}
+
+.--wizard > .--steps .number {
+    font-weight: bolder;
+}
+
+.--wizard > .--steps a,
+.--wizard > .--steps a:hover,
+.--wizard > .--steps a:active {
+    /* display: block;
+    width: auto;
+    margin: 0 .5em .5em;
+    padding: 1em 1em;
+    text-decoration: none;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px */
+    color: #717171;
+    text-decoration: none;
+}
+
+.--wizard > .--steps .disabled a,
+.--wizard > .--steps .disabled a:hover,
+.--wizard > .--steps .disabled a:active {
+    color: #aaa;
+    cursor: default
+}
+
+.--wizard > .--steps .current a,
+.--wizard > .--steps .current a:hover,
+.--wizard > .--steps .current a:active {
+    color: #0275d8;
+    cursor: default
+}
+
+.--wizard > .--steps .done a,
+.--wizard > .--steps .done a:hover,
+.--wizard > .--steps .done a:active {
+    color: #9dc8e2;
+}
+
+.--wizard > .--steps .error a,
+.--wizard > .--steps .error a:hover,
+.--wizard > .--steps .error a:active {
+    color: #ff3111;
+}
+
+.--wizard > .--content{
+    padding: 8px;
+}
+
+.--wizard > .--content legend{
+    margin-top: 25px;
+    margin-bottom: 15px;
+    font-size: 18px;
+    font-weight: bold;
+}

@@ -33,7 +33,7 @@
 					{{ order.total|currency({in: order.currency}) }}
 				</td>
 				<td>
-					<a href="#" data-request="onLoadOrder" data-request-data="id: {{ order.id }}" class="btn btn-default btn-xs">
+					<a href="#" data-request="{{ __SELF__ }}::onLoadOrder" data-request-data="id: {{ order.id }}" class="btn btn-default btn-xs">
 						<i class="fas fa-search"></i> {{ 'pixel.shop::lang.fields.view'|trans }}
 					</a>
 				</td>

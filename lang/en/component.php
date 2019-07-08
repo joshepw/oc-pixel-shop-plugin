@@ -50,7 +50,7 @@ return [
         'bank_transfer_comment' => 'Please transfer the total amount (:total) to our bank account.',
         'cash_on_delivery_comment' => 'You pay for the merchandise upon delivery.',
         'paypal_comment' => 'When you click <b>"Place Order"</b>, you will be taken to the <b>PayPal</b> website.',
-        'pixelpay_comment' => 'On the next page your payment is processed through <b style="color: #226DF6">PixelPay&reg;</b><br> <b style="color: #226DF6">We do not store card data. The transaction is <b style="color: #226DF6">encrypted and secure</b>',
+        'pixelpay_comment' => 'On the next page your payment is processed through <b style="color: #226DF6">PixelPay&reg;</b><br>We do not store card data. The transaction is <b style="color: #226DF6">encrypted and secure</b>',
 
         'name_card' => 'Name on card',
         'card_number' => 'Credit card number',
@@ -59,7 +59,12 @@ return [
 
         'filter_by_category' => 'Filter by Category',
         'no_results' => 'There are no results to show.',
-        'return' => 'Return'
+        'return' => 'Return',
+
+        'customer_information' => 'Customer Information',
+        'shipping_method' => 'Shipping Method',
+        'complete_order' => 'Complete Order',
+        'payment_method' => 'Payment Method'
 	]
 ];
 

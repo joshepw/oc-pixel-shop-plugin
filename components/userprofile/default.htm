@@ -7,14 +7,16 @@
 					<h1 class="text-center login-title">{{ 'pixel.shop::component.user.sign_in'|trans }}</h1>
 					<div class="account-wall">
 						<img class="profile-img" src="{{ '/plugins/pixel/shop/assets/img/photo.png'|app }}" alt="">
-						<form class="form-signin" data-request="onSignin" data-request-success="location.reload()" novalidate data-request-flash data-request-validate>
+						<form class="form-signin" data-request="onSignin" data-request-success="Profile.onFinishLogin()" novalidate data-request-flash data-request-validate>
 							<p class="form-errors">
 								<small class="invalid-feedback text-danger" data-validate-for="username"></small>
 								<small class="invalid-feedback text-danger" data-validate-for="password"></small>
 							</p>
 
 							<input name="username" type="text" class="form-control first" placeholder="Email" required autofocus>
-							<input name="password" type="password" class="form-control last" placeholder="Password" required>
+                            <input name="password" type="password" class="form-control last" placeholder="Password" required>
+                            
+                            <input type="hidden" name="origin" value="{{ input('origin') }}">
 
 							<button class="btn btn-lg btn-primary btn-block" type="submit">
 								{{ 'pixel.shop::component.user.sign_in_button'|trans }}
@@ -28,7 +30,7 @@
 					<h1 class="text-center login-title">{{ 'pixel.shop::component.user.register'|trans }}</h1>
 					<div class="account-wall">
 						<img class="profile-img" src="{{ '/plugins/pixel/shop/assets/img/photo.png'|app }}" alt="">
-						<form class="form-signin" data-request="onRegister" data-request-success="location.reload()" novalidate data-request-flash data-request-validate>
+						<form class="form-signin" data-request="onRegister" data-request-success="Profile.onFinishLogin()" novalidate data-request-flash data-request-validate>
 							<p class="form-errors">
 								<small class="invalid-feedback text-danger" data-validate-for="name"></small>
 								<small class="invalid-feedback text-danger" data-validate-for="username"></small>
@@ -63,36 +65,26 @@
 		{% endif %}
 
 
-		<ul class="nav nav-tabs">
-			<li class="active"><a data-toggle="tab" href="#account">{{ 'pixel.shop::component.user.account'|trans }}</a></li>
-			<li><a data-toggle="tab" href="#orders">{{ 'pixel.shop::component.user.orders'|trans }}</a></li>
-			<li><a data-toggle="tab" href="#favorites">{{ 'pixel.shop::component.user.favorites'|trans }}</a></li>
+		<ul class="nav nav-tabs">            
+            {% for tab in __SELF__.tabs %}
+            <li {% if loop.first %}class="active"{% endif %}>
+                <a data-toggle="tab" href="#{{ tab.id }}">{{ tab.title|trans }}</a>
+            </li>
+            {% endfor %}
 
 			<li class="pull-right"><a href="#" data-request="onLogOut" data-request-success="location.reload()">{{ 'pixel.shop::component.user.logout'|trans }}</a></li>			
 		</ul>
 
 		<div class="tab-content">
-			<div id="account" class="tab-pane fade in active">
-				<h3>{{ 'pixel.shop::component.user.account'|trans }}</h3>
-				<hr>
-				{% partial '@account' %}
-			</div>
-
-			<div id="orders" class="tab-pane fade">
-				<h3>{{ 'pixel.shop::component.user.orders'|trans }}</h3>
-				<hr>
-				<div id="user-orders">
-					{% partial '@orders' %}
-				</div>
-			</div>
-
-			<div id="favorites" class="tab-pane fade">
-				<h3>{{ 'pixel.shop::component.user.favorites'|trans }}</h3>
-				<hr>
-				<div id="user-favorites">
-					{% partial '@favorites' %}
-				</div>
-			</div>
+            {% for tab in __SELF__.tabs %}
+            <div id="{{ tab.id }}" class="tab-pane fade {% if loop.first %}in active{% endif %}">
+                <h3>{{ tab.title|trans }}</h3>
+                <hr>
+                <div id="{{ tab.id }}-content">
+                    {{ tab.content|raw }}
+                </div>
+            </div>
+            {% endfor %}
 		</div>
 	</div>
 

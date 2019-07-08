@@ -221,6 +221,13 @@ Profile.checkSameAddress = function(el){
 		$('.shop__billing-elements').fadeIn();
 }
 
+Profile.onFinishLogin = function(){
+    if(($('[name="origin"]').val() || '').length > 0)
+        location.replace($('[name="origin"]').val())
+    else
+        location.reload();
+}
+
 jQuery(document).ready(function($) {
 	var hash = window.location.hash;
   		hash && $('ul.nav a[href="' + hash + '"]').tab('show');

@@ -139,7 +139,8 @@ class CartContainer extends ComponentBase{
 		$this->page['methods_list'] = $this->getPaymentMethodsList($billing_country);
 
 		$this->addCss('/plugins/pixel/shop/assets/css/cart.css');
-		$this->addJs('/plugins/pixel/shop/assets/js/jquery.mask.min.js');
+        $this->addJs('/plugins/pixel/shop/assets/js/jquery.mask.min.js');
+        $this->addJs('/plugins/pixel/shop/assets/js/jquery.steps.min.js');
 		$this->addJs('/plugins/pixel/shop/assets/js/cart.js');
 	}
 

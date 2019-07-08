@@ -16,9 +16,12 @@ use Cms\Classes\ComponentBase;
 use Pixel\Shop\Models\Favorite;
 use RainLab\Location\Models\State;
 use RainLab\Location\Models\Country;
+use Pixel\Shop\Classes\PartialMaker;
 use RainLab\User\Models\Settings as UserSettings;
 
 class UserProfile extends ComponentBase{
+
+    public $tabs;
 
     public function componentDetails(){
         return [
@@ -49,14 +52,53 @@ class UserProfile extends ComponentBase{
         $this->addCss('/plugins/pixel/shop/assets/css/products.css');
         $this->addJs('/plugins/pixel/shop/assets/js/jquery.mask.min.js');
         $this->addJs('/plugins/pixel/shop/assets/js/user.js');
+
+        // Extend Tabs and content
+        $this->addComponentTab('orders', [
+            'title' => 'pixel.shop::component.user.orders',
+            'order' => 20,
+            'content' => $this->renderPartial('@orders')
+        ]);
+            
+        $this->addComponentTab('favorites', [
+            'title' => 'pixel.shop::component.user.favorites',
+            'order' => 30,
+            'content' => $this->renderPartial('@favorites')
+        ]);
+
+        $this->addComponentTab('account', [
+            'title' => 'pixel.shop::component.user.account',
+            'order' => 10,
+            'content' => $this->renderPartial('@account')
+        ]);
+
+        Event::fire('pixel.shop.profile.extendtabs', [$this]);
+    }
+
+
+    public function addComponentTab($id, $tab){
+        $tab['id'] = $id;
+        $this->tabs[] = $tab;
+
+        usort($this->tabs, function($a, $b){
+            if(array_key_exists('order', $a) && array_key_exists('order', $b)){
+                if($a['order'] == $b['order'])
+                    return 0;
+
+                return ($a['order'] < $b['order']) ? -1 : 1;
+            }else{
+                return 0;
+            }
+        });
     }
 
     public function prepareVars(){
     	$this->page['user'] = $user = $this->user();
     	$this->page['canRegister'] = $this->canRegister();
     	$this->page['countries'] = Country::isEnabled()->orderBy('is_pinned', 'desc')->get();
-
-    	$this->page['favorites'] = $this->loadFavorites($user);
+        $this->page['favorites'] = $this->loadFavorites($user);
+        
+        $this->tabs = array();
 
     	if(isset($user->billing_address['state'])){
 			if($state = State::where('code', $user->billing_address['state'])->first())
@@ -66,7 +108,7 @@ class UserProfile extends ComponentBase{
 		if(isset($user->shipping_address['state'])){
 			if($state = State::where('code', $user->shipping_address['state'])->first())
 				$this->page['shipping_states'] = $state->country->states;
-		}
+        }
     }
 
     public function user(){
@@ -293,7 +335,7 @@ class UserProfile extends ComponentBase{
 					$fav->save();
 				}
 
-				return ['#user-favorites' => $this->renderPartial('@favorites', [
+				return ['#favorites-content' => $this->renderPartial('@favorites', [
 					'favorites' => $this->loadFavorites($user)
 				])];
 			}
@@ -309,10 +351,10 @@ class UserProfile extends ComponentBase{
 		if(!$order = Order::find($item_id))
 			return;
 
-		return ['#user-orders' => $this->renderPartial('@order', [ 'order' => $order ])];
+		return ['#orders-content' => $this->renderPartial('@order', [ 'order' => $order ])];
 	}
 
 	public function onLoadOrders(){
-		return ['#user-orders' => $this->renderPartial('@orders', [ 'user' => $this->user() ])];
+		return ['#orders-content' => $this->renderPartial('@orders', [ 'user' => $this->user() ])];
 	}
 }

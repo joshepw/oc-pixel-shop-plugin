@@ -8,51 +8,60 @@
 			{% partial '@cart' %}
 		</div>
 
-		<div class="col-md-8">
-			<form novalidate="" data-request="onSendCheckout" data-request-flash data-request-validate>
-				{% partial '@customer_information' %}
+		<div class="col-md-8" id="shop__cart-steps">
+			<form novalidate="" data-request="onSendCheckout" data-request-flash data-request-validate data-request-complete="Cart.focusToInvalidFields()">
+                <div class="shop__steps">
+                    <h3>{{ 'pixel.shop::component.cart.customer_information'|trans }}</h3>
+                    <div class="step-content">
+                        {% partial '@customer_information' %}
+                    </div>
 
-				{% partial '@shipping_address' %}
+                    <h3>{{ 'pixel.shop::component.cart.shipping_method'|trans }}</h3>
+                    <div class="step-content">
+                        {% partial '@shipping_address' %}
+                    </div>
+                    <h3>{{ 'pixel.shop::component.cart.complete_order'|trans }}</h3>
+                    <div class="step-content">
+                        {% partial '@billing_address' %}
 
-				{% partial '@billing_address' %}
+                        <div class="checkbox">
+                            <label for="same-address">
+                                <input type="checkbox" name="is_ship_same_bill" id="same-address" {% if (user.is_ship_same_bill or user.is_ship_same_bill == null) or not user %}checked="checked"{% endif %} onchange="Cart.checkSameAddress($(this))">
+                                <b>{{ 'pixel.shop::component.cart.is_ship_same_bill'|trans }}</b>
+                            </label>
+                        </div>
 
-				<hr>
-	
-				{% if user %}
-				<div class="checkbox">
-					<label for="same-address">
-						<input type="checkbox" name="is_ship_same_bill" id="same-address" {% if user.is_ship_same_bill or user.is_ship_same_bill == null %}checked="checked"{% endif %}><b>{{ 'pixel.shop::component.cart.is_ship_same_bill'|trans }}</b>
-					</label>
-				</div>
-				{% else %}
-				<div class="checkbox">
-					<label for="same-address">
-						<input type="checkbox" name="is_ship_same_bill" id="same-address" checked="checked"><b>{{ 'pixel.shop::component.cart.is_ship_same_bill'|trans }}</b>
-					</label>
-				</div>
-				{% endif %}
+                        {% if user %}
+                        <div class="checkbox">
+                            <label class="custom-control-label" for="save-info">
+                                <input type="checkbox" name="is_save_for_later" id="save-info"><b>{{ 'pixel.shop::component.cart.is_save_for_later'|trans }}</b>
+                            </label>
+                        </div>
+                        {% endif %}
 
-				{% if user %}
-				<div class="checkbox">
-					<label class="custom-control-label" for="save-info">
-						<input type="checkbox" name="is_save_for_later" id="save-info"><b>{{ 'pixel.shop::component.cart.is_save_for_later'|trans }}</b>
-					</label>
-				</div>
-				{% endif %}
-				
-				<hr>
+                        <legend>{{ 'pixel.shop::component.cart.payment_method'|trans }}</legend>
 
-				<div class="shop__methods-list">
-					{% partial '@methods' %}
-				</div>
+                        <div class="shop__methods-list">
+                            {% partial '@methods' %}
+                        </div>
+                    </div>
+                </div>
+                
 
-				<div class="row" id="form-bag">
-					<div class="col-md-6">
-						<a href="{{ product_page|page }}" class="btn btn-primary btn-block"><i class="fas fa-shopping-cart"></i> {{ 'pixel.shop::component.cart.continue_shopping'|trans }}</a>
+                <div class="row" id="form-bag">
+                    <div class="col-md-12 text-right">
+                        <hr>
+                        <a href="javascript:;" class="btn btn-link btn-prev">Regresar</a>
+                        <a href="javascript:;" class="btn btn-primary btn-next">Siguiente</a>
+                        <button class="btn btn-success btn-finish" type="submit" data-attach-loading style="display: none">
+                            <i class="fas fa-credit-card"></i> {{ 'pixel.shop::component.cart.place_order'|trans }}
+                        </button>
+                    </div>
+					{# <div class="col-md-6">
+                        <a href="{{ product_page|page }}" class="btn btn-primary btn-block"><i class="fas fa-shopping-cart"></i> {{ 'pixel.shop::component.cart.continue_shopping'|trans }}</a>
 					</div>
 					<div class="col-md-6">
-						<button class="btn btn-success btn-block" type="submit" data-attach-loading><i class="fas fa-credit-card"></i> {{ 'pixel.shop::component.cart.place_order'|trans }}</button>
-					</div>
+					</div> #}
 				</div>
 			</form>
 		</div>
