@@ -259,7 +259,7 @@
         'order_not_exist' => 'The order does not exist or is invalid.',
         'order_status_updated' => 'The status of the order was updated.',
         'enable_variants' => 'Enable variants first',
-        'enable_variants_comment' => 'For manage the item variants and options you need enable the "Has Variants" swithc for continue.',
+        'enable_variants_comment' => 'For manage the item variants and options you need enable the "Has Variants" switch for continue.',
 
         'bank_transfer_settings' => 'This module allows you to accept secure payments by bank wire.',
         'bank_transfer_settings_comment' => 'If the client chooses to pay by bank wire, the order status will change to \'Awaiting Payment\'. That said, you must manually confirm the order upon receiving the bank wire.',

@@ -8,7 +8,7 @@ return [
 		'favorites' => 'My Favorites',
 		'account' => 'Account Details',
 		'logout' => 'Logout',
-		'sign_in_button' => 'Sing in',
+		'sign_in_button' => 'Sign in',
 		'register_button' => 'Register',
 		'save_details' => 'Save Details',
 		'desactivate_account' => 'Deactivate account',
