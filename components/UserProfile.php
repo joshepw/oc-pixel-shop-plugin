@@ -32,13 +32,17 @@ class UserProfile extends ComponentBase{
 
     public function defineProperties(){
         return [
+            'redirect' => [
+                'title'       => 'Redirect on register/login',
+                'type'        => 'dropdown',
+                'default'     => ''
+            ],
         	'productPage' => [
 				'title'       => 'Product page',
 				'description' => 'Product detail page',
 				'type'        => 'dropdown',
 				'default'     => 'product',
-				'group'       => 'Links',
-			],
+            ]
         ];
     }
 
@@ -208,6 +212,9 @@ class UserProfile extends ComponentBase{
                 Auth::logout();
                 throw new Exception(trans('rainlab.user::lang.account.banned'));
             }
+
+            if ($redirect = $this->makeRedirection(true))
+                return $redirect;
         }catch (Exception $ex) {
             if (Request::ajax()) 
             	throw $ex;
@@ -256,6 +263,9 @@ class UserProfile extends ComponentBase{
 
             if ($automaticActivation || !$requireActivation)
                 Auth::login($user);
+
+            if ($redirect = $this->makeRedirection(true))
+                return $redirect;
         }catch (Exception $ex) {
             if (Request::ajax()) 
             	throw $ex;
@@ -266,7 +276,27 @@ class UserProfile extends ComponentBase{
 
 	public function onLogOut(){
 		Auth::logout();
-	}
+    }
+    
+    protected function makeRedirection($intended = false){
+        $method = $intended ? 'intended' : 'to';
+
+        $property = trim((string) $this->property('redirect'));
+
+        if ($property === '0') {
+            return;
+        }
+        
+        if ($property === '') {
+            return Redirect::refresh();
+        }
+
+        $redirectUrl = $this->pageUrl($property) ?: $property;
+
+        if ($redirectUrl = post('redirect', $redirectUrl)) {
+            return Redirect::$method($redirectUrl);
+        }
+    }
 
 	public function onUpdate(){
         if (!$user = $this->user())
@@ -356,5 +386,10 @@ class UserProfile extends ComponentBase{
 
 	public function onLoadOrders(){
 		return ['#orders-content' => $this->renderPartial('@orders', [ 'user' => $this->user() ])];
-	}
+    }
+    
+    public function getRedirectOptions()
+    {
+        return [''=>'- refresh page -', '0' => '- no redirect -'] + Page::sortBy('baseFileName')->lists('baseFileName', 'baseFileName');
+    }
 }
