@@ -19,7 +19,7 @@
 	<div class="col-md-6">
 		<div class="form-group">
 			<label>{{ 'pixel.shop::lang.fields.email'|trans }}</label>
-			<input type="email" class="form-control" placeholder="you@example.com" value="{{ user.email ?: cart.customer_email }}" name="customer_email">
+			<input type="email" class="form-control" placeholder="{{ 'pixel.shop::lang.components.cart_emailexample'|trans }}" value="{{ user.email ?: cart.customer_email }}" name="customer_email">
 			<div class="invalid-feedback" data-validate-for="customer_email"></div>
 		</div>
 	</div>

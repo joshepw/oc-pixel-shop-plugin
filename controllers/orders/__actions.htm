@@ -5,14 +5,14 @@
 	</div>
 
 	<?php if($formModel->status == 'await_pay'): ?>
-		<button data-request="onChangeStatus" data-request-confirm="<?= trans('pixel.shop::lang.messages.status_confirm') ?>" data-request-data="status: 'await_fulfill', order_id: '<?= $formModel->id ?>'" class="btn btn-success btn-sm oc-icon-check">Mark as Paid</button>
+		<button data-request="onChangeStatus" data-request-confirm="<?= trans('pixel.shop::lang.messages.status_confirm') ?>" data-request-data="status: 'await_fulfill', order_id: '<?= $formModel->id ?>'" class="btn btn-success btn-sm oc-icon-check"><?= e(trans('pixel.shop::lang.status.mark_as_paid')) ?></button>
 	<?php endif ?>
 
 	<?php if($formModel->status == 'await_fulfill'): ?>
-		<button data-request="onChangeStatus" data-request-confirm="<?= trans('pixel.shop::lang.messages.status_confirm') ?>" data-request-data="status: 'completed', order_id: '<?= $formModel->id ?>'" class="btn btn-success btn-sm oc-icon-check">Mark as complete</button>
+		<button data-request="onChangeStatus" data-request-confirm="<?= trans('pixel.shop::lang.messages.status_confirm') ?>" data-request-data="status: 'completed', order_id: '<?= $formModel->id ?>'" class="btn btn-success btn-sm oc-icon-check"><?= e(trans('pixel.shop::lang.status.mark_as_complete')) ?></button>
 	<?php endif ?>
 
 	<?php if($formModel->status != 'completed' && $formModel->status != 'cancelled'): ?>
-		<button data-request="onChangeStatus" data-request-confirm="<?= trans('pixel.shop::lang.messages.status_confirm') ?>" data-request-data="status: 'cancelled', order_id: '<?= $formModel->id ?>'" class="btn btn-danger btn-sm oc-icon-ban">Cancel Order</button>
+		<button data-request="onChangeStatus" data-request-confirm="<?= trans('pixel.shop::lang.messages.status_confirm') ?>" data-request-data="status: 'cancelled', order_id: '<?= $formModel->id ?>'" class="btn btn-danger btn-sm oc-icon-ban"><?= e(trans('pixel.shop::lang.status.cancel_order')) ?></button>
 	<?php endif ?>
 </div>

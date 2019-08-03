@@ -369,7 +369,7 @@ class UserProfile extends ComponentBase{
 				])];
 			}
 		}else{
-			Flash::error('Please login first to save favorites.');
+			Flash::error(trans('pixel.shop::lang.components.pl_please_login'));
 			return;
 		}
 	}

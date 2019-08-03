@@ -17,7 +17,7 @@
 		{% if settings.bank_transfer_customer_information %}
 		<div class="col-md-12">
 			<label>{{ 'pixel.shop::lang.fields.information'|trans }}</label>
-			<p>{{ settings.bank_transfer_customer_information }}</p>
+			<p>{{ settings.bank_transfer_customer_information|raw }}</p>
 		</div>
 		{% endif %}
 	</div>

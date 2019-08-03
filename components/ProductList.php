@@ -1,6 +1,7 @@
 <?php namespace Pixel\Shop\Components;
 
 use Flash;
+use Lang;
 use Cms\Classes\Page;
 use Cms\Classes\ComponentBase;
 
@@ -199,7 +200,7 @@ class ProductList extends ComponentBase
 
 	public function getCategoryFilterOptions(){
 		$list = Category::lists('name', 'slug');
-		array_unshift($list, 'All Categories');
+		array_unshift($list, trans('pixel.shop::lang.components.pl_all_cats'));
 		return $list;
 	}
 
@@ -214,7 +215,7 @@ class ProductList extends ComponentBase
 		$list = array();
 		
 		$empty = new Category();
-		$empty->name = 'All Categories';
+		$empty->name = trans('pixel.shop::lang.components.pl_all_cats');
 		$empty->setUrl($page, $this->controller, $param);
 
 		$list[] = $empty;
@@ -260,7 +261,7 @@ class ProductList extends ComponentBase
 					])];
 			}
 		}else{
-			Flash::error('Please login first to save favorites.');
+			Flash::error(trans('pixel.shop::lang.components.pl_please_login'));
 			return;
 		}
 	}

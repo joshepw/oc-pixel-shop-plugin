@@ -199,7 +199,9 @@
         'order' => 'Order',
         'action' => 'Action',
         'view' => 'View',
-        'zip' => 'ZIP'
+        'zip' => 'ZIP',
+        'sales' => 'Sales',
+        'views' => 'Views'
     ],
     'status' => [
     	'pending' => 'Pending',
@@ -208,6 +210,9 @@
     	'paid' => 'Paid',
     	'cancelled' => 'Cancelled/Refunded',
     	'completed' => 'Completed',
+        'mark_as_paid' => 'Mark as Paid',
+        'mark_as_complete' => 'Mark as Complete',
+        'cancel_order' => 'Cancel Order',
     ],
     'messages' => [
     	'pending_description' => 'Customer started the checkout process but did not complete it.',
@@ -357,5 +362,13 @@
     	'code_2' => 'This coupon is no longer valid to date.',
     	'code_1' => 'This coupon is no longer active.',
     	'code_0' => 'The coupon has been applied successfully.'
+    ],
+
+    'components' => [
+        'pl_all_cats' => 'All Categories',
+        'cart_next'    => 'Next',
+        'cart_prev'    => 'Back',
+        'cart_emailexample'    => 'your@email.com',
+        'pl_please_login' => 'Please login first to save favorites.'
     ],
 ];

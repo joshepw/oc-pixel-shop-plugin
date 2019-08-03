@@ -125,8 +125,8 @@ secondaryTabs:
 
     bank_transfer_customer_information:
         label: 'pixel.shop::lang.fields.bank_customer_information'
-        type: textarea
-        size: tiny
+        type: richeditor
+        size: large
         span: full
         comment: 'pixel.shop::lang.messages.bank_customer_information'
         tab: 'pixel.shop::lang.fields.bank_transfer'

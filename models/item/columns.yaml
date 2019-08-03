@@ -13,12 +13,12 @@ columns:
         searchable: true
         sortable: true
     sales_count:
-        label: 'Sales'
+        label: 'pixel.shop::lang.fields.sales'
         type: number
         width: 60px
         searchable: false
     views_count:
-        label: 'Views'
+        label: 'pixel.shop::lang.fields.views'
         type: number
         width: 60px
         searchable: false

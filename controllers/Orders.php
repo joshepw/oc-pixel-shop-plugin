@@ -48,6 +48,7 @@ class Orders extends Controller
     	}
 
     	if(input('status') == 'cancelled'){
+			$order->status = input('status');
     		$order->reduceInventory(true);
     		$order->sendNotification();
     	}

@@ -23,13 +23,18 @@ class CreateRainlabExtendLocation extends Migration
 	
 	public function down()
 	{
-		Schema::table('rainlab_location_states', function($table){
+		if (Schema::hasColumns('rainlab_location_states', ["shipping_fee"]))			
+		{	
+			Schema::table('rainlab_location_states', function($table){
+				$table->dropColumn('shipping_fee');
+			});
+		}
+		if (Schema::hasColumns('rainlab_location_countries', ["shipping_fee"]))
+		{
+			Schema::table('rainlab_location_countries', function($table){
 			$table->dropColumn('shipping_fee');
-		});
-
-		Schema::table('rainlab_location_countries', function($table){
-			$table->dropColumn('shipping_fee');
-		});
+			});
+		}
 	}
 	
 

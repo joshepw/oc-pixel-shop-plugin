@@ -37,11 +37,11 @@
 								<small class="invalid-feedback text-danger" data-validate-for="password"></small>
 							</p>
 
-							<input name="name" type="text" class="form-control first" placeholder="Name" required autofocus>
-							<input name="email" type="text" class="form-control last" placeholder="Email" required>
+							<input name="name" type="text" class="form-control first" placeholder="{{ 'pixel.shop::component.default.name'|trans }}" required autofocus>
+							<input name="email" type="text" class="form-control last" placeholder="{{ 'pixel.shop::component.default.email'|trans }}" required>
 
-							<input name="password" type="password" class="form-control first" placeholder="Password" required>
-                            <input name="password_confirmation" type="password" class="form-control last" placeholder="Password" required>
+							<input name="password" type="password" class="form-control first" placeholder="{{ 'pixel.shop::component.default.password'|trans }}" required>
+							<input name="password_confirmation" type="password" class="form-control last" placeholder="{{ 'pixel.shop::component.default.password_confirmation'|trans }}" required>
                             
                             <input type="hidden" name="redirect" value="{{ input('origin') }}">
 

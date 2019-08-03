@@ -1,6 +1,7 @@
 <?php namespace Pixel\Shop\Models;
 
 use Mail;
+use Log;
 use Auth;
 use Model;
 use Currency;
@@ -103,16 +104,51 @@ class Order extends Model
 
     public function getShopAddress(){
     	return SalesSettings::get('shop_address');
+	}
+	
+	public function getBankTransferDetails(){
+    	return GatewaysSettings::get('bank_transfer_customer_information');
     }
 
     public function sendNotification(){
         $order = $this;
         $vars = [ 'order' => $order ];
 
-        Mail::send('pixel.shop::mail.order', $vars, function($message) use ($order) {
-            $message->to($order->customer_email, $order->customer_fullname);
-            $message->subject(trans('pixel.shop::mail.receipt'));
-        });
+		if (!$order->is_paid && !$order->is_confirmed && $order->status == "await_pay"){
+			Mail::send('pixel.shop::mail.order_awaitpay', $vars, function($message) use ($order) {
+				$message->to($order->customer_email, $order->customer_fullname);
+				$message->subject(trans('pixel.shop::mail.receipt'));
+			});
+		}
+		else if ($order->is_paid && $order->is_confirmed && !$order->is_fulfill && $order->status == "await_fulfill" ){
+			Mail::send('pixel.shop::mail.order_payed', $vars, function($message) use ($order) {
+				$message->to($order->customer_email, $order->customer_fullname);
+				$message->subject(trans('pixel.shop::mail.payed'));
+			});
+		}
+		else if ($order->is_paid && $order->is_confirmed && $order->is_fulfill && $order->status == "await_fulfill" ){
+			Mail::send('pixel.shop::mail.order_completed', $vars, function($message) use ($order) {
+				$message->to($order->customer_email, $order->customer_fullname);
+				$message->subject(trans('pixel.shop::mail.shipped'));
+			});
+		}
+		else if ($order->status == "cancelled"){
+			Mail::send('pixel.shop::mail.order_cancelled', $vars, function($message) use ($order) {
+				$message->to($order->customer_email, $order->customer_fullname);
+				$message->subject(trans('pixel.shop::mail.cancelled'));
+			});
+		}
+		else {
+			Log::info('Notification Failure: unable to get order status: ' . json_encode([
+                'OrderID' => $order->id,
+                'is_paid' => $order->is_paid,
+                'is_confirmed' => $order->is_confirmed,
+                'is_fulfill' => $order->is_fulfill,
+                'status' => $order->status,
+                'gateway' => $order->gateway,
+            ]));
+		}	
+        
     }
 
     public function reduceInventory($increment = false){

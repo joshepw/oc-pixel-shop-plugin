@@ -67,7 +67,7 @@
 		<div class="row">
 			<div class="col-md-6">
 				<div class="text-left">
-					<label>Order ID</label>
+					<label>{{ 'pixel.shop::lang.fields.order_id'|trans }}</label>
 					<p>#{{ order.getOrderID() }}</p>
 				</div>
 			</div>
@@ -146,6 +146,7 @@
 							{{ order.shipping_total|currency }}
 						</td>
 					</tr>
+					{% if not order.tax_total == "0.00" %}
 					<tr>
 						<td class="border-top">
 							<strong>{{ 'pixel.shop::lang.fields.tax'|trans }}</strong>
@@ -154,6 +155,7 @@
 							{{ order.tax_total|currency }}
 						</td>
 					</tr>
+					{% endif %}
 					<tr>
 						<td class="border-top">
 							<strong>{{ 'pixel.shop::lang.fields.grand_total'|trans }}</strong>

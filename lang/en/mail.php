@@ -1,8 +1,13 @@
 <?php 
 
 return [
-	'receipt' => 'Order Receipt',
-	'thanks_shopping' => 'Thanks for shopping with us.',
+        'receipt' => 'Order Receipt',
+        'shipped' => 'Order Completed',
+        'payed' => 'Payment received',
+        'shipped_text' => 'Shortly you\'ll receive link or tracking id on your email',
+        'cancelled_text' => 'Your order was canceled. If order is paid, it will be refunded. For more info, please contact us on email.',
+        'thanks_shopping' => 'Thanks for shopping with us.',
+        'cancelled' => 'Order Canceled',
 
 	'status' => [
         'completed' => 'Your order has been fulfill.',
