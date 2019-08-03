@@ -197,6 +197,12 @@ secondaryTabs:
         span: auto
         tab: 'pixel.shop::lang.fields.paypal'
 
+    paypal_use_sandbox:
+        label: 'Use Sandbox for testing?' 
+        type: checkbox 
+        span: left 
+        tab: 'pixel.shop::lang.fields.paypal'
+
     paypal_countries:
         label: 'pixel.shop::lang.fields.allowed_countries'
         comment: 'pixel.shop::lang.messages.allowed_countries'

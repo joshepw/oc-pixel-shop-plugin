@@ -221,11 +221,12 @@ Profile.checkSameAddress = function(el){
 		$('.shop__billing-elements').fadeIn();
 }
 
-Profile.onFinishLogin = function(){
-    if(($('[name="origin"]').val() || '').length > 0)
-        location.replace($('[name="origin"]').val())
-    else
+Profile.onFinishLogin = function(result){
+    if(result.action == 'refresh')
         location.reload();
+
+    if(result.action == 'redirect')
+        location.replace(result.url);
 }
 
 jQuery(document).ready(function($) {

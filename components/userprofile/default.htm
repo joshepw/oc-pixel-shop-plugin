@@ -7,7 +7,7 @@
 					<h1 class="text-center login-title">{{ 'pixel.shop::component.user.sign_in'|trans }}</h1>
 					<div class="account-wall">
 						<img class="profile-img" src="{{ '/plugins/pixel/shop/assets/img/photo.png'|app }}" alt="">
-						<form class="form-signin" data-request="onSignin" novalidate data-request-flash data-request-validate>
+						<form class="form-signin" data-request="onSignin" accept-charset="UTF-8" data-request-success="Profile.onFinishLogin(data)" novalidate data-request-flash data-request-validate>
 							<p class="form-errors">
 								<small class="invalid-feedback text-danger" data-validate-for="username"></small>
 								<small class="invalid-feedback text-danger" data-validate-for="password"></small>
@@ -30,7 +30,7 @@
 					<h1 class="text-center login-title">{{ 'pixel.shop::component.user.register'|trans }}</h1>
 					<div class="account-wall">
 						<img class="profile-img" src="{{ '/plugins/pixel/shop/assets/img/photo.png'|app }}" alt="">
-						<form class="form-signin" data-request="onRegister" novalidate data-request-flash data-request-validate>
+						<form class="form-signin" data-request="onRegister" accept-charset="UTF-8" data-request-success="Profile.onFinishLogin(data)" novalidate data-request-flash data-request-validate>
 							<p class="form-errors">
 								<small class="invalid-feedback text-danger" data-validate-for="name"></small>
 								<small class="invalid-feedback text-danger" data-validate-for="username"></small>

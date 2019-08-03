@@ -30,6 +30,6 @@ class BuilderTableCreatePixelShopCoupons extends Migration
 	
 	public function down()
 	{
-		Schema::dropIfExists('pixel_shop_orders');
+		Schema::dropIfExists('pixel_shop_coupons');
 	}
 }

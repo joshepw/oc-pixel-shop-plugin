@@ -32,8 +32,13 @@ class UserProfile extends ComponentBase{
 
     public function defineProperties(){
         return [
-            'redirect' => [
-                'title'       => 'Redirect on register/login',
+            'redirectOnLogin' => [
+                'title'       => 'Redirect on login',
+                'type'        => 'dropdown',
+                'default'     => ''
+            ],
+            'redirectOnRegister' => [
+                'title'       => 'Redirect on register',
                 'type'        => 'dropdown',
                 'default'     => ''
             ],
@@ -213,7 +218,7 @@ class UserProfile extends ComponentBase{
                 throw new Exception(trans('rainlab.user::lang.account.banned'));
             }
 
-            if ($redirect = $this->makeRedirection(true))
+            if ($redirect = $this->makeRedirection('Login'))
                 return $redirect;
         }catch (Exception $ex) {
             if (Request::ajax()) 
@@ -264,7 +269,7 @@ class UserProfile extends ComponentBase{
             if ($automaticActivation || !$requireActivation)
                 Auth::login($user);
 
-            if ($redirect = $this->makeRedirection(true))
+            if ($redirect = $this->makeRedirection('Register'))
                 return $redirect;
         }catch (Exception $ex) {
             if (Request::ajax()) 
@@ -278,24 +283,18 @@ class UserProfile extends ComponentBase{
 		Auth::logout();
     }
     
-    protected function makeRedirection($intended = false){
-        $method = $intended ? 'intended' : 'to';
-
-        $property = trim((string) $this->property('redirect'));
-
-        if ($property === '0') {
-            return;
-        }
+    protected function makeRedirection($from = 'Login'){
+        $property = trim((string) $this->property('redirectOn' . $from));
         
-        if ($property === '') {
-            return Redirect::refresh();
-        }
+        if ($property === '')
+            return ['action' => 'refresh'];
 
         $redirectUrl = $this->pageUrl($property) ?: $property;
 
-        if ($redirectUrl = post('redirect', $redirectUrl)) {
-            return Redirect::$method($redirectUrl);
-        }
+        if (!empty(post('redirect')))
+            return ['action' => 'redirect', 'url' => post('redirect')];
+
+        return ['action' => 'redirect', 'url' => $redirectUrl];
     }
 
 	public function onUpdate(){
@@ -388,8 +387,13 @@ class UserProfile extends ComponentBase{
 		return ['#orders-content' => $this->renderPartial('@orders', [ 'user' => $this->user() ])];
     }
     
-    public function getRedirectOptions()
+    public function getRedirectOnLoginOptions()
     {
-        return [''=>'- refresh page -', '0' => '- no redirect -'] + Page::sortBy('baseFileName')->lists('baseFileName', 'baseFileName');
+        return [''=>'- refresh page -'] + Page::sortBy('baseFileName')->lists('baseFileName', 'baseFileName');
+    }
+
+    public function getRedirectOnRegisterOptions()
+    {
+        return [''=>'- refresh page -'] + Page::sortBy('baseFileName')->lists('baseFileName', 'baseFileName');
     }
 }

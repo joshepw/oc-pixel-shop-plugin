@@ -112,11 +112,13 @@ class CartContainer extends ComponentBase{
 			if($state = State::where('code', $user->shipping_address['state'])->first())
 				$this->page['shipping_states'] = $state->country->states;
 		}
-
-		if(isset($cart->shipping_address['state'])){
-			if($state = State::where('code', $cart->shipping_address['state'])->first())
-				$this->page['shipping_states'] = $state->country->states;
-		}
+        
+        if(isset($cart->shipping_address['state'])){
+            $thisCountry = Country::isEnabled()->where('code', $cart->shipping_address['country'])->first();
+            
+            if($state = State::where([['code', $cart->shipping_address['state']], ['country_id', $thisCountry->id]])->first()) 
+                $this->page['shipping_states'] = $state->country->states;
+        }
 
 
 		if($user){
