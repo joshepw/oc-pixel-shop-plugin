@@ -200,6 +200,7 @@
         'zip' => 'ZIP',
         'sales' => 'Ventas',
         'views' => 'Vistas',
+        'new_order_notify' => 'Correo de notificacion de nuevas ordenes'
     ],
     'status' => [
         'pending' => 'Pendiente',

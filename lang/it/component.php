@@ -66,6 +66,9 @@ return [
         'complete_order' => 'Completa ordine',
         'payment_method' => 'Metodo di pagamento'
     ],
+    "payment" => [
+        "request_error" => "Errore durante l'invio dei dati a PixelPay",
+    ],
     'default' => [
         'name'                  =>      'Nome',
         'email'                 =>      'Email',

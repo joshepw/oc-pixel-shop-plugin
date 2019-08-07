@@ -201,7 +201,8 @@
         'view' => 'Visualizza',
         'zip' => 'CAP',
         'sales' => 'Vendite',
-        'views' => 'Visualizzazioni'
+        'views' => 'Visualizzazioni',
+        'new_order_notify' => 'Notifica quando viene creato un nuovo ordine'
     ],
 	
     'status' => [

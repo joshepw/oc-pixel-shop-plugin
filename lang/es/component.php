@@ -68,6 +68,12 @@ return [
     ],
     "payment" => [
         "request_error" => "Error al enviar los datos a PixelPay",
+    ],
+    'default' => [
+        'name'                  =>      'Nombre',
+        'email'                 =>      'Correo Electrónico',
+        'password'              =>      'Contraseña',
+        'password_confirmation' =>      'Confirmar Contraseña'
     ]
 ];
 

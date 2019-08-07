@@ -201,7 +201,8 @@
         'view' => 'View',
         'zip' => 'ZIP',
         'sales' => 'Sales',
-        'views' => 'Views'
+        'views' => 'Views',
+        'new_order_notify' => 'New order notification email'
     ],
     'status' => [
     	'pending' => 'Pending',

@@ -153,7 +153,7 @@ class ProductList extends ComponentBase
 		$take = $this->property('take');
 		$orderBy = $this->property('orderBy');
 		$orderSort = $this->property('sort');
-	$products = null;
+	    $products = null;
 
 		$this->page['categoryList'] = $this->getCategoryList();
 

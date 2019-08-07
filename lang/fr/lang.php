@@ -200,6 +200,7 @@
         'zip' => 'ZIP',
         'sales' => 'Ventes',
         'views' => 'Vues',
+        'new_order_notify' => 'Notifier quand une nouvelle commande est créée'
     ],
     'status' => [
         'pending' => 'En attente',

@@ -40,7 +40,7 @@ class CartContainer extends ComponentBase{
 				'title'       => 'Return Payment Page',
 				'type'        => 'dropdown',
 				'default'     => 'return',
-			],
+            ]
 		];
 	}
 

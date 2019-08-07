@@ -65,7 +65,16 @@ return [
         'shipping_method' => 'Méthode d\'expédition',
         'complete_order' => 'Terminer la commande',
         'payment_method' => 'Mode de paiement'
-	]
+    ],
+    "payment" => [
+        "request_error" => "Erreur d'envoi des données à PixelPay",
+    ],
+    'default' => [
+        'name'                  =>      'Nom',
+        'email'                 =>      'Email',
+        'password'              =>      'Mot de passe',
+        'password_confirmation' =>      'Confirmez le mot de passe'
+    ]
 ];
 
 ?>

@@ -40,7 +40,7 @@ class Item extends Model{
 	protected $dates = ['deleted_at'];
 	
 	// PROPIEDADES
-	public $timestamps = false;
+	public $timestamps = true;
 	public $table = 'pixel_shop_items';
 	public $implement = ['@RainLab.Translate.Behaviors.TranslatableModel'];
 	public $translatable = ['name', 'short_description', 'description'];

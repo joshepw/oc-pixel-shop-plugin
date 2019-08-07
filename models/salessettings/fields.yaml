@@ -35,6 +35,17 @@ fields:
                     oc.commentPosition: ''
                     span: auto
                     type: number
+
+    _notify:
+        label: 'pixel.shop::lang.fields.new_order_notify'
+        type: section
+        span: left
+
+    new_order_notify:
+        label: pixel.shop::lang.fields.email
+        type: text
+        span: left
+
     _merchant:
         label: 'pixel.shop::lang.fields.merchant_info'
         type: section

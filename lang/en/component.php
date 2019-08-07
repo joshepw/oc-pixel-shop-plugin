@@ -65,7 +65,16 @@ return [
         'shipping_method' => 'Shipping Method',
         'complete_order' => 'Complete Order',
         'payment_method' => 'Payment Method'
-	]
+    ],
+    "payment" => [
+        "request_error" => "Error on sending data to PixelPay server",
+    ],
+    'default' => [
+        'name'                  =>      'Name',
+        'email'                 =>      'Email',
+        'password'              =>      'Password',
+        'password_confirmation' =>      'Confirm Password'
+    ]
 ];
 
 ?>

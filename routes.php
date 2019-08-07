@@ -22,7 +22,7 @@
 		$eventLog = new \System\Models\EventLog();
 		$data = array();
 		$data["name"] = "Payment PixelPay Response";
-		$data["post"] = post();
+		$data["post"] = Request::json() ?? post();
 		$eventLog->message = json_encode($data);
 		$eventLog->save();
 
