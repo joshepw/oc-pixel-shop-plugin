@@ -60,5 +60,14 @@
 			<input type="text" class="form-control" name="billing_address[zip]" value="{{ user.billing_address.zip ?: cart.billing_address.zip }}">
 			<div class="invalid-feedback" data-validate-for="billing_address.zip"></div>
 		</div>
-	</div>
+    </div>
+    
 </div>
+
+{% if __SELF__.prepareFields('billing') %}
+    <div class="row small-gutter">
+    {% for field in __SELF__.prepareFields('billing') %}
+    {% partial '@custom_fields' field=field group="billing" %}
+    {% endfor %}
+    </div>
+{% endif %}

@@ -70,3 +70,11 @@
 		</div>
 	</div>
 </div>
+
+{% if __SELF__.prepareFields('shipping') %}
+    <div class="row small-gutter">
+    {% for field in __SELF__.prepareFields('shipping') %}
+    {% partial '@custom_fields' field=field group="shipping" %}
+    {% endfor %}
+    </div>
+{% endif %}

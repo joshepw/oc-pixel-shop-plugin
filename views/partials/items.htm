@@ -1,0 +1,93 @@
+name = Items table
+==
+<style>
+.table-items{
+    width: 100%; 
+    margin: 0;
+}
+
+.table-items .item img{
+    border-radius: 3px;
+}
+
+.table-items .item td{
+    border-bottom: 1px dashed #eee;
+}
+
+.table-items .total td{
+    border-top: 1px dashed #eee;
+}
+
+.table-items .text-center{
+    text-align: center;
+}
+
+.table-items .text-left{
+    text-align: left;
+}
+
+.table-items .text-right{
+    text-align: right;
+}
+
+.table-items .text-success{
+    color: #00AE69;
+}
+</style>
+
+<div class="table">
+    <table class="table-items" cellspacing="0" cellpadding="0">
+        <tbody>
+            {% for item in order.items %}
+            <tr class="item">
+                <td width="50">
+                    {% if item.thumb %}
+                    <img src="{{ item.thumb }}" alt="" width="42" height="42">
+                    {% endif %}
+                </td>
+                <td valign="top">
+                    <strong>{{ item.title }}</strong>
+                    {% if item.description %} <br />
+                    <small>{{ item.description }}</small> {% endif %}
+                </td>
+                <td class="text-right" valign="top">
+                    {{ item.price|currency }}<br /><small><b>x{{ item.quantity }}</b></small>
+                </td>
+                <td class="text-right" valign="top">{{ item.total|currency }}</td>
+            </tr>
+            {% endfor %}
+            
+            {% if order.coupon %}
+            <tr>
+                <td class="text-left" colspan="2">
+                    {{ 'pixel.shop::lang.fields.coupon'|trans }} <br />
+                    <small class="text-success">{{ order.coupon.code }}</small>
+                </td>
+                <td class="text-right">- -</td>
+                <td class="text-right">
+                    <span class="text-success">-{{ order.coupon.getValueLabel() }}</span>
+                </td>
+            </tr>
+            {% endif %}
+
+            <tr>
+                <td class="text-right" colspan="3">{{ 'pixel.shop::lang.fields.shipping'|trans }}</td>
+                <td class="text-right">{{ order.shipping_total|currency }}</td>
+            </tr>
+
+            <tr>
+                <td class="text-right" colspan="3">{{ 'pixel.shop::lang.fields.tax'|trans }}</td>
+                <td class="text-right">{{ order.tax_total|currency }}</td>
+            </tr>
+
+            <tr class="total">
+                <td class="text-right" colspan="3">
+                    <b>{{ 'pixel.shop::lang.fields.grand_total'|trans }}</b>
+                </td>
+                <td class="text-right">
+                    <b>{{ order.total|currency }}</b>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

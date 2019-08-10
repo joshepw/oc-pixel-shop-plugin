@@ -51,6 +51,18 @@
 	font-size: 12px;
 }
 
+.shop__cart-checkout .radio-group-input{
+    display: inline-block;
+    margin: 0px 5px 5px 0px;
+    line-height: 1em;
+}
+
+.shop__cart-checkout .radio-group-input > label{
+    line-height: 1em;
+    font-size: 14px;
+    font-weight: normal;
+}
+
 input[name="cc_number"]{
 	-webkit-transition: background-image 0.3s linear;
 	-o-transition: background-image 0.3s linear;

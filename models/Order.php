@@ -4,6 +4,7 @@ use Mail;
 use Log;
 use Auth;
 use Model;
+use Backend;
 use Currency;
 use CurrencyShop;
 use Pixel\Shop\Models\Item;
@@ -38,7 +39,8 @@ class Order extends Model
     	'history', 
     	'items',
     	'billing_address',
-    	'shipping_address'
+        'shipping_address',
+        'custom_fields'
     ];
 
     // RELACIONES
@@ -112,19 +114,34 @@ class Order extends Model
 
     public function sendNotification(){
         $order = $this;
-        $vars = [ 'order' => $order ];
+        $vars = [ 
+            'order' => $order,
+            'backend_url' => Backend::url('pixel/shop/orders')
+        ];
 
 		if (!$order->is_paid && !$order->is_confirmed && $order->status == "await_pay"){
 			Mail::send('pixel.shop::mail.order_awaitpay', $vars, function($message) use ($order) {
 				$message->to($order->customer_email, $order->customer_fullname);
 				$message->subject(trans('pixel.shop::mail.receipt'));
-			});
+            });
+            
+            if(SalesSettings::get('new_order_notify')){
+                Mail::send('pixel.shop::mail.new_order', $vars, function($message){
+                    $message->to(SalesSettings::get('new_order_notify'));
+                });
+            }
 		}
 		else if ($order->is_paid && $order->is_confirmed && !$order->is_fulfill && $order->status == "await_fulfill" ){
 			Mail::send('pixel.shop::mail.order_payed', $vars, function($message) use ($order) {
 				$message->to($order->customer_email, $order->customer_fullname);
 				$message->subject(trans('pixel.shop::mail.payed'));
 			});
+
+            if(SalesSettings::get('new_order_notify')){
+                Mail::send('pixel.shop::mail.new_order', $vars, function($message){
+                    $message->to(SalesSettings::get('new_order_notify'));
+                });
+            }
 		}
 		else if ($order->is_paid && $order->is_confirmed && $order->is_fulfill && $order->status == "await_fulfill" ){
 			Mail::send('pixel.shop::mail.order_completed', $vars, function($message) use ($order) {

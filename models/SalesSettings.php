@@ -5,9 +5,15 @@ use RainLab\Location\Models\Country;
 
 class SalesSettings extends Model{
 	// PROPERTIES
-	public $implement = ['System.Behaviors.SettingsModel'];
+	public $implement = [
+        'System.Behaviors.SettingsModel',
+        '@RainLab.Translate.Behaviors.TranslatableModel'
+    ];
+
 	public $settingsCode = 'pixel_shop_sale_settings';
-	public $settingsFields = 'fields.yaml';
+    public $settingsFields = 'fields.yaml';
+    
+    public $translatable = ['shop_address', 'taxes.name'];
 
 	public $attachOne = [
 		'default_image' => ['System\Models\File']

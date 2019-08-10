@@ -1,0 +1,44 @@
+<div class="col-md-6">
+    <div class="form-group">
+        <label>{{ field.label|trans }}</label>
+        <input type="hidden" name="custom_fields[{{ group }}][{{ field.name }}][label]" value="{{ field.label|trans }}">
+
+        {% if field.field == 'text' %}
+        <input type="text" class="form-control" placeholder="{{ field.placeholder|trans }}"
+            name="custom_fields[{{ group }}][{{ field.name }}][value]">
+        {% endif %}
+
+        {% if field.field == 'select' %}
+        <select name="custom_fields[{{ group }}][{{ field.name }}][value]" class="form-control">
+            <option value="">{{ 'pixel.shop::component.cart.choose'|trans }}</option>
+            {% for option in field.values|split(',') %}
+            <option>{{ option }}</option>
+            {% endfor %}
+        </select>
+        {% endif %}
+
+        {% if field.field == 'radio' %}
+        <div class="radio-group">
+            {% for key, option in field.values|split(',') %}
+            <div class="radio-group-input">
+                <input type="radio" name="custom_fields[{{ group }}][{{ field.name }}][value]" id="{{ field.name }}-{{ key }}" value="{{ option }}">
+                <label for="{{ field.name }}-{{ key }}">{{ option }}</label>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        {% if field.field == 'checkbox' %}
+        <div class="radio-group">
+            {% for key, option in field.values|split(',') %}
+            <div class="radio-group-input">
+                <input type="checkbox" name="custom_fields[{{ group }}][{{ field.name }}][value]" id="{{ field.name }}-{{ key }}" value="{{ option }}">
+                <label for="{{ field.name }}-{{ key }}">{{ option }}</label>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <div class="invalid-feedback" data-validate-for="custom_fields.{{ group }}.{{ field.name }}.value"></div>
+    </div>
+</div>

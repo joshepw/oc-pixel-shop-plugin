@@ -1,0 +1,100 @@
+subject = New Order Generated
+==
+
+{% partial 'badge' status=order.status body %}
+#{{ 'pixel.shop::lang.fields.order'|trans }} #{{ order.getOrderID() }}
+{% endpartial %}
+
+**{{ 'pixel.shop::lang.frontend.contact'|trans }}**
+<small style="line-height: 1.5em; display: block">
+{{ order.customer_fullname }}
+<br>
+[{{ order.customer_email }}](mailto:{{ order.customer_email }})
+</small>
+
+{% if order.custom_fields.customer %}
+{% for field in order.custom_fields.customer %}
+**{{ field.label }}**
+<small style="line-height: 1.5em; display: block">{{ field.value }}</small>
+
+{% endfor %}
+{% endif %}
+
+
+{% partial 'items' order=order %}
+
+{% if order.billing_address %}
+**{{ 'pixel.shop::lang.fields.billing_address'|trans }}**
+<small style="line-height: 1.5em; display: block">
+{{ order.billing_address.first_line }}
+<br>
+{% if order.billing_address.city %}
+{{ order.billing_address.city }},
+{% endif %}
+{% if order.billing_address.state %}
+{{ order.billing_address.state }},
+{% endif %}
+{% if order.billing_address.country %}
+{{ order.billing_address.country }}
+{% endif %}
+{% if order.billing_address.zip %}
+<br>
+{{ 'pixel.shop::lang.fields.postal_code'|trans }}: {{ order.billing_address.zip }}
+</small>
+{% endif %}
+{% endif %}
+
+{% if order.custom_fields.billing %}
+{% for field in order.custom_fields.billing %}
+**{{ field.label }}**
+<small style="line-height: 1.5em; display: block">{{ field.value }}</small>
+
+{% endfor %}
+{% endif %}
+
+{% if order.shipping_address %}
+**{{ 'pixel.shop::lang.fields.shipping_address'|trans }}**
+<small style="line-height: 1.5em; display: block">
+{{ order.shipping_address.first_line }}
+<br>
+{% if order.shipping_address.city %}
+{{ order.shipping_address.city }},
+{% endif %}
+{% if order.shipping_address.state %}
+{{ order.shipping_address.state }},
+{% endif %}
+{% if order.shipping_address.country %}
+{{ order.shipping_address.country }}
+{% endif %}
+{% if order.shipping_address.zip %}
+<br>
+{{ 'pixel.shop::lang.fields.postal_code'|trans }}: {{ order.billing_address.zip }}
+</small>
+{% endif %}
+{% endif %}
+
+{% if order.custom_fields.shipping %}
+{% for field in order.custom_fields.shipping %}
+**{{ field.label }}**
+<small style="line-height: 1.5em; display: block">{{ field.value }}</small>
+
+{% endfor %}
+{% endif %}
+
+{% if order.gateway %}
+**{{ 'pixel.shop::lang.fields.gateway'|trans }}**
+<span style="line-height: 1em; display: block; margin-top: 6px">
+    <img style="float: left; margin: -8px 0px;" src="{{ url('/plugins/pixel/shop/assets/img/icon-' ~ order.gateway ~ '.svg') }}" alt="" width="32" height="32">&nbsp;{{ ('pixel.shop::lang.fields.' ~ order.gateway)|trans }}
+</span>
+{% endif %}
+
+{% if order.note %}
+**{{ 'pixel.shop::lang.fields.note'|trans }}**
+<small style="line-height: 1.5em; display: block">{{ order.note }}</small>
+{% endif %}
+
+{% partial 'subcopy' body %}
+{% partial 'button' url=backend_url body %}
+{{ 'pixel.shop::lang.frontend.view_all_orders'|trans }}
+{% endpartial %}
+{% endpartial %}

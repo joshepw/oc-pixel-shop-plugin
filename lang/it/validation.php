@@ -20,7 +20,10 @@ return [
     'gateway.required' => 'Scegli prima un metodo di pagamento.',
 
     'server_validation_error' => 'Errore: campi obbligatori richiesti per processare l\'ordine',
-
+	 'jquery' => [
+	        'required' => '* Informazione obbligatoria',
+	        'email' => '* Digitare una mail valida'
+	 ],
     'values' => [
     	'gateway' => [
     		'cc' => 'Carta di credito'

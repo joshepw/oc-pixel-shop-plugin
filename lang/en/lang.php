@@ -31,6 +31,9 @@
         'manage' => 'Manage',
     ],
     'fields' => [
+        'shop' => 'Shop',
+        'shop_name' => 'Shop name',
+        'shop_email' => 'Shop contact email',
         'name' => 'Name',
         'code' => 'Code or SKU',
         'categories' => 'Categories',
@@ -128,7 +131,11 @@
         'customer_fullname' => 'Customer Fullname',
         'payment_method' => 'Payment Method',
         'billing_address' => 'Billing address',
+        'billing_address_ex1' => '1234 Main St',
+        'billing_address_ex2' => 'Apartment or suite',
         'shipping_address' => 'Shipping address',
+        'shipping_address_ex1' => '1234 Main St',
+        'shipping_address_ex2' => 'Apartment or suite',
         'postal_code' => 'Postal Code',
         'items' => 'Items',
         'activity' => 'Activity',
@@ -160,6 +167,7 @@
         'owner' => 'Owner',
         'details' => 'Details',
         'bank_customer_information' => 'Customer information',
+        'bank_hide_customer_information' => 'Hide Customer Information during cart steps',
         'allowed_countries' => 'Allowed countries',
         'used_count' => 'Count of Used',
         'minimum_value_basket' => 'Minimum value of basket',
@@ -202,7 +210,12 @@
         'zip' => 'ZIP',
         'sales' => 'Sales',
         'views' => 'Views',
-        'new_order_notify' => 'New order notification email'
+        'new_order_notify' => 'New order notification email',
+        'label' => 'Label',
+        'rules' => 'Rules',
+        'custom_fields' => 'Custom fields',
+        'add_custom_field' => 'Add custom field',
+        'values' => 'Values'
     ],
     'status' => [
     	'pending' => 'Pending',
@@ -354,7 +367,8 @@
         'used' => 'Used',
 		'refurbished' => 'Refurbished',
 		'select_option' => '-- Please select an option --',
-		'related_products' => 'Related Products'
+        'related_products' => 'Related Products',
+        'view_all_orders' => 'View all orders'
     ],
     'coupon_codes' => [
     	'code_5' => 'The coupon code is invalid or does not exist.',

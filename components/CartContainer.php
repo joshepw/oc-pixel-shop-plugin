@@ -15,6 +15,7 @@ use RainLab\Location\Models\Country;
 use Pixel\Shop\Components\CartTrait;
 use Pixel\Shop\Components\PaymentTrait;
 use Pixel\Shop\Models\GatewaysSettings;
+use Pixel\Shop\Models\SalesSettings;
 
 class CartContainer extends ComponentBase{
 
@@ -42,7 +43,30 @@ class CartContainer extends ComponentBase{
 				'default'     => 'return',
             ]
 		];
-	}
+    }
+    
+    public function getCustomFieldsSettings(){
+        $fields = [
+            'customer' => $this->prepareFields('customer'),
+            'billing' => $this->prepareFields('billing'),
+            'shipping' => $this->prepareFields('shipping')
+        ];
+
+        return $fields;
+    }
+
+    public function prepareFields($key){
+        $fields = SalesSettings::get($key . '_custom_fields');
+
+        if(!$fields)
+            return [];
+
+        foreach ($fields as $key => $field) {
+            $fields[$key]['name'] = str_slug($field['label'], '_');
+        }
+
+        return $fields;
+    }
 
 	public function getProductPageOptions(){
 		return Page::sortBy('baseFileName')->lists('baseFileName', 'baseFileName');

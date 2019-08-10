@@ -4,11 +4,13 @@
 	<br>
 	<?= $formModel->getCustomerFullName() ?>
 </p>
+
 <p>
 	<b><?= trans('pixel.shop::lang.fields.email') ?>: </b>
 	<br>
 	<a href="mailto:<?= $formModel->customer_email ?>"><?= $formModel->customer_email ?></a>
 </p>
+
 <?php if($formModel->customer_phone): ?>
 <p>
 	<b><?= trans('pixel.shop::lang.fields.phone') ?>: </b>
@@ -16,6 +18,18 @@
 	<a href="tel:<?= $formModel->customer_phone ?>"><?= $formModel->customer_phone ?></a>
 </p>
 <?php endif ?>
+
+<?php if($formModel->custom_fields['customer'] ?? null): ?>
+    <?php foreach($formModel->custom_fields['customer'] as $field): ?>
+    <p>
+        <b><?= $field['label'] ?? '???' ?>: </b>
+        <br>
+        <?= $field['value'] ?? '???' ?>
+    </p>
+    <?php endforeach ?>
+<?php endif ?>
+
+<?php if($formModel->billing_address): ?>
 <p>
 	<b><?= trans('pixel.shop::lang.fields.billing_address') ?>: </b>
 	<br>
@@ -36,6 +50,19 @@
 	<?php endif ?>
 	
 </p>
+<?php endif ?>
+
+<?php if($formModel->custom_fields['billing'] ?? null): ?>
+    <?php foreach($formModel->custom_fields['billing'] as $field): ?>
+    <p>
+        <b><?= $field['label'] ?? '???' ?>: </b>
+        <br>
+        <?= $field['value'] ?? '???' ?>
+    </p>
+    <?php endforeach ?>
+<?php endif ?>
+
+<?php if($formModel->shipping_address): ?>
 <p>
 	<b><?= trans('pixel.shop::lang.fields.shipping_address') ?>: </b>
 	<br>
@@ -55,3 +82,14 @@
 		<br><?= $formModel->shipping_address['country'] ?>
 	<?php endif ?>
 </p>
+<?php endif ?>
+
+<?php if($formModel->custom_fields['shipping'] ?? null): ?>
+    <?php foreach($formModel->custom_fields['shipping'] as $field): ?>
+    <p>
+        <b><?= $field['label'] ?? '???' ?>: </b>
+        <br>
+        <?= $field['value'] ?? '???' ?>
+    </p>
+    <?php endforeach ?>
+<?php endif ?>

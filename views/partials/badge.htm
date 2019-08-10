@@ -1,0 +1,76 @@
+name = Badge
+==
+<style type="text/css">
+.badge h1, .badge p{
+    text-align: center;
+}
+
+.badge-status{
+    display: inline-block;
+    min-width: 10px;
+    padding: 3px 7px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #ffffff;
+    line-height: 1;
+    vertical-align: middle;
+    white-space: nowrap;
+    text-align: center;
+    background-color: #777777;
+    border-radius: 10px;
+    border-radius: 3px;
+    padding: 8px 18px;
+    margin-bottom: 30px;
+}
+
+.status-pending{
+    background-color: #ffa738 !important;
+    color: #fff !important;
+}
+.status-await_pay{
+    background-color: #ea7d37 !important;
+    color: #fff !important;
+}
+.status-await_fulfill{
+    background-color: #2a99d6 !important;
+    color: #fff !important;
+}
+.status-paid{
+    background-color: #00bc9e !important;
+    color: #fff !important;
+}
+.status-cancelled{
+    background-color: #ec4a41 !important;
+    color: #fff !important;
+}
+.status-completed{
+    background-color: #00ae69 !important;
+    color: #fff !important;
+}
+</style>
+
+<table class="badge" align="center" width="100%" cellpadding="0" cellspacing="0">
+    <tr>
+        <td align="center">
+            <table width="100%" border="0" cellpadding="0" cellspacing="0">
+                <tr>
+                    <td align="center">
+                        <table border="0" cellpadding="0" cellspacing="0">
+                            <tr>
+                                <td>
+                                    <center>
+                                        {{ body|md_safe }}
+
+                                        <div class="badge-status status-{{ status ?: 'default' }}">
+                                            {{ ('pixel.shop::lang.status.' ~ status)|trans }}
+                                        </div>
+                                    </center>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>

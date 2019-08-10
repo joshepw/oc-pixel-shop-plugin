@@ -128,7 +128,11 @@
         'customer_fullname' => 'Nome completo del cliente',
         'payment_method' => 'Metodo di pagamento',
         'billing_address' => 'Indirizzo di fatturazione',
+        'billing_address_ex1' => 'indicare via e num. civico',
+        'billing_address_ex2' => 'eventualmente indicare stanza e piano',
         'shipping_address' => 'Indirizzo di spedizione',
+        'shipping_address_ex1' => 'indicare via e num. civico',
+        'shipping_address_ex2' => 'eventualmente indicare stanza e piano',
         'postal_code' => 'Codice postale',
         'items' => 'Articoli',
         'activity' => 'Attività', //da confermare
@@ -160,6 +164,7 @@
         'owner' => 'Proprietario',
         'details' => 'Dettagli',
         'bank_customer_information' => 'Informazioni per il pagamento',
+        'bank_hide_customer_information' => 'Nascondi le informazioni per il pagamento durante il carrello',
         'allowed_countries' => 'Paesi ammessi',
         'used_count' => 'Conteggio Utilizzo', //da verificare
         'minimum_value_basket' => 'Valore minimo del carrello', //verificare
@@ -181,7 +186,7 @@
         'no_brand' => '-- Nessun marchio --',
         'address' => 'Indirizzo',
         'address_alt' => 'Indirizzo 2',
-        'country' => 'Paese',
+        'country' => 'Nazione',
         'state' => 'Provincia',
         'city' => 'Città',
         'note' => 'Note o istruzioni',

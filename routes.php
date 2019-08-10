@@ -1,8 +1,15 @@
 <?php	
 
 	Route::get('/mail', function(){
-		$order = \Pixel\Shop\Models\Order::find(12);
-		return view('pixel.shop::mail.order', ['order' => $order] );
+		$order = \Pixel\Shop\Models\Order::find(24);
+        // return view('pixel.shop::mail.new-order', ['order' => $order] );
+
+        App::setLocale('es');
+
+        return Mail::outputView('pixel.shop::mail.order_awaitpay', [
+            'order' => $order,
+            'backend_url' => Backend::url('pixel/shop/orders')
+        ]);
 	});
 
 	// UPLOAD AVATAR

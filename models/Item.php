@@ -67,13 +67,11 @@ class Item extends Model{
 	];
 
 	public function getImageAttribute(){
-		if($this->gallery)
-			return $this->gallery->first();
+		if($this->gallery->count())
+            return $this->gallery->first();
 
-		if($image = SalesSettings::get('default_image'))
-			return $image;
-
-		return null;
+        $settings = SalesSettings::instance();
+        return $settings->default_image;
 	}
 
 	// SCOPES

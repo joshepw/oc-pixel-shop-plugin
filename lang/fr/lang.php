@@ -350,6 +350,7 @@
         'refurbished' => 'Remis à neuf',
         'select_option' => '-- Veuillez sélectionner une option --',
         'related_products' => 'Produits associés',
+        'bank_hide_customer_information' => 'Masquer les informations client lors des étapes du panier',
     ],
     'coupon_codes' => [
         'code_5' => 'Le code de coupon n\'est pas valide ou n\'existe pas.',

@@ -45,15 +45,9 @@ trait PaymentTrait{
 			'cc_number' => 'required_if:gateway,cc|ccn',
 			'cc_exp' => 'required_if:gateway,cc|ccexp',
 			'cc_cvv' => 'required_if:gateway,cc|cvv:cc_number'
-		];
-
-		if(input('shipping_zip_required') == 'required')
-			$rules['shipping_address.zip'] = 'required';
-
-		if(!input('is_ship_same_bill') && input('billing_zip_required') == 'required')
-			$rules['billing_address.zip'] = 'required';
-
-		$validation = Validator::make($data, $rules, trans('pixel.shop::validation'), [
+        ];
+        
+        $names = [
 			'customer_first_name' => strtolower( trans('pixel.shop::lang.fields.first_name') ),
 			'customer_last_name' => strtolower( trans('pixel.shop::lang.fields.last_name') ),
 			'customer_email' => strtolower( trans('pixel.shop::lang.fields.email') ),
@@ -77,7 +71,30 @@ trait PaymentTrait{
 			'cc_cvv' => strtolower( trans('pixel.shop::lang.fields.cc_cvv') ),
 
 			'is_ship_same_bill' => strtolower( trans('pixel.shop::lang.fields.is_ship_same_bill') ),
-		]);
+        ];
+        
+        if($extras = $this->getCustomFieldsSettings()){
+            foreach ($extras as $group => $fields) {
+                if(!count($fields))
+                    continue;
+
+                foreach ($fields as $field) {
+                    if(empty($field['rules']))
+                        continue;
+
+                    $rules['custom_fields.' . $group . '.' . $field['name'] . '.value'] = $field['rules'];
+                    $names['custom_fields.' . $group . '.' . $field['name'] . '.value'] = $field['label'];
+                }
+            }
+        }
+
+		if(input('shipping_zip_required') == 'required')
+			$rules['shipping_address.zip'] = 'required';
+
+		if(!input('is_ship_same_bill') && input('billing_zip_required') == 'required')
+			$rules['billing_address.zip'] = 'required';
+
+		$validation = Validator::make($data, $rules, trans('pixel.shop::validation'), $names);
 
 		if ($validation->fails())
 			throw new ValidationException($validation);
@@ -105,6 +122,7 @@ trait PaymentTrait{
 		$cart->shipping_address = input('shipping_address');
 		$cart->billing_address = input('is_ship_same_bill' == 'on') ? input('shipping_address') : input('billing_address');
         $cart->notes = input('notes');
+        $cart->custom_fields = input('custom_fields', array());
         
         Log::debug(json_encode([
             'shipping' => input('shipping_address'),

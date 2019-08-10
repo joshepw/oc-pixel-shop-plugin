@@ -152,7 +152,27 @@ class Plugin extends PluginBase{
 				'code'  => 'shop-variants'
 			],
 		];
-	}
+    }
+
+    // MAIL TEMPLATES
+    public function registerMailPartials()
+    {
+        return [
+            'badge'  => 'pixel.shop::partials.badge',
+            'items'  => 'pixel.shop::partials.items',
+        ];
+    }
+
+    public function registerMailTemplates()
+    {
+        return [
+            'pixel.shop::mail.new_order',
+            'pixel.shop::mail.order_awaitpay',
+            'pixel.shop::mail.order_cancelled',
+            'pixel.shop::mail.order_completed',
+            'pixel.shop::mail.order_payed',
+        ];
+    }
 
 	// RAINLAB PAGES MENU SUPPORT
 	private function bootMenuItem() {

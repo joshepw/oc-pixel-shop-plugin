@@ -52,14 +52,14 @@
 					<div class="col-md-6">
 						<div class="form-group">
 							<label>{{ 'pixel.shop::lang.fields.address'|trans }}</label>
-							<input type="text" class="form-control" placeholder="1234 Main St" value="{{ user.shipping_address.first_line }}" name="shipping_address[first_line]">
+							<input type="text" class="form-control" placeholder="{{ 'pixel.shop::lang.fields.shipping_address_ex1'|trans }}" value="{{ user.shipping_address.first_line }}" name="shipping_address[first_line]">
 							<div class="invalid-feedback" data-validate-for="shipping_address.first_line"></div>
 						</div>
 					</div>
 					<div class="col-md-6">
 						<div class="form-group">
 							<label>{{ 'pixel.shop::lang.fields.address_alt'|trans }} <span class="text-muted">({{ 'pixel.shop::component.cart.optional'|trans }})</span></label>
-							<input type="text" class="form-control" placeholder="Apartment or suite" value="{{ user.shipping_address.second_line }}" name="shipping_address[second_line]">
+							<input type="text" class="form-control" placeholder="{{ 'pixel.shop::lang.fields.shipping_address_ex2'|trans }}" value="{{ user.shipping_address.second_line }}" name="shipping_address[second_line]">
 						</div>
 					</div>
 				</div>
@@ -118,14 +118,14 @@
 					<div class="col-md-6">
 						<div class="form-group">
 							<label>{{ 'pixel.shop::lang.fields.address'|trans }}</label>
-							<input type="text" class="form-control" placeholder="1234 Main St" value="{{ user.billing_address.first_line }}" name="billing_address[first_line]">
+							<input type="text" class="form-control" placeholder="{{ 'pixel.shop::lang.fields.billing_address_ex1'|trans }}" value="{{ user.billing_address.first_line }}" name="billing_address[first_line]">
 							<div class="invalid-feedback" data-validate-for="billing_address.first_line"></div>
 						</div>
 					</div>
 					<div class="col-md-6">
 						<div class="form-group">
 							<label>{{ 'pixel.shop::lang.fields.address_alt'|trans }} <span class="text-muted">({{ 'pixel.shop::component.cart.optional'|trans }})</span></label>
-							<input type="text" class="form-control" placeholder="Apartment or suite" value="{{ user.billing_address.second_line }}" name="billing_address[second_line]">
+							<input type="text" class="form-control" placeholder="{{ 'pixel.shop::lang.fields.billing_address_ex1'|trans }}" value="{{ user.billing_address.second_line }}" name="billing_address[second_line]">
 						</div>
 					</div>
 				</div>

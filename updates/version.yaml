@@ -8,11 +8,14 @@
     - builder_table_create_pixel_shop_coupons.php
     - create_rainlab_extend_location.php
     - create_rainlab_extend_users.php
-1.0.2: PixelPay Update
-1.0.3: Customer notifications and bugs fixed
-1.0.4: Preparing the plugin for Carriers support
-1.0.5: New French version - Many thanks to Damien MATHIEU - Agence HOUNDDD
-1.0.6: Add new redirect option on login/register Account component
-1.0.7: Bugs Fixed (Support to luigi.rossi28678)
-1.0.8: New Italian version - Many thanks to Luigi Rossi - Niluan SRL
-1.0.9: Items short fix & added Lang missing strings
+1.0.2: 'PixelPay Update'
+1.0.3: 'Customer notifications and bugs fixed'
+1.0.4: 'Preparing the plugin for Carriers support'
+1.0.5: 'New French version - Many thanks to Damien MATHIEU - Agence HOUNDDD'
+1.0.6: 'Add new redirect option on login/register Account component'
+1.0.7: 'Bugs Fixed (Support to luigi.rossi28678)'
+1.0.8: 'New Italian version - Many thanks to Luigi Rossi - Niluan SRL'
+1.0.9: 'Items short fix & added Lang missing strings'
+1.1.0:
+    - 'Custom fields for orders, editable emails templates and new preferences'
+    - builder_table_update_pixel_shop_orders.php

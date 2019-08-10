@@ -19,6 +19,11 @@ return [
 
     'gateway.required' => 'Please choose a payment method first.',
 
+    'jquery' => [
+        'required' => '* Required field',
+        'email' => '* Please enter a valid email'
+    ],
+
     'values' => [
     	'gateway' => [
     		'cc' => 'credit card'

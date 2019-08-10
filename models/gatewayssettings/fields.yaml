@@ -131,6 +131,12 @@ secondaryTabs:
         comment: 'pixel.shop::lang.messages.bank_customer_information'
         tab: 'pixel.shop::lang.fields.bank_transfer'
 
+    bank_transfer_hide_customer_information:
+        label: 'pixel.shop::lang.fields.bank_hide_customer_information' 
+        type: checkbox 
+        span: left 
+        tab: 'pixel.shop::lang.fields.bank_transfer'    
+
     bank_transfer_countries:
         label: 'pixel.shop::lang.fields.allowed_countries'
         comment: 'pixel.shop::lang.messages.allowed_countries'

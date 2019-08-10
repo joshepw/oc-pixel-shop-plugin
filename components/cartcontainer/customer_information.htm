@@ -31,3 +31,12 @@
 		</div>
 	</div>
 </div>
+
+{% if __SELF__.prepareFields('customer') %}
+<div class="row small-gutter">
+    {% for field in __SELF__.prepareFields('customer') %}
+    {% partial '@custom_fields' field=field group="customer" %}
+    {% endfor %}
+</div>
+{% endif %}
+

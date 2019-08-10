@@ -16,7 +16,8 @@ class Cart{
 	public $items;
 
 	public $shipping_address;
-	public $billing_address;
+    public $billing_address;
+    public $custom_fields;
 
 	public $carrier;
 	public $coupon;
@@ -145,7 +146,8 @@ class Cart{
 
 		$order = new Order();
 		$order->shipping_address = $this->shipping_address;
-		$order->billing_address = $this->billing_address;
+        $order->billing_address = $this->billing_address;
+        $order->custom_fields = $this->custom_fields;
 
 		if(!empty($this->user))
 			$order->user_id = $this->user;

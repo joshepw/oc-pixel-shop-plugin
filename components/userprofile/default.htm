@@ -13,8 +13,8 @@
 								<small class="invalid-feedback text-danger" data-validate-for="password"></small>
 							</p>
 
-							<input name="username" type="text" class="form-control first" placeholder="Email" required autofocus>
-                            <input name="password" type="password" class="form-control last" placeholder="Password" required>
+							<input name="username" type="text" class="form-control first" placeholder="{{ 'pixel.shop::component.default.email'|trans }}" required autofocus>
+                            <input name="password" type="password" class="form-control last" placeholder="{{ 'pixel.shop::component.default.password'|trans }}" required>
                             
                             <input type="hidden" name="redirect" value="{{ input('origin') }}">
 

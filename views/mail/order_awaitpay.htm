@@ -1,250 +1,105 @@
 subject = Await Pay
+layout = system
 ==
-<style type="text/css">
-img {
-	max-width: 100%;
-}
 
-body {
-	-webkit-font-smoothing: antialiased;
-	-webkit-text-size-adjust: none;
-	width: 100% !important;
-	height: 100%;
-	line-height: 1.6em;
-}
+<h1 class="aligncenter" style="font-size: 32px; line-height: 1.2em; font-weight: 500; text-align: center; margin: 40px 0 0;" align="center">
+{{ 'pixel.shop::mail.receipt'|trans }}
+</h1>
 
-body {
-	background-color: #f6f6f6;
-	color: #586667;
-}
+{% partial 'badge' status=order.status body %}
+#{{ 'pixel.shop::lang.fields.order'|trans }} #{{ order.getOrderID() }}
+**{{ 'pixel.shop::mail.thanks_shopping'|trans }}**
+{% endpartial %}
 
-.badge-status{
-    display: inline-block;
-    min-width: 10px;
-    padding: 3px 7px;
-    font-size: 14px;
-    font-weight: bold;
-    color: #ffffff;
-    line-height: 1;
-    vertical-align: middle;
-    white-space: nowrap;
-    text-align: center;
-    background-color: #777777;
-    border-radius: 10px;
-    border-radius: 3px;
-    padding: 6px 12px;
-}
 
-.status-pending{
-    background-color: #FFA738 !important;
-    color: #FFF !important;
-}
-.status-await_pay{
-    background-color: #EA7D37 !important;
-    color: #FFF !important;
-}
-.status-await_fulfill{
-    background-color: #2A99D6 !important;
-    color: #FFF !important;
-}
-.status-paid{
-    background-color: #00BC9E !important;
-    color: #FFF !important;
-}
-.status-cancelled{
-    background-color: #EC4A41 !important;
-    color: #FFF !important;
-}
-.status-completed{
-    background-color: #00AE69 !important;
-    color: #FFF !important;
-}
+**{{ 'pixel.shop::component.order.to'|trans }}**
+<small style="line-height: 1.5em; display: block">
+{{ order.customer_fullname }}
+<br>
+[{{ order.customer_email }}](mailto:{{ order.customer_email }})
+</small>
 
-@media only screen and (max-width: 640px) {
-	body {
-		padding: 0 !important;
-	}
+{% if order.custom_fields.customer %}
+{% for field in order.custom_fields.customer %}
+**{{ field.label }}**
+<small style="line-height: 1.5em; display: block">{{ field.value }}</small>
 
-	h1 {
-		font-weight: 800 !important;
-		margin: 20px 0 5px !important;
-	}
+{% endfor %}
+{% endif %}
 
-	h2 {
-		font-weight: 800 !important;
-		margin: 20px 0 5px !important;
-	}
 
-	h3 {
-		font-weight: 800 !important;
-		margin: 20px 0 5px !important;
-	}
+{% partial 'items' order=order %}
 
-	h4 {
-		font-weight: 800 !important;
-		margin: 20px 0 5px !important;
-	}
+{% if order.billing_address %}
+**{{ 'pixel.shop::lang.fields.billing_address'|trans }}**
+<small style="line-height: 1.5em; display: block">
+{{ order.billing_address.first_line }}
+<br>
+{% if order.billing_address.city %}
+{{ order.billing_address.city }},
+{% endif %}
+{% if order.billing_address.state %}
+{{ order.billing_address.state }},
+{% endif %}
+{% if order.billing_address.country %}
+{{ order.billing_address.country }}
+{% endif %}
+{% if order.billing_address.zip %}
+<br>
+{{ 'pixel.shop::lang.fields.postal_code'|trans }}: {{ order.billing_address.zip }}
+</small>
+{% endif %}
+{% endif %}
 
-	h1 {
-		font-size: 22px !important;
-	}
+{% if order.custom_fields.billing %}
+{% for field in order.custom_fields.billing %}
+**{{ field.label }}**
+<small style="line-height: 1.5em; display: block">{{ field.value }}</small>
 
-	h2 {
-		font-size: 18px !important;
-	}
+{% endfor %}
+{% endif %}
 
-	h3 {
-		font-size: 16px !important;
-	}
+{% if order.shipping_address %}
+**{{ 'pixel.shop::lang.fields.shipping_address'|trans }}**
+<small style="line-height: 1.5em; display: block">
+{{ order.shipping_address.first_line }}
+<br>
+{% if order.shipping_address.city %}
+{{ order.shipping_address.city }},
+{% endif %}
+{% if order.shipping_address.state %}
+{{ order.shipping_address.state }},
+{% endif %}
+{% if order.shipping_address.country %}
+{{ order.shipping_address.country }}
+{% endif %}
+{% if order.shipping_address.zip %}
+<br>
+{{ 'pixel.shop::lang.fields.postal_code'|trans }}: {{ order.billing_address.zip }}
+</small>
+{% endif %}
+{% endif %}
 
-	.container {
-		padding: 0 !important;
-		width: 100% !important;
-	}
+{% if order.custom_fields.shipping %}
+{% for field in order.custom_fields.shipping %}
+**{{ field.label }}**
+<small style="line-height: 1.5em; display: block">{{ field.value }}</small>
 
-	.content {
-		padding: 0 !important;
-	}
+{% endfor %}
+{% endif %}
 
-	.content-wrap {
-		padding: 10px !important;
-	}
+{% if order.gateway %}
+**{{ 'pixel.shop::lang.fields.gateway'|trans }}**
+<span style="line-height: 1em; display: block; margin-top: 6px">
+    <img style="float: left; margin: -8px 0px;" src="{{ url('/plugins/pixel/shop/assets/img/icon-' ~ order.gateway ~ '.svg') }}" alt="" width="32" height="32">&nbsp;{{ ('pixel.shop::lang.fields.' ~ order.gateway)|trans }}
+</span>
+{% endif %}
 
-	.invoice {
-		width: 100% !important;
-	}
-}
+{% if order.gateway == 'bank_transfer' %}
+{{ order.getBankTransferDetails()|raw }}
+{% endif %}
 
-</style>
-<table class="main" width="100%" cellpadding="0" cellspacing="0" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; border-radius: 3px; background-color: #fff; margin: 0; border: none;" bgcolor="#fff">
-	<tr style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
-		<td class="content-wrap aligncenter" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; text-align: center; margin: 0; padding: 20px;" align="center" valign="top">
-			<table width="100%" cellpadding="0" cellspacing="0" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
-				<tr style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
-					<td class="content-block" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0 0 20px;" valign="top">
-						<h1 class="aligncenter" style="font-family: 'Helvetica Neue',Helvetica,Arial,'Lucida Grande',sans-serif; box-sizing: border-box; font-size: 32px; color: #000; line-height: 1.2em; font-weight: 500; text-align: center; margin: 40px 0 0;" align="center">
-							{{ 'pixel.shop::mail.receipt'|trans }}
-						</h1>
-						<h3 style="font-family: 'Helvetica Neue',Helvetica,Arial,'Lucida Grande',sans-serif; box-sizing: border-box; font-size: 22px; color: #000; line-height: 1.2em; font-weight: 500; text-align: center; margin: 0 0; color: #50669D" align="center">#{{ order.getOrderID() }}</h3>
-					</td>
-				</tr>
-				<tr style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
-					<td class="content-block" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0 0 20px;" valign="top">
-                        <div class="badge-status status-{{ order.status }}">{{ ('pixel.shop::lang.status.' ~ order.status)|trans }}</div>
-						<h2 class="aligncenter" style="font-family: 'Helvetica Neue',Helvetica,Arial,'Lucida Grande',sans-serif; box-sizing: border-box; font-size: 24px; color: #000; line-height: 1.2em; font-weight: 400; text-align: center; margin: 40px 0 0;" align="center">{{ 'pixel.shop::mail.thanks_shopping'|trans }}</h2>
-						<h5 style="font-family: 'Helvetica Neue',Helvetica,Arial,'Lucida Grande',sans-serif; box-sizing: border-box; font-size: 16px; line-height: 1.2em; font-weight: 400; text-align: center; margin: 6px 0 0;" align="center">
-							<b>{{ ('pixel.shop::mail.status.' ~ order.status)|trans }}</b>
-						</h5>
-					</td>
-				</tr>
-				<tr style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
-					<td class="content-block aligncenter" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; text-align: center; margin: 0; padding: 0 0 20px;" align="center" valign="top">
-						<table class="invoice" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; text-align: left; width: 90%; margin: 20px auto;">
-							<tr style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
-								<td style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 5px 0;" valign="top">
-									<b>{{ 'pixel.shop::component.order.to'|trans }}</b>
-									<br style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 10px; margin: 0;" />
-									{{ order.customer_fullname }}
-									<br style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 10px; margin: 0;" />
-									<a href="mailto:{{ order.customer_email }}">{{ order.customer_email }}</a>
-									<br style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 10px; margin: 0;" />
-									{{ order.billing_address.first_line }} <br>
-									{% if order.billing_address.city %}
-									{{ order.billing_address.city }},
-									{% endif %}
-									{% if order.billing_address.state %}
-									{{ order.billing_address.state }},
-									{% endif %}
-									{% if order.billing_address.country %}
-									{{ order.billing_address.country }}
-									{% endif %}
-									<br>
-									{% if order.billing_address.zip %}
-									{{ 'pixel.shop::lang.fields.postal_code'|trans }}: {{ order.billing_address.zip }}
-									{% endif %}
-								</td>
-							</tr>
-							<tr style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
-								<td style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 5px 0;" valign="top">
-									<table class="invoice-items" cellpadding="0" cellspacing="0" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; width: 100%; margin: 0;">
-										{% for item in order.items %}
-										<tr style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
-											<td style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; border-top-width: 1px; border-top-color: #eee; border-top-style: solid; margin: 0; padding: 5px 0;" valign="top">
-												<strong>{{ item.title }}</strong>
-												{% if item.description %}
-												<br>
-												<small>{{ item.description }}</small>
-												{% endif %}
-											</td>
-											<td class="text-right" class="alignright" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 12px; line-height:14px; vertical-align: middle; text-align: right; border-top-width: 1px; border-top-color: #eee; border-top-style: solid; margin: 0; padding: 5px 0;" align="right" valign="middle">
-												{{ item.price|currency }}
-												<br />
-												x{{ item.quantity }}
-											</td>
-											<td class="text-right" class="alignright" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: middle; text-align: right; border-top-width: 1px; border-top-color: #eee; border-top-style: solid; margin: 0; padding: 5px 0;" align="right" valign="middle">
-												{{ item.total|currency }}
-											</td>
-										</tr>
-										{% endfor %}
-										{% if order.coupon %}
-										<tr style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
-											<td style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; border-top-width: 1px; border-top-color: #eee; border-top-style: solid; margin: 0; padding: 5px 0;" valign="top">
-												{{ 'pixel.shop::lang.fields.coupon'|trans }} <br>
-												<small class="text-success">{{ order.coupon.code }}</small>
-											</td>
-											<td class="text-right">
-												- -
-											</td>
-											<td class="text-right" class="alignright" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; text-align: right; border-top-width: 1px; border-top-color: #eee; border-top-style: solid; margin: 0; padding: 5px 0;" align="right" valign="top">
-												<span class="text-success">-{{ order.coupon.getValueLabel() }}</span>
-											</td>
-										</tr>
-										{% endif %}
-										<tr style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
-											<td colspan="2" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; border-top-width: 1px; border-top-color: #eee; border-top-style: solid; margin: 0; padding: 5px 0;text-align: right" valign="top">
-												{{ 'pixel.shop::lang.fields.shipping'|trans }}
-											</td>
-											<td class="alignright" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; text-align: right; border-top-width: 1px; border-top-color: #eee; border-top-style: solid; margin: 0; padding: 5px 0;" align="right" valign="top">
-												{{ order.shipping_total|currency }}
-											</td>
-										</tr>
-										<tr style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
-											<td colspan="2" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; border-top-width: 1px; border-top-color: #eee; border-top-style: solid; margin: 0; padding: 5px 0;text-align: right" valign="top">
-												{{ 'pixel.shop::lang.fields.tax'|trans }}
-											</td>
-											<td class="alignright" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; text-align: right; border-top-width: 1px; border-top-color: #eee; border-top-style: solid; margin: 0; padding: 5px 0;" align="right" valign="top">
-												{{ order.tax_total|currency }}
-											</td>
-										</tr>
-										<tr class="total" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
-											<td colspan="2" class="alignright" width="80%" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; text-align: right; border-top-width: 2px; border-top-color: #333; border-top-style: solid; border-bottom-color: #333; border-bottom-width: 2px; border-bottom-style: solid; font-weight: 700; margin: 0; padding: 5px 0; color: #333" align="right" valign="top">
-												{{ 'pixel.shop::lang.fields.grand_total'|trans }}
-											</td>
-											<td class="alignright" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; text-align: right; border-top-width: 2px; border-top-color: #333; border-top-style: solid; border-bottom-color: #333; border-bottom-width: 2px; border-bottom-style: solid; font-weight: 700; margin: 0; padding: 5px 0; color: #333" align="right" valign="top">
-												{{ order.total|currency }}
-											</td>
-										</tr>
-									</table>
-								</td>
-							</tr>
-							{% if order.gateway == 'bank_transfer' %}
-								<tr>
-									<td>{{ order.getBankTransferDetails() |raw }}</td>	
-								</tr>
-							{% endif %}
-						</table>
-					</td>
-				</tr>
-				<tr style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
-					<td class="content-block aligncenter" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; text-align: center; margin: 0; padding: 0 0 20px; color: #333" align="center" valign="top">
-						{{ order.getShopName() }}
-						<br style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 10px; margin: 0;" />
-						<a style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 12px; margin: 0; line-height: 14px" href="mailto:{{ order.getShopEmail() }}">{{ order.getShopEmail() }}</a>
-						<br style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 10px; margin: 0;" />
-						<small style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 10px; margin: 0; line-height: 14px">{{ order.getShopAddress()|nl2br }}</small>
-					</td>
-				</tr>
-			</table>
-		</td>
-	</tr>
-</table>
+{% if order.note %}
+**{{ 'pixel.shop::lang.fields.note'|trans }}**
+<small style="line-height: 1.5em; display: block">{{ order.note }}</small>
+{% endif %}

@@ -45,11 +45,11 @@ return [
         'billing_address' => 'Indirizzo di fatturazione',
         'optional' => 'Opzionale',
         'is_ship_same_bill' => 'L\'indirizzo di fatturazione è lo stesso del mio indirizzo di spedizione',
-        'is_save_for_later' => 'Salva quest\'informazione per dopo',
+        'is_save_for_later' => 'Salva le informazioni inserite per futuri acquisti',
         'place_order' => 'Invia ordine',
         'bank_transfer_comment' => 'Pagamento dell\'intero importo (:total) tramite bonifico bancario anticipato.',
         'cash_on_delivery_comment' => 'Si paga per la merce al momento della consegna.',
-        'paypal_comment' => 'Qunado fai clic su <b>"Effettua ordine"</b>, verrai indirizzato al sito web di <b>PayPal</b>.',
+        'paypal_comment' => 'Paga con <b>"Carta di Credito/Debito"</b>tramite il portale web di <b>PayPal</b>.',
         'pixelpay_comment' => 'Nella pagina successiva il pagamento viene elaborato tramite <b style="color: #226DF6">PixelPay&reg;</b><br>Noi non salveremo i dati della carta. La transazione sarà <b style="color: #226DF6">criptata e sicura</b>',
 
         'name_card' => 'Nome sulla carta',
