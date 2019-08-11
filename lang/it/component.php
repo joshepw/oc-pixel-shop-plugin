@@ -64,7 +64,8 @@ return [
         'customer_information' => 'Informazioni cliente',
         'shipping_method' => 'Metodo di spedizione',
         'complete_order' => 'Completa ordine',
-        'payment_method' => 'Metodo di pagamento'
+        'payment_method' => 'Metodo di pagamento',
+        'no_gateway_support' => 'Questo negozio non supporta e metodi di pagamento in questo paese (:country).'
     ],
     "payment" => [
         "request_error" => "Errore durante l'invio dei dati a PixelPay",

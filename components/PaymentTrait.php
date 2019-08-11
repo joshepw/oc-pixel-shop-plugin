@@ -19,6 +19,8 @@ use Responsiv\Currency\Helpers\Currency;
 trait PaymentTrait{
 
 	protected function onSendCheckout(){
+        $this->prepareLang();
+        
 		$cart = Cart::load();
 		$data = input();
 		$settings = GatewaysSettings::instance();
@@ -47,6 +49,12 @@ trait PaymentTrait{
 			'cc_cvv' => 'required_if:gateway,cc|cvv:cc_number'
         ];
         
+		if(input('shipping_zip_required') == 'required')
+			$rules['shipping_address.zip'] = 'required';
+
+		if(!input('is_ship_same_bill') && input('billing_zip_required') == 'required')
+			$rules['billing_address.zip'] = 'required';
+
         $names = [
 			'customer_first_name' => strtolower( trans('pixel.shop::lang.fields.first_name') ),
 			'customer_last_name' => strtolower( trans('pixel.shop::lang.fields.last_name') ),

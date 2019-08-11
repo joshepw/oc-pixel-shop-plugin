@@ -1,16 +1,22 @@
 <table class="table table-hover table-content order-items">
 	<thead>
 		<tr>
+            <th width="36"></th>
 			<th><?= trans('pixel.shop::lang.fields.description') ?></th>
 			<th width="100" class="text-right"><?= trans('pixel.shop::lang.fields.price') ?></th>
-			<th width="30" class="text-center"><?= trans('pixel.shop::lang.fields.qty') ?></th>
+			<th width="60" class="text-center"><?= trans('pixel.shop::lang.fields.qty') ?></th>
 			<th width="100" class="text-right"><?= trans('pixel.shop::lang.fields.total') ?></th>
 		</tr>
 	</thead>
 	<tbody>
 		<?php foreach ($value as $item): ?>
 		<tr>
-			<td>
+            <td valign="middle" style="vertical-align: middle">
+                <?php if(!empty($item['thumb'])): ?>
+                <img src="<?= $item['thumb'] ?>" alt="" width="32" height="32" style="border-radius: 3px">
+                <?php endif; ?>
+            </td>
+			<td valign="middle" style="vertical-align: middle">
 				<b><?= $item['title'] ?></b>
 				<?php if(!empty($item['description'])): ?>
 				<br><?= $item['description'] ?>
@@ -33,7 +39,7 @@
 
 		<?php if($formModel->coupon): ?>
 		<tr>
-			<td>
+			<td colspan="2">
 				<b><?= trans('pixel.shop::lang.fields.coupon') ?></b>
 				<br>
 				<b class="text-success"><?= $formModel->coupon->code ?></b>
@@ -55,7 +61,7 @@
 
 		<?php if($formModel->shipping_total > 0): ?>
 		<tr>
-			<td class="text-right" colspan="3">
+			<td class="text-right" colspan="4">
 				<b><?= trans('pixel.shop::lang.fields.shipping') ?></b>
 			</td>
 			<td class="text-right">
@@ -64,7 +70,7 @@
 		</tr>
 		<?php endif; ?>
 		<tr>
-			<td class="text-right" colspan="3">
+			<td class="text-right" colspan="4">
 				<b><?= trans('pixel.shop::lang.fields.tax') ?></b>
 			</td>
 			<td class="text-right">
@@ -72,7 +78,7 @@
 			</td>
 		</tr>
 		<tr>
-			<td class="text-right" colspan="3">
+			<td class="text-right" colspan="4">
 				<b><?= trans('pixel.shop::lang.fields.grand_total') ?></b>
 			</td>
 			<td class="text-right">

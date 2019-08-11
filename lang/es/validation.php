@@ -17,7 +17,14 @@ return [
     'billing_address.state.required_without' => 'El campo :attribute es obligatorio.',
     'billing_address.city.required_without' => 'El campo :attribute es obligatorio.',
 
-    'gateway.required' => 'Por favor, elija un método de pago primero.',
+    'gateway.required' => 'Por favor, elija un método de pago primero',
+
+    'jquery' => [
+        'required' => 'Campo requerido',
+        'email' => 'Introduzca una dirección de correo electrónico válida',
+        'maxlength' => 'Ingrese no más de {0} caracteres',
+        'minlength' => 'Ingrese al menos {0} caracteres',
+    ],
 
     'values' => [
     	'gateway' => [

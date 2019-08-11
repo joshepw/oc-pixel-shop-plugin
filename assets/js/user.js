@@ -202,6 +202,7 @@ Profile.setBillingCountryOnSelect = function(data){
 };
 
 Profile.evalAddressSelect = function(countryCode, type){
+    console.log(countryCode, type)
 	if(countryCode && Profile.zipCodes[countryCode]){
 		$('.col-'+type).removeClass('col-md-4').addClass('col-md-3');
 		$('.col-'+type+'-zip').fadeIn(300);

@@ -10,7 +10,7 @@
         'access_items' => 'Accedi ai prodotti',
         'access_categories' => 'Accedi alle categorie',
         'access_brands' => 'Accedi ai marchi',
-        'access_coupons' => 'Accedi ai Coupons', //da vedere se accedere o di accesso
+        'access_coupons' => 'Accedi ai Coupons',
     ],
     'menu' => [
         'shop' => 'Shop',
@@ -31,6 +31,9 @@
         'manage' => 'Gestione',
     ],
     'fields' => [
+        'shop' => 'Negozio',
+        'shop_name' => 'Nome del negozio',
+        'shop_email' => 'Email di contatto del negozio',
         'name' => 'Nome',
         'code' => 'Codice Prodotto',
         'categories' => 'Categorie',
@@ -55,7 +58,7 @@
         'description' => 'Descrizione',
         'keywords' => 'Keywords',
         'custom_page' => 'Modello di pagina personalizzato',
-        'content' => 'Contenuto', 
+        'content' => 'Contenuto',
         'gallery' => 'Galleria',
         'model' => 'modello di articolo',
         'attachments' => 'Allegati',
@@ -76,7 +79,7 @@
         'number' => 'Numero',
         'digits' => 'Cifre',
         'prefix' => 'Prefisso',
-        'note' => 'Note',
+        'note' => 'Note o istruzioni',
         'discounts' => 'Sconti',
         'percent' => 'Percentuale',
         'created_at' => 'Data creazione',
@@ -96,18 +99,18 @@
         'accesories' => 'Accesori',
         'variants' => 'Varianti',
         'saved' => 'Salvato',
-        'due_days' => 'Giorni di ritardo',//da verificare
+        'due_days' => 'Giorni di ritardo',
         'page' => 'Pagina',
         'price_simple' => 'Prezzo',
         'send_to_mail' => 'invia per email',
         'print' => 'Stampa',
-        'mark_success' => 'Segna come "Completato"', //da verificare
+        'mark_success' => 'Segna come "Completato"',
         'mark_pending' => 'Segna come "In Attesa"',
         'sent_default_customer' => 'invia al cliente',
         'send_copies' => 'Invia copie per email',
         'send' => 'Invia',
         'reply' => 'Rispondi',
-        'estimate_attach' => 'Estimate message', //idem
+        'estimate_attach' => 'Estimate message',
         'tags_to_use' => 'Tags',
         'document' => 'Documento',
         'company' => 'Azienda',
@@ -135,15 +138,15 @@
         'shipping_address_ex2' => 'eventualmente indicare stanza e piano',
         'postal_code' => 'Codice postale',
         'items' => 'Articoli',
-        'activity' => 'Attività', //da confermare
+        'activity' => 'Attività',
         'item_details' => 'Dettagli dell\'articolo',
-        'qty' => 'Quantità.', //lunghezza
+        'qty' => 'Quantità.',
         'grand_total' => 'Importo totale',
         'carrier' => 'Vettore',
-        'invoice' => 'Fattura', //da verificare
+        'invoice' => 'Fattura',
         'title' => 'Titolo',
         'option' => 'Opzione',
-        'price_diff' => 'Differenza di prezzo. (+/-)', //lunghezza
+        'price_diff' => 'Differenza di prezzo. (+/-)',
         'required' => 'Opzioni richieste',
         'optional' => 'varianti opzionali',
         'option_title' => 'Titolo opzione',
@@ -154,7 +157,7 @@
         'shipping_fee' => 'Tassa di spedizione',
         'credit_card' => 'Carta di credito',
         'active' => 'Attivo',
-        'default_gateway' => 'Gateway predefinito', //da verificare
+        'default_gateway' => 'Gateway predefinito',
         'cc' => 'Carta di credito',
         'paypal' => 'PayPal Checkout',
         'bank_transfer' => 'Bonifico Bancario',
@@ -162,13 +165,12 @@
         'cash_on_delivery' => 'Pagamento alla consegna',
         'pixelpay' => 'PixelPay',
         'owner' => 'Proprietario',
-        'details' => 'Dettagli',
         'bank_customer_information' => 'Informazioni per il pagamento',
         'bank_hide_customer_information' => 'Nascondi le informazioni per il pagamento durante il carrello',
         'allowed_countries' => 'Paesi ammessi',
-        'used_count' => 'Conteggio Utilizzo', //da verificare
-        'minimum_value_basket' => 'Valore minimo del carrello', //verificare
-        'minimum_value_basket_comment' => 'Può essere utilizzato solo per coupons globali - vedi sotto', //verificare
+        'used_count' => 'Conteggio Utilizzo',
+        'minimum_value_basket' => 'Valore minimo del carrello',
+        'minimum_value_basket_comment' => 'Può essere utilizzato solo per coupons globali - vedi sotto',
         'type_value' => 'Tipo di valore',
         'coupon_code' => 'Codice Coupon (Maiuscolo)',
         'valid_from' => 'Valido da',
@@ -189,7 +191,6 @@
         'country' => 'Nazione',
         'state' => 'Provincia',
         'city' => 'Città',
-        'note' => 'Note o istruzioni',
         'cc_name' => 'Nome sulla carta',
         'cc_number' => 'Numero carta di Credito/Debito',
         'cc_exp' => 'Scadenza',
@@ -207,15 +208,19 @@
         'zip' => 'CAP',
         'sales' => 'Vendite',
         'views' => 'Visualizzazioni',
-        'new_order_notify' => 'Notifica quando viene creato un nuovo ordine'
+        'new_order_notify' => 'Notifica quando viene creato un nuovo ordine',
+        'label' => 'Etichetta',
+        'rules' => 'Regole',
+        'custom_fields' => 'Campi personalizzati',
+        'add_custom_field' => 'Aggiungi campo personalizzato',
+        'values' => 'Valori',
     ],
-	
     'status' => [
-    	'pending' => 'In sospeso',
-    	'await_pay' => 'In attesa del pagamento',
-    	'await_fulfill' => 'In Preparazione',
-    	'paid' => 'Pagato',
-    	'cancelled' => 'Annullato/Rimborsato',
+        'pending' => 'In sospeso',
+        'await_pay' => 'In attesa del pagamento',
+        'await_fulfill' => 'In Preparazione',
+        'paid' => 'Pagato',
+        'cancelled' => 'Annullato/Rimborsato',
         'completed' => 'Completato',
         'mark_as_paid' => 'Segna come Pagato',
         'mark_as_complete' => 'Segna come Evaso',
@@ -227,13 +232,12 @@
         'await_fulfill_description' => 'il cliente ha completato il processo di ceckout e pagamento è stato confermato.',
         'cancelled_description' => 'Il venditore ha cancellato un ordine, a causa di una mancanza in magazzino o altre ragioni.',
         'completed_description' => 'L\'ordine è stato correttamente spedito/preso in carico, e la ricevuta è stata confermata.',
-
         'method_active' => 'Attiva questo metodo di pagamento nel processo di checkout.',
         'bank_transfer_details_comment' => 'Come filiale bancaria, numero IBAN, codice BIC, ecc.',
         'allowed_countries' => 'Se nessuno è selezionato, per impostazione predefinita, sarà consentito qualsiasi paese.',
         'bank_customer_information' => 'Informazioni sul bonifico bancario (tempo di elaborazione, inizio della spedizione ...)',
         'delivery_customer_information' => 'Informazioni sulla consegna (tempo di elaborazione, inizio della spedizione ...)',
-        'mark_success' => 'Vuoi davvero impostare questa stima con successo?', //meglio senza successo?
+        'mark_success' => 'Vuoi davvero impostare questa stima con successo?',
         'sent_default_customer' => 'Vuoi inviare questa email al cliente?',
         'send_copies' => 'Inserisci la mailing list separata da virgole',
         'tags_to_use' => '<b>Tags:</b> Fare clic sul pulsante per incollare il codice nell\'editor di testo',
@@ -272,7 +276,6 @@
         'order_status_updated' => 'Lo stato dell\'ordine è stato aggiornato.',
         'enable_variants' => 'Abilita prima le varianti',
         'enable_variants_comment' => 'Per gestire le varianti e le opzioni degli articoli è necessario abilitare l\'opzione "Ha varianti" per continuare..',
-
         'bank_transfer_settings' => 'Questo modulo consente di accettare pagamenti sicuri tramite bonifico bancario.',
         'bank_transfer_settings_comment' => 'Se il cliente sceglie di pagare tramite bonifico bancario, lo stato dell\'ordine cambierà in \'In attesa di pagamento \'; in seguito sarà necessario confermare manualmente l\'ordine alla ricezione del bonifico',
         'cash_on_delivery_settings' => 'Questo modulo consente di accettare pagamenti in contrassegno.',
@@ -282,9 +285,8 @@
         'pixelpay_settings' => 'Questo modulo consente di effettuare pagamenti tramite PixelPay',
         'pixelpay_settings_comment' => 'Quando il cliente fa clic sul pulsante "Paga adesso", l\'utente verrà reindirizzato al fornitore di servizi di pagamento..',
     ],
-
     'frontend' => [
-    	'cart' => 'Carrello',
+        'cart' => 'Carrello',
         'address' => 'Indirizzo',
         'preview_order' => 'Anteprima dell\'ordine',
         'delivery_billing' => 'Fatturazione alla &amp; consegna',
@@ -312,7 +314,7 @@
         'delivery_address' => 'Indirizzo di spedizione',
         'first_name' => 'Nome',
         'last_name' => 'Cognome',
-        'street_address' => 'Indirizzo, ragione sociale', //da controllare
+        'street_address' => 'Indirizzo, ragione sociale',
         'apartment_suite' => 'Appartamento edificio appartamento piano ecc.',
         'billing_address' => 'Indirizzo di fatturazione uguale all\'indirizzo di consegna',
         'billing_add' => 'indirizzo di fatturazione',
@@ -350,7 +352,7 @@
         'brand' => 'Marca:',
         'addtocart' => 'Aggiungi al carrello',
         'product_not_found' => 'Prodotto non trovato',
-        'attachments' => 'Allegati', 
+        'attachments' => 'Allegati',
         'accessories' => 'Accessori',
         'moreinfo' => 'Dettagli',
         'order_reserve' => 'Ordine / Riserva',
@@ -358,24 +360,24 @@
         'viewless' => 'Nascondi...',
         'note' => 'Note',
         'used' => 'Usato',
-		'refurbished' => 'Ricondizionato',
-		'select_option' => '-- Seleziona un\'opzione --',
-		'related_products' => 'Prodotti correlati'
+        'refurbished' => 'Ricondizionato',
+        'select_option' => '-- Seleziona un\'opzione --',
+        'related_products' => 'Prodotti correlati',
+        'view_all_orders' => 'Vedi tutti gli ordini',
     ],
     'coupon_codes' => [
-    	'code_5' => 'Il codice del coupon non è valido oppure non esiste.',
-    	'code_4' => 'Questo coupon non soddisfa il valore minimo di acquisto.',
-    	'code_3' => 'Questo coupon ha superato il limite di utilizzo.',
-    	'code_2' => 'Questo coupon non è più valido.',
-    	'code_1' => 'Questo coupon non è più attivo.',
-    	'code_0' => 'Il coupon è stato applicato correttamente.'
+        'code_5' => 'Il codice del coupon non è valido oppure non esiste.',
+        'code_4' => 'Questo coupon non soddisfa il valore minimo di acquisto.',
+        'code_3' => 'Questo coupon ha superato il limite di utilizzo.',
+        'code_2' => 'Questo coupon non è più valido.',
+        'code_1' => 'Questo coupon non è più attivo.',
+        'code_0' => 'Il coupon è stato applicato correttamente.',
     ],
-
     'components' => [
         'pl_all_cats' => 'Tutte le Categorie',
-        'cart_next'    => 'Avanti',
-        'cart_prev'    => 'Indietro',
-        'cart_emailexample'    => 'la_tua@email.it',
-        'pl_please_login' => 'Accedi al tuo account per salvare i prodotti che ti piacciono.'
+        'cart_next' => 'Avanti',
+        'cart_prev' => 'Indietro',
+        'cart_emailexample' => 'la_tua@email.it',
+        'pl_please_login' => 'Accedi al tuo account per salvare i prodotti che ti piacciono.',
     ],
 ];

@@ -123,6 +123,8 @@ class ProductList extends ComponentBase
 
     public function onRun()
 	{
+        $this->prepareLang();
+        
 		$this->addCss('/plugins/pixel/shop/assets/css/products.css');
 
 		$this->products = $this->page['products'] = $this->loadProducts();
@@ -132,7 +134,22 @@ class ProductList extends ComponentBase
 		$this->page['showSearchBar'] = $this->property('showSearchBar');
 		$this->page['showQuickAdd'] = $this->property('showQuickAdd');
         $this->page['typeCategoriesFilter'] = $this->property('typeCategoriesFilter');
-	}
+    }
+    
+    protected function prepareLang(){
+        $lang = \Config::get('app.locale', 'en');
+
+        if(\System\Models\PluginVersion::where('code', 'RainLab.Translate')->where('is_disabled', 0)->first()){
+            $translator = \RainLab\Translate\Classes\Translator::instance();
+            $activeLocale = $translator->getLocale();
+            $lang = $activeLocale;
+        }
+
+        if(!empty(post('lang')))
+            $lang = post('lang');
+
+        \App::setLocale($lang);
+    }
 
     // LOAD MODELS
     protected function loadCategory(){
@@ -231,6 +248,8 @@ class ProductList extends ComponentBase
 	}
 
 	public function onSetFavorite(){
+        $this->prepareLang();
+
 		$item_id = post('id');
 		
 		if (class_exists("\RainLab\User\Models\User")){

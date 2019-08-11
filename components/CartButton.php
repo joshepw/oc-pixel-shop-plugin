@@ -63,6 +63,8 @@ class CartButton extends ComponentBase
 	}
 
 	public function onRun(){
+        $this->prepareLang();
+
 		$this->page['cart'] = $cart = Cart::load();
 		$this->page['cart_count'] = count($cart->items);
 
@@ -74,5 +76,20 @@ class CartButton extends ComponentBase
 		$this->page['cart_color'] = $this->property('color');
         $this->page['cart_page'] = $this->property('cartPage');
         $this->page['hide_on_empty'] = $this->property('hideOnEmpty');
-	}
+    }
+    
+    protected function prepareLang(){
+        $lang = \Config::get('app.locale', 'en');
+
+        if(\System\Models\PluginVersion::where('code', 'RainLab.Translate')->where('is_disabled', 0)->first()){
+            $translator = \RainLab\Translate\Classes\Translator::instance();
+            $activeLocale = $translator->getLocale();
+            $lang = $activeLocale;
+        }
+
+        if(!empty(post('lang')))
+            $lang = post('lang');
+
+        \App::setLocale($lang);
+    }
 }

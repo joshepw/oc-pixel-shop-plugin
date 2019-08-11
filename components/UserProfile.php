@@ -56,6 +56,7 @@ class UserProfile extends ComponentBase{
             $this->onActivate($code);
 
         $this->prepareVars();
+        $this->prepareLang();
 
         $this->addCss('/plugins/pixel/shop/assets/css/user.css');
         $this->addCss('/plugins/pixel/shop/assets/css/products.css');
@@ -84,6 +85,20 @@ class UserProfile extends ComponentBase{
         Event::fire('pixel.shop.profile.extendtabs', [$this]);
     }
 
+    protected function prepareLang(){
+        $lang = \Config::get('app.locale', 'en');
+
+        if(\System\Models\PluginVersion::where('code', 'RainLab.Translate')->where('is_disabled', 0)->first()){
+            $translator = \RainLab\Translate\Classes\Translator::instance();
+            $activeLocale = $translator->getLocale();
+            $lang = $activeLocale;
+        }
+
+        if(!empty(post('lang')))
+            $lang = post('lang');
+
+        \App::setLocale($lang);
+    }
 
     public function addComponentTab($id, $tab){
         $tab['id'] = $id;
@@ -110,12 +125,14 @@ class UserProfile extends ComponentBase{
         $this->tabs = array();
 
     	if(isset($user->billing_address['state'])){
-			if($state = State::where('code', $user->billing_address['state'])->first())
+            $thisCountry = Country::isEnabled()->where('code',$user->shipping_address['country'])->first();
+			if($state = State::where([ ['code', $user->billing_address['state']],['country_id', $thisCountry->id] ])->first())
 				$this->page['billing_states'] = $state->country->states;
 		}
 
 		if(isset($user->shipping_address['state'])){
-			if($state = State::where('code', $user->shipping_address['state'])->first())
+            $thisCountry = Country::isEnabled()->where('code',$user->shipping_address['country'])->first();
+			if($state = State::where([ ['code', $user->shipping_address['state']],['country_id', $thisCountry->id] ])->first())
 				$this->page['shipping_states'] = $state->country->states;
         }
     }
@@ -141,6 +158,8 @@ class UserProfile extends ComponentBase{
     }
 
     public function onActivate($code = null){
+        $this->prepareLang();
+
         try {
             $code = post('code', $code);
             $errorFields = ['code' => trans('rainlab.user::lang.account.invalid_activation_code')];
@@ -173,8 +192,10 @@ class UserProfile extends ComponentBase{
     }
 
     public function onShippingCountrySelect(){
+        $this->prepareLang();
+
 		if($country = Country::where('code', input('shipping_address.country'))->first()){
-			$return = ['[name="shipping_address[state]"]' => $this->renderPartial('@states', [
+			$return = ['.shippingStateWrapper' => $this->renderPartial('@states', [
 				'states' => $country->states
 			]), 'code' => $country->code];
 
@@ -183,8 +204,10 @@ class UserProfile extends ComponentBase{
 	}
 
 	public function onBillingCountrySelect(){
+        $this->prepareLang();
+
 		if($country = Country::where('code', input('billing_address.country'))->first()){
-			$return = ['[name="billing_address[state]"]' => $this->renderPartial('@states', [
+			$return = ['.billingStateWrapper' => $this->renderPartial('@states', [
 				'states' => $country->states
 			]), 'code' => $country->code];
 
@@ -194,6 +217,8 @@ class UserProfile extends ComponentBase{
 
 	public function onSignin(){
         try {
+            $this->prepareLang();
+
             $data = post();
             $rules = [
             	'username' => 'required|email|between:6,255',
@@ -230,6 +255,8 @@ class UserProfile extends ComponentBase{
 
     public function onRegister(){
     	try {
+            $this->prepareLang();
+
             if (!$this->canRegister())
             	throw new Exception(trans('rainlab.user::lang.account.registration_disabled'));
 
@@ -298,6 +325,8 @@ class UserProfile extends ComponentBase{
     }
 
 	public function onUpdate(){
+        $this->prepareLang();
+
         if (!$user = $this->user())
             return;
 
@@ -316,6 +345,8 @@ class UserProfile extends ComponentBase{
     }
 
     public function onDeactivate(){
+        $this->prepareLang();
+        
         if (!$user = $this->user())
             return;
 
@@ -348,6 +379,8 @@ class UserProfile extends ComponentBase{
 	}
 
 	public function onSetFavorite(){
+        $this->prepareLang();
+
 		$item_id = post('id');
 		
 		if (class_exists("\RainLab\User\Models\User")){
@@ -375,6 +408,8 @@ class UserProfile extends ComponentBase{
 	}
 
 	public function onLoadOrder(){
+        $this->prepareLang();
+
 		$item_id = post('id');
 
 		if(!$order = Order::find($item_id))
@@ -384,6 +419,7 @@ class UserProfile extends ComponentBase{
 	}
 
 	public function onLoadOrders(){
+        $this->prepareLang();
 		return ['#orders-content' => $this->renderPartial('@orders', [ 'user' => $this->user() ])];
     }
     

@@ -55,6 +55,21 @@ class CartContainer extends ComponentBase{
         return $fields;
     }
 
+    protected function prepareLang(){
+        $lang = \Config::get('app.locale', 'en');
+
+        if(\System\Models\PluginVersion::where('code', 'RainLab.Translate')->where('is_disabled', 0)->first()){
+            $translator = \RainLab\Translate\Classes\Translator::instance();
+            $activeLocale = $translator->getLocale();
+            $lang = $activeLocale;
+        }
+
+        if(!empty(post('lang')))
+            $lang = post('lang');
+
+        \App::setLocale($lang);
+    }
+
     public function prepareFields($key){
         $fields = SalesSettings::get($key . '_custom_fields');
 
@@ -63,6 +78,29 @@ class CartContainer extends ComponentBase{
 
         foreach ($fields as $key => $field) {
             $fields[$key]['name'] = str_slug($field['label'], '_');
+
+            if(!empty($field['rules'])){
+                $attrs = '';
+                $rules = explode('|', $field['rules']);
+                
+                foreach ($rules as $rule) {
+                    $parts = explode(':', $rule);
+
+                    if(strpos($rule, 'min:') !== false)
+                        $attrs .= ' minlength="'.$parts[1].'"';
+
+                    if(strpos($rule, 'max:') !== false)
+                        $attrs .= ' maxlength="'.$parts[1].'"';
+
+                    if(strpos($rule, 'required') !== false)
+                        $attrs .= ' required';
+
+                    if(strpos($rule, 'email') !== false)
+                        $fields[$key]['type'] = 'email';
+                }
+
+                $fields[$key]['attributes'] = $attrs;
+            }
         }
 
         return $fields;
@@ -77,7 +115,7 @@ class CartContainer extends ComponentBase{
 	}
 
 	public function onRun(){
-		$billing_country = null;
+        $this->prepareLang();
 
 		if(input('cart_id'))
 			Cart::load(input('cart_id'));
@@ -125,46 +163,44 @@ class CartContainer extends ComponentBase{
 		$this->page['cancel_page'] = $this->property('cancelPage');
 
 		$this->page['countries'] = Country::isEnabled()->orderBy('is_pinned', 'desc')->get();
-		$this->page['settings'] = GatewaysSettings::instance();
+        $this->page['settings'] = GatewaysSettings::instance();
+        
+        $shippingCountry = null;
+        $billingCountry = null;
 
-		if(isset($user->billing_address['state'])){
-			if($state = State::where('code', $user->billing_address['state'])->first())
-				$this->page['billing_states'] = $state->country->states;
-		}
+		if(Country::isEnabled()->count() == 1){
+            $onlyOneCountry = Country::isEnabled()->first();
+            $shippingCountry = $billingCountry = $onlyOneCountry;
+			$this->page['shipping_states'] = $this->page['billing_states'] = $onlyOneCountry->states;
+        }
+        
+        if(!empty($cart->billing_address['country'])){
+            $billingCountry = Country::isEnabled()->where('code', $cart->billing_address['country'])->first();
+        }elseif($user){
+            if($user->is_ship_same_bill && !empty($user->shipping_address['country']))
+                $billingCountry = Country::isEnabled()->where('code', $user->shipping_address['country'])->first();
+            elseif(!empty($user->billing_address['country']))
+                $billingCountry = Country::isEnabled()->where('code', $user->billing_address['country'])->first();
+        }
 
-		if(isset($user->shipping_address['state'])){
-			if($state = State::where('code', $user->shipping_address['state'])->first())
-				$this->page['shipping_states'] = $state->country->states;
-		}
+        if(!empty($cart->shipping_address['country'])){
+            $shippingCountry = Country::isEnabled()->where('code', $cart->shipping_address['country'])->first();
+        }elseif($user && !empty($user->shipping_address['country'])){
+            $shippingCountry = Country::isEnabled()->where('code', $user->shipping_address['country'])->first();
+        }
 
-		if(isset($cart->shipping_address['state'])){		
-			$thisCountry = Country::isEnabled()->where('code',$cart->shipping_address['country'])->first();
-			if($state = State::where([ ['code', $cart->shipping_address['state']],['country_id', $thisCountry->id] ])->first())
-				$this->page['shipping_states'] = $state->country->states;
-		}
+        $this->page['billing_country'] = $billingCountry->code;
+        $this->page['shipping_country'] = $shippingCountry->code;
 
+        $this->page['billing_states'] = $billingCountry ? $billingCountry->states : null;
+        $this->page['shipping_states'] = $shippingCountry ? $shippingCountry->states : null;
 
-		if($user){
-			if($user->is_ship_same_bill || $user->is_ship_same_bill == null){
-				if(isset($user->shipping_address['country']) && !empty($user->shipping_address['country']))
-					$billing_country = $user->shipping_address['country'];
-			}else{
-				if(isset($user->billing_address['country']) && !empty($user->billing_address['country']))
-					$billing_country = $user->billing_address['country'];
-			}
-		}else{
-			if(isset($cart->billing_address['country']) && !empty($cart->billing_address['country'])){
-				$billing_country = $cart->billing_address['country'];
-			}else{
-				if(isset($cart->shipping_address['country']) && !empty($cart->shipping_address['country']))
-					$billing_country = $cart->shipping_address['country'];
-			}
-		}
-
-		$this->page['methods_list'] = $this->getPaymentMethodsList($billing_country);
+        $this->page['methods_list'] = $this->getPaymentMethodsList($billingCountry->code);
+        $this->page['method_country_code'] = $billingCountry->code;
 
 		$this->addCss('/plugins/pixel/shop/assets/css/cart.css');
         $this->addJs('/plugins/pixel/shop/assets/js/jquery.mask.min.js');
+		$this->addJs('/plugins/pixel/shop/assets/js/jquery.validate.min.js');
         $this->addJs('/plugins/pixel/shop/assets/js/jquery.steps.min.js');
 		$this->addJs('/plugins/pixel/shop/assets/js/cart.js');
 	}
@@ -177,14 +213,26 @@ class CartContainer extends ComponentBase{
 	}
 
 	public function onShippingCountrySelect(){
+        $this->prepareLang();
+        
 		if($country = Country::where('code', input('shipping_address.country'))->first()){
-			$return = ['[name="shipping_address[state]"]' => $this->renderPartial('@shipping_states', [
-				'shipping_states' => $country->states
-			]), 'code' => $country->code];
+            $cart = Cart::load();
+            $cart->shipping_address['country'] = input('shipping_address.country');
+            $cart->updateTotals();
+            $cart->save();
+
+			$return = [
+                '#shop__cart-partial' => $this->renderPartial('@cart', [ 'cart' => $cart ]),
+                '.shippingStateContainer' => $this->renderPartial('@shipping_states', [
+                    'shipping_states' => $country->states
+                ]), 
+                'code' => $country->code
+            ];
 
 			if(input('is_ship_same_bill'))
 				$return['.shop__methods-list'] = $this->renderPartial('@methods', [
-					'methods_list' => $this->getPaymentMethodsList(input('shipping_address.country'))
+                    'methods_list' => $this->getPaymentMethodsList(input('shipping_address.country')),
+                    'method_country_code' => input('shipping_address.country')
 				]);
 
 			return $return;
@@ -192,13 +240,16 @@ class CartContainer extends ComponentBase{
 	}
 
 	public function onBillingCountrySelect(){
+        $this->prepareLang();
+
 		if($country = Country::where('code', input('billing_address.country'))->first()){
-			$return = ['[name="billing_address[state]"]' => $this->renderPartial('@billing_states', [
+			$return = ['.billingStateContainer' => $this->renderPartial('@billing_states', [
 				'billing_states' => $country->states
 			]), 'code' => $country->code];
 
 			$return['.shop__methods-list'] = $this->renderPartial('@methods', [
-				'methods_list' => $this->getPaymentMethodsList(input('billing_address.country'))
+                'methods_list' => $this->getPaymentMethodsList(input('billing_address.country')),
+                'method_country_code' => input('billing_address.country')
 			]);
 
 			return $return;
@@ -206,6 +257,8 @@ class CartContainer extends ComponentBase{
 	}
 
 	public function onShippingStateSelect(){
+        $this->prepareLang();
+
 		$cart = Cart::load();
 		$cart->shipping_address['state'] = input('shipping_address.state');
 		$cart->shipping_address['country'] = input('shipping_address.country');
@@ -213,5 +266,25 @@ class CartContainer extends ComponentBase{
 		$cart->save();
 
 		return [ '#shop__cart-partial' => $this->renderPartial('@cart', [ 'cart' => $cart ]) ];
-	}
+    }
+    
+    public function onSameAddressChange(){
+        $this->prepareLang();
+
+        $cart = Cart::load();
+		$cart->billing_address['state'] = input('shipping_address.state');
+		$cart->billing_address['country'] = input('shipping_address.country');
+		$cart->updateTotals();
+        $cart->save();
+        
+        $methodCountry = input('is_ship_same_bill') ? 'shipping' : 'billing';
+
+		return [ 
+            '#shop__cart-partial' => $this->renderPartial('@cart', [ 'cart' => $cart ]),
+            '.shop__methods-list' => $this->renderPartial('@methods', [
+                'methods_list' => $this->getPaymentMethodsList(input($methodCountry . '_address.country')),
+                'method_country_code' => input($methodCountry . '_address.country')
+			])
+        ];
+    }
 }

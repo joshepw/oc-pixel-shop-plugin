@@ -42,6 +42,8 @@ class ProductDetails extends ComponentBase{
 	}
 
 	public function onRun(){
+        $this->prepareLang();
+        
     	$slug = $this->property('slug');
     	$product = Item::where('slug', $slug)->where("is_visible", 1)->first();
 
@@ -66,6 +68,20 @@ class ProductDetails extends ComponentBase{
         }
     }
 
+    protected function prepareLang(){
+        $lang = \Config::get('app.locale', 'en');
+
+        if(\System\Models\PluginVersion::where('code', 'RainLab.Translate')->where('is_disabled', 0)->first()){
+            $translator = \RainLab\Translate\Classes\Translator::instance();
+            $activeLocale = $translator->getLocale();
+            $lang = $activeLocale;
+        }
+
+        if(!empty(post('lang')))
+            $lang = post('lang');
+
+        \App::setLocale($lang);
+    }
 
     public function getRelatedProducts($product){	
 		$list = $product->categories->lists('id');

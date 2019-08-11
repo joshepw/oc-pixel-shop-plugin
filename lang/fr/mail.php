@@ -2,7 +2,12 @@
 
 return [
 	'receipt' => 'Reçu de commande',
-	'thanks_shopping' => 'Merci d\'avoir fait du shopping avec nous.',
+    'shipped' => 'Commande terminée',
+    'payed' => 'Paiement reçu',
+    'shipped_text' => 'Bientôt, vous recevrez un lien ou un identifiant de suivi sur votre email',
+    'cancelled_text' => 'Votre commande a été annulée. Si la commande est payée, elle sera remboursée. Pour plus d\'informations, s\'il vous plaît contactez-nous par email.',
+    'thanks_shopping' => 'Merci d\'avoir fait du shopping avec nous.',
+    'cancelled' => 'Commande annulée',
 
 	'status' => [
         'completed' => 'Votre commande a été traitée.',
@@ -12,5 +17,3 @@ return [
         'cancelled' => 'La commande a été annulée'
 	]
 ];
-
- ?>

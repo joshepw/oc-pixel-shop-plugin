@@ -17,11 +17,13 @@ return [
     'billing_address.state.required_without' => 'The :attribute field is required.',
     'billing_address.city.required_without' => 'The :attribute field is required.',
 
-    'gateway.required' => 'Please choose a payment method first.',
+    'gateway.required' => 'Please choose a payment method first',
 
     'jquery' => [
-        'required' => '* Required field',
-        'email' => '* Please enter a valid email'
+        'required' => 'Required field',
+        'email' => 'Enter a valid email',
+        'maxlength' => 'Enter no more than {0} characters',
+        'minlength' => 'Enter at least {0} characters',
     ],
 
     'values' => [
@@ -30,5 +32,3 @@ return [
     	]
     ]
 ];
-
- ?>

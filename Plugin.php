@@ -302,7 +302,7 @@ class Plugin extends PluginBase{
 			\RainLab\User\Models\User::extend(function($model) {
 				$model->hasMany['orders'] = [
 					'Pixel\Shop\Models\Order',
-					'order' => 'paid_at desc'
+					'order' => 'created_at desc'
 				];
 
 				$model->hasMany['favorites'] = [

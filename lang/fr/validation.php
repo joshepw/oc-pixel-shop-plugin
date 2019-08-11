@@ -17,7 +17,14 @@ return [
     'billing_address.state.required_without' => 'Le champ :attribut est obligatoire.',
     'billing_address.city.required_without' => 'Le champ :attribut est obligatoire.',
 
-    'gateway.required' => 'Veuillez d\'abord choisir un mode de paiement.',
+    'gateway.required' => 'Veuillez d\'abord choisir un mode de paiement',
+
+    'jquery' => [
+        'required' => 'Champs requis',
+        'email' => 'Entrer un email valide',
+        'maxlength' => 'N\'entrez pas plus de {0} caractères',
+        'minlength' => 'Entrez au moins {0} caractères',
+    ],
 
     'values' => [
     	'gateway' => [

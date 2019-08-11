@@ -4,12 +4,12 @@
         <input type="hidden" name="custom_fields[{{ group }}][{{ field.name }}][label]" value="{{ field.label|trans }}">
 
         {% if field.field == 'text' %}
-        <input type="text" class="form-control" placeholder="{{ field.placeholder|trans }}"
-            name="custom_fields[{{ group }}][{{ field.name }}][value]">
+        <input type="{{ field.type ?: 'text' }}" class="form-control" placeholder="{{ field.placeholder|trans }}"
+            name="custom_fields[{{ group }}][{{ field.name }}][value]"{{ field.attributes|raw }}>
         {% endif %}
 
         {% if field.field == 'select' %}
-        <select name="custom_fields[{{ group }}][{{ field.name }}][value]" class="form-control">
+        <select name="custom_fields[{{ group }}][{{ field.name }}][value]" class="form-control"{{ field.attributes|raw }}>
             <option value="">{{ 'pixel.shop::component.cart.choose'|trans }}</option>
             {% for option in field.values|split(',') %}
             <option>{{ option }}</option>
@@ -21,7 +21,7 @@
         <div class="radio-group">
             {% for key, option in field.values|split(',') %}
             <div class="radio-group-input">
-                <input type="radio" name="custom_fields[{{ group }}][{{ field.name }}][value]" id="{{ field.name }}-{{ key }}" value="{{ option }}">
+                <input type="radio" name="custom_fields[{{ group }}][{{ field.name }}][value]" id="{{ field.name }}-{{ key }}" value="{{ option }}"{{ field.attributes|raw }}>
                 <label for="{{ field.name }}-{{ key }}">{{ option }}</label>
             </div>
             {% endfor %}
@@ -32,7 +32,7 @@
         <div class="radio-group">
             {% for key, option in field.values|split(',') %}
             <div class="radio-group-input">
-                <input type="checkbox" name="custom_fields[{{ group }}][{{ field.name }}][value]" id="{{ field.name }}-{{ key }}" value="{{ option }}">
+                <input type="checkbox" name="custom_fields[{{ group }}][{{ field.name }}][value]" id="{{ field.name }}-{{ key }}" value="{{ option }}"{{ field.attributes|raw }}>
                 <label for="{{ field.name }}-{{ key }}">{{ option }}</label>
             </div>
             {% endfor %}

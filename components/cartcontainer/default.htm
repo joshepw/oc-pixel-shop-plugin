@@ -9,7 +9,7 @@
 		</div>
 
 		<div class="col-md-8" id="shop__cart-steps">
-			<form novalidate="" data-request="onSendCheckout" data-request-flash data-request-validate data-request-complete="Cart.focusToInvalidFields()">
+			<form novalidate="" data-request="onSendCheckout" data-request-flash data-request-validate data-request-complete="Cart.focusToInvalidFields(data)">
                 <div class="shop__steps">
                     <h3>{{ 'pixel.shop::component.cart.customer_information'|trans }}</h3>
                     <div class="step-content">
@@ -26,7 +26,7 @@
 
                         <div class="checkbox">
                             <label for="same-address">
-                                <input type="checkbox" name="is_ship_same_bill" id="same-address" {% if (user.is_ship_same_bill or user.is_ship_same_bill == null) or not user %}checked="checked"{% endif %} onchange="Cart.checkSameAddress($(this))">
+                                <input type="checkbox" name="is_ship_same_bill" id="same-address" {% if user.is_ship_same_bill %}checked="checked"{% endif %} data-request="onSameAddressChange" onchange="Cart.checkSameAddress($(this))">
                                 <b>{{ 'pixel.shop::component.cart.is_ship_same_bill'|trans }}</b>
                             </label>
                         </div>
@@ -51,17 +51,13 @@
                 <div class="row" id="form-bag">
                     <div class="col-md-12 text-right">
                         <hr>
-                        <a href="javascript:;" class="btn btn-link btn-prev">{{ 'pixel.shop::lang.components.cart_prev'|trans }}</a>
+                        <a href="{{ product_page|page }}" class="btn btn-link btn-back-shopping"><i class="fas fa-shopping-cart"></i> {{ 'pixel.shop::component.cart.continue_shopping'|trans }}</a>
+                        <a href="javascript:;" class="btn btn-link btn-prev" style="display: none">{{ 'pixel.shop::lang.components.cart_prev'|trans }}</a>
                         <a href="javascript:;" class="btn btn-primary btn-next">{{ 'pixel.shop::lang.components.cart_next'|trans }}</a>
                         <button class="btn btn-success btn-finish" type="submit" data-attach-loading style="display: none">
                             <i class="fas fa-credit-card"></i> {{ 'pixel.shop::component.cart.place_order'|trans }}
                         </button>
                     </div>
-					{# <div class="col-md-6">
-                        <a href="{{ product_page|page }}" class="btn btn-primary btn-block"><i class="fas fa-shopping-cart"></i> {{ 'pixel.shop::component.cart.continue_shopping'|trans }}</a>
-					</div>
-					<div class="col-md-6">
-					</div> #}
 				</div>
 			</form>
 		</div>
@@ -69,3 +65,13 @@
 		{% endif %}
 	</div>
 </div>	
+{% put scripts %}
+<script>
+    jQuery.extend(jQuery.validator.messages, {
+        required: "{{ 'pixel.shop::validation.jquery.required'|trans }}",
+        email: "{{ 'pixel.shop::validation.jquery.email'|trans }}",
+        maxlength: jQuery.validator.format("{{ 'pixel.shop::validation.jquery.maxlength'|trans }}"),
+        minlength: jQuery.validator.format("{{ 'pixel.shop::validation.jquery.minlength'|trans }}"),
+    });
+</script>
+{% endput %}

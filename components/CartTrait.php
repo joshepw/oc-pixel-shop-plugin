@@ -8,6 +8,8 @@ use Pixel\Shop\Models\Coupon;
 trait CartTrait{
 
     protected function onAddToCart(){
+        $this->prepareLang();
+        
     	$cart = Cart::load();
     	$item = Item::find(input('id'));
 
@@ -59,6 +61,8 @@ trait CartTrait{
     }
 
     protected function onDeleteFromCart(){
+        $this->prepareLang();
+        
     	$cart = Cart::load();
     	$index = input('index');
 
@@ -72,6 +76,8 @@ trait CartTrait{
     }
 
     protected function onClearCart(){
+        $this->prepareLang();
+        
     	$cart = Cart::clear();
 
     	Flash::success(trans('pixel.shop::lang.messages.cart_clear'));
@@ -80,6 +86,8 @@ trait CartTrait{
     }
 
     protected function onClearCoupon(){
+        $this->prepareLang();
+
     	$cart = Cart::load();
 
     	if($coupon = Coupon::where('code', $cart->coupon['code'])->first())
@@ -95,6 +103,8 @@ trait CartTrait{
     }
 
     protected function onCheckCoupon(){
+        $this->prepareLang();
+
     	$code = strtoupper(input('coupon_code'));
     	if(!$coupon = Coupon::where('code', $code)->first())
     		return [ Flash::error(trans('pixel.shop::lang.coupon_codes.code_5')) ];

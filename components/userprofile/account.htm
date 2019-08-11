@@ -90,9 +90,9 @@
 					<div class="col-md-4">
 						<div class="form-group">
 							<label>{{ 'pixel.shop::lang.fields.state'|trans }}</label>
-							<select class="form-control" name="shipping_address[state]">
-								{% partial '@states' states=shipping_states user_state=user.shipping_address.state %}
-							</select>
+							<div class="shippingStateWrapper">
+								{% partial '@states' fieldtype='shipping' states=shipping_states user_state=user.shipping_address.state %}
+                            </div>
 							<div class="invalid-feedback" data-validate-for="shipping_address.state"></div>
 						</div>
 					</div>
@@ -131,14 +131,14 @@
 				</div>
 
 				<div class="row shop__billing-elements">
-					<div class="col-shipping col-md-3">
+					<div class="col-billing col-md-3">
 						<div class="form-group">
 							<label>{{ 'pixel.shop::lang.fields.country'|trans }}</label>
 							<select 
 								class="form-control" 
 								name="billing_address[country]" 
-								data-request="onShippingCountrySelect" 
-								data-request-success="Profile.setShippingCountryOnSelect(data)">
+								data-request="onBillingCountrySelect" 
+								data-request-success="Profile.setBillingCountryOnSelect(data)">
 								<option value="">{{ 'pixel.shop::component.cart.choose'|trans }}</option>
 								{% for country in countries %}
 								<option 
@@ -156,20 +156,20 @@
 					<div class="col-md-4">
 						<div class="form-group">
 							<label>{{ 'pixel.shop::lang.fields.state'|trans }}</label>
-							<select class="form-control" name="billing_address[state]">
-								{% partial '@states' states=shipping_states user_state=user.billing_address.state %}
-							</select>
+                            <div class="billingStateWrapper">
+                                {% partial '@states' fieldtype='billing' states=shipping_states user_state=user.billing_address.state %}
+                            </div>
 							<div class="invalid-feedback" data-validate-for="billing_address.state"></div>
 						</div>
 					</div>
-					<div class="col-shipping col-md-3">
+					<div class="col-billing col-md-3">
 						<div class="form-group">
 							<label>{{ 'pixel.shop::lang.fields.city'|trans }}</label>
 							<input type="text" class="form-control" name="billing_address[city]" value="{{ user.billing_address.city }}">
 							<div class="invalid-feedback" data-validate-for="billing_address.city"></div>
 						</div>
 					</div>
-					<div class="col-shipping-zip col-md-2">
+					<div class="col-billing-zip col-md-2">
 						<div class="form-group">
 							<label>{{ 'pixel.shop::lang.fields.zip'|trans }}</label>
 							<input type="hidden" name="shipping_zip_required">

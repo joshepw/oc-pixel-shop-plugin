@@ -8,6 +8,7 @@ use CurrencyShop;
 use Pixel\Shop\Models\Item;
 use Pixel\Shop\Models\Order;
 use RainLab\Location\Models\State;
+use RainLab\Location\Models\Country;
 
 class Cart{
 	
@@ -103,10 +104,14 @@ class Cart{
 		$shipping_total = 0.00;
 		$tax_total = 0.00;
 		$total = 0.00;
-		$state = null;
+        $state = null;
+        $country = null;
 
 		if(array_key_exists('state', $this->shipping_address))
-			$state = State::where('code', $this->shipping_address['state'])->first();
+            $state = State::where('code', $this->shipping_address['state'])->first();
+            
+        if(array_key_exists('country', $this->shipping_address))
+			$country = Country::where('code', $this->shipping_address['country'])->first();
 
 		foreach ($this->items as $item) {
 			$id = Item::find($item['id']);
@@ -122,8 +127,8 @@ class Cart{
 
 			if($state && $state->shipping_fee > 0)
 				$shipping_total += floatval($state->shipping_fee);
-			elseif($state && $state->country->shipping_fee > 0)
-				$shipping_total += floatval($state->country->shipping_fee);
+			elseif($country && $country->shipping_fee > 0)
+				$shipping_total += floatval($country->shipping_fee);
 		}
 
 		if(!empty($this->coupon) && array_key_exists('amount', $this->coupon))

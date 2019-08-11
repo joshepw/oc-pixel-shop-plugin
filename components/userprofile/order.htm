@@ -64,12 +64,27 @@
 					</p>
 				</div>
 			</div>
-		</div>
+        </div>
+        
+        {% if order.custom_fields.customer %}
+        <div class="row">
+            {% for field in order.custom_fields.customer if field.value %}
+            <div class="col-md-3">
+                <div class="text-left">
+                    <label>{{ field.label }}</label>
+                    <p>{{ field.value }}</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        
 
 		<div class="order-items">
 			<table class="table">
 				<thead>
 					<tr>
+                        <th width="42"></th>
 						<th>
 							<span>{{ 'pixel.shop::lang.fields.description'|trans }}</span>
 						</th>
@@ -87,7 +102,12 @@
 				<tbody>
 					{% for item in order.items %}
 					<tr>
-						<td>
+                        <td style="vertical-align: middle">
+                            {% if item.thumb %}
+                            <img src="{{ item.thumb }}" alt="" width="42" height="42" style="border-radius: 3px">
+                            {% endif %}
+                        </td>
+						<td style="vertical-align: middle">
 							<strong>{{ item.title }}</strong>
 							{% if item.description %}
 							<br>
@@ -107,7 +127,7 @@
 					{% endfor %}
 					{% if order.coupon %}
 					<tr>
-						<td>
+						<td colspan="2">
 							{{ 'pixel.shop::lang.fields.coupon'|trans }} <br>
 							<small class="text-success">{{ order.coupon.code }}</small>
 						</td>
@@ -123,26 +143,26 @@
 					</tr>
 					{% endif %}
 					<tr>
-						<td class="border-top">
+						<td colspan="4" class="border-top text-right">
 							<strong>{{ 'pixel.shop::lang.fields.shipping'|trans }}</strong>
 						</td>
-						<td colspan="3" class="text-right border-top">
+						<td class="text-right border-top">
 							{{ order.shipping_total|currency }}
 						</td>
 					</tr>
 					<tr>
-						<td class="border-top">
+						<td colspan="4" class="border-top text-right">
 							<strong>{{ 'pixel.shop::lang.fields.tax'|trans }}</strong>
 						</td>
-						<td colspan="3" class="text-right border-top">
+						<td class="text-right border-top">
 							{{ order.tax_total|currency }}
 						</td>
 					</tr>
 					<tr>
-						<td class="border-top">
+						<td colspan="4" class="border-top text-right">
 							<strong>{{ 'pixel.shop::lang.fields.grand_total'|trans }}</strong>
 						</td>
-						<td colspan="3" class="text-right border-top">
+						<td class="text-right border-top">
 							<span class="h3">
 								{{ order.total|currency }}
 							</span>
@@ -150,7 +170,33 @@
 					</tr>
 				</tbody>
 			</table>
-		</div>
+        </div>
+        
+        {% if order.custom_fields.shipping %}
+        <div class="row">
+            {% for field in order.custom_fields.shipping if field.value %}
+            <div class="col-md-3">
+                <div class="text-left">
+                    <label>{{ field.label }}</label>
+                    <p>{{ field.value }}</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        {% if order.custom_fields.billing %}
+        <div class="row">
+            {% for field in order.custom_fields.billing if field.value %}
+            <div class="col-md-3">
+                <div class="text-left">
+                    <label>{{ field.label }}</label>
+                    <p>{{ field.value }}</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
 
 		{% if order.note %}
 		<hr>

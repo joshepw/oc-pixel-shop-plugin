@@ -3,22 +3,22 @@
 	<div class="col-md-6">
 		<div class="form-group">
 			<label>{{ 'pixel.shop::lang.fields.address'|trans }}</label>
-			<input type="text" class="form-control" placeholder="1234 Main St" value="{{ user.shipping_address.first_line ?: cart.shipping_address.first_line }}" name="shipping_address[first_line]">
+			<input type="text" class="form-control" placeholder="{{ 'pixel.shop::lang.fields.shipping_address_ex1'|trans }}" value="{{ user.shipping_address.first_line ?: cart.shipping_address.first_line }}" name="shipping_address[first_line]" minlength="3" maxlength="190" required>
 			<div class="invalid-feedback" data-validate-for="shipping_address.first_line"></div>
 		</div>
 	</div>
 	<div class="col-md-6">
 		<div class="form-group">
 			<label>{{ 'pixel.shop::lang.fields.address_alt'|trans }} <span class="text-muted">({{ 'pixel.shop::component.cart.optional'|trans }})</span></label>
-			<input type="text" class="form-control" placeholder="Apartment or suite" value="{{ user.shipping_address.second_line ?: cart.shipping_address.second_line }}" name="shipping_address[second_line]">
+			<input type="text" class="form-control" placeholder="{{ 'pixel.shop::lang.fields.shipping_address_ex2'|trans }}" value="{{ user.shipping_address.second_line ?: cart.shipping_address.second_line }}" name="shipping_address[second_line]" minlength="3" maxlength="190">
 		</div>
 	</div>
 </div>
 <div class="row small-gutter">
 	<div class="col-shipping col-md-3">
 		<div class="form-group">
-			<label>{{ 'pixel.shop::lang.fields.country'|trans }}</label>
-			<select 
+            <label>{{ 'pixel.shop::lang.fields.country'|trans }}</label> {{ cart.is_ship_same_bill }}
+			<select required
 				class="form-control" 
 				name="shipping_address[country]" 
 				data-request="onShippingCountrySelect" 
@@ -27,10 +27,10 @@
 				{% for country in countries %}
 				<option 
 					value="{{ country.code }}" 
-					{% if user.shipping_address.country == country.code or cart.shipping_address.country == country.code %}
+					{% if shipping_country == country.code %}
 					selected="selected"
 					{% endif %}>
-					{{ country.name }}
+					{{ country.name }} ({{ country.code }})
 				</option>
 				{% endfor %}
 			</select>
@@ -40,16 +40,16 @@
 	<div class="col-md-4">
 		<div class="form-group">
 			<label>{{ 'pixel.shop::lang.fields.state'|trans }}</label>
-			<select class="form-control" name="shipping_address[state]" data-request="onShippingStateSelect">
+			<div class="shippingStateContainer">
 				{% partial '@shipping_states' %}
-			</select>
+            </div>
 			<div class="invalid-feedback" data-validate-for="shipping_address.state"></div>
 		</div>
 	</div>
 	<div class="col-shipping col-md-3">
 		<div class="form-group">
 			<label>{{ 'pixel.shop::lang.fields.city'|trans }}</label>
-			<input type="text" class="form-control" name="shipping_address[city]" value="{{ user.shipping_address.city ?: cart.shipping_address.city }}">
+			<input type="text" class="form-control" name="shipping_address[city]" value="{{ user.shipping_address.city ?: cart.shipping_address.city }}" minlength="2" maxlength="90" required>
 			<div class="invalid-feedback" data-validate-for="shipping_address.city"></div>
 		</div>
 	</div>
@@ -57,7 +57,7 @@
 		<div class="form-group">
 			<label>{{ 'pixel.shop::lang.fields.zip'|trans }}</label>
 			<input type="hidden" name="shipping_zip_required">
-			<input type="text" class="form-control" name="shipping_address[zip]" value="{{ user.shipping_address.zip ?: cart.shipping_address.zip }}">
+			<input type="text" class="form-control" name="shipping_address[zip]" value="{{ user.shipping_address.zip ?: cart.shipping_address.zip }}" minlength="5" maxlength="12" required>
 			<div class="invalid-feedback" data-validate-for="shipping_address.zip"></div>
 		</div>
 	</div>
@@ -66,7 +66,7 @@
 	<div class="col-md-12">
 		<div class="form-group">
 			<label>{{ 'pixel.shop::lang.fields.note'|trans }}</label>
-			<textarea name="notes" class="form-control" rows="2">{{ cart.notes }}</textarea>
+			<textarea name="notes" class="form-control" maxlength="200" rows="2">{{ cart.notes }}</textarea>
 		</div>
 	</div>
 </div>

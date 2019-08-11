@@ -1,10 +1,14 @@
-<option value="">{{ 'pixel.shop::component.cart.choose'|trans }}</option>
-{% for state in billing_states %}
-	<option 
-		value="{{ state.code }}" 
-		{% if user.billing_address.state == state.code or cart.billing_address.state == state.code %}
-		selected="selected"
-		{% endif %}>
-		{{ state.name }}
-	</option>
-{% endfor %}
+{% if billing_states|length > 0 %}
+    <select class="form-control" name="billing_address[state]">
+        <option value="">{{ 'pixel.shop::component.cart.choose'|trans }}</option>
+        {% for state in billing_states %}
+        <option value="{{ state.code }}"
+            {% if user.billing_address.state == state.code or cart.billing_address.state == state.code %}
+            selected="selected" {% endif %}>
+            {{ state.name }}
+        </option>
+        {% endfor %}
+    </select>
+{% else %}
+    <input type="text" class="form-control" value="{{ user.billing_address.state ?: cart.billing_address.state }}" minlength="2" maxlength="90"  name="billing_address[state]">
+{% endif %}

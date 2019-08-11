@@ -3,6 +3,7 @@
 	<p style="line-height: 32px">
 		{{ 'pixel.shop::component.cart.bank_transfer_comment'|trans({total: cart.total|currency}) }}
 	</p>
+	{% if not settings.bank_transfer_hide_customer_information %}
 	<div class="row">
 		<div class="col-md-6">
 			<label>{{ 'pixel.shop::lang.fields.owner'|trans }}</label>
@@ -21,4 +22,5 @@
 		</div>
 		{% endif %}
 	</div>
+	{% endif %}
 </div>

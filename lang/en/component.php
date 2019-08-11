@@ -64,7 +64,8 @@ return [
         'customer_information' => 'Customer Information',
         'shipping_method' => 'Shipping Method',
         'complete_order' => 'Complete Order',
-        'payment_method' => 'Payment Method'
+        'payment_method' => 'Payment Method',
+        'no_gateway_support' => 'This shop don\'t support and payment method in this country (:country).'
     ],
     "payment" => [
         "request_error" => "Error on sending data to PixelPay server",
