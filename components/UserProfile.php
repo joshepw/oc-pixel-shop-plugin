@@ -124,16 +124,14 @@ class UserProfile extends ComponentBase{
         
         $this->tabs = array();
 
-    	if(isset($user->billing_address['state'])){
-            $thisCountry = Country::isEnabled()->where('code',$user->shipping_address['country'])->first();
-			if($state = State::where([ ['code', $user->billing_address['state']],['country_id', $thisCountry->id] ])->first())
-				$this->page['billing_states'] = $state->country->states;
+    	if($user->billing_address && is_array($user->billing_address) && array_key_exists('country', $user->billing_address)){
+            if($thisCountry = Country::isEnabled()->where('code', $user->billing_address['country'])->first())
+                $this->page['billing_states'] = $thisCountry->states;
 		}
 
-		if(isset($user->shipping_address['state'])){
-            $thisCountry = Country::isEnabled()->where('code',$user->shipping_address['country'])->first();
-			if($state = State::where([ ['code', $user->shipping_address['state']],['country_id', $thisCountry->id] ])->first())
-				$this->page['shipping_states'] = $state->country->states;
+		if($user->shipping_address && is_array($user->shipping_address) && array_key_exists('country', $user->shipping_address)){
+            if($thisCountry = Country::isEnabled()->where('code', $user->shipping_address['country'])->first())
+				$this->page['shipping_states'] = $thisCountry->states;
         }
     }
 

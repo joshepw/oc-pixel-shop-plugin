@@ -18,4 +18,6 @@
 	
     <a href="<?= Backend::url('pixel/shop/categories') ?>" class="btn btn-default oc-icon-tags"><?= trans('pixel.shop::lang.menu.manage_categories') ?></a>
     <a href="<?= Backend::url('pixel/shop/brands') ?>" class="btn btn-default oc-icon-copyright"><?= trans('pixel.shop::lang.menu.manage_brands') ?></a>
+
+    <?= $this->fireViewEvent('pixel.shop.extendItemsToolbar') ?>
 </div>

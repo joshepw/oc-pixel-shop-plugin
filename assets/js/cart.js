@@ -200,6 +200,9 @@ jQuery(document).ready(function ($) {
         enablePagination: false,
         autoFocus: true,
         onStepChanging: function (event, currentIndex, newIndex) {
+            if (currentIndex > newIndex)
+                return true;
+
             $('#shop__cart-steps form').validate().settings.ignore = ":disabled,:hidden";
             return $('#shop__cart-steps form').valid();
         },

@@ -32,7 +32,7 @@
         <div class="radio-group">
             {% for key, option in field.values|split(',') %}
             <div class="radio-group-input">
-                <input type="checkbox" name="custom_fields[{{ group }}][{{ field.name }}][value]" id="{{ field.name }}-{{ key }}" value="{{ option }}"{{ field.attributes|raw }}>
+                <input type="checkbox" name="custom_fields[{{ group }}][{{ field.name }}][value][]" id="{{ field.name }}-{{ key }}" value="{{ option }}"{{ field.attributes|raw }}>
                 <label for="{{ field.name }}-{{ key }}">{{ option }}</label>
             </div>
             {% endfor %}

@@ -14,5 +14,7 @@
 
 	<?php if($formModel->status != 'completed' && $formModel->status != 'cancelled'): ?>
 		<button data-request="onChangeStatus" data-request-confirm="<?= trans('pixel.shop::lang.messages.status_confirm') ?>" data-request-data="status: 'cancelled', order_id: '<?= $formModel->id ?>'" class="btn btn-danger btn-sm oc-icon-ban"><?= e(trans('pixel.shop::lang.status.cancel_order')) ?></button>
-	<?php endif ?>
+    <?php endif ?>
+    
+    <?= $this->fireViewEvent('pixel.shop.extendOrderActions') ?>
 </div>

@@ -20,3 +20,4 @@
     - 'Custom fields for orders, editable emails templates and new preferences'
     - builder_table_update_pixel_shop_orders.php
 1.1.1: 'Thumbs of items, New validation rules in cart, Bugs fixed'
+1.1.2: 'Bugs Fixed and new Backend Extend Events'

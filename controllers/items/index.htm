@@ -21,7 +21,9 @@
 			<p class="oc-icon-arrow-circle-down"><?= $low_stock ?></p>
 			<p class="description"><?= strtoupper(e(trans('pixel.shop::lang.menu.items'))) ?></p>
 		</div>
-		<?php endif ?>
+        <?php endif ?>
+        
+        <?= $this->fireViewEvent('pixel.shop.extendItemsHeader') ?>
 	</div>
 
 	<h3><?= trans('pixel.shop::lang.menu.manage') ?></h3>

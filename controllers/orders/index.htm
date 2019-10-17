@@ -1,6 +1,10 @@
 <div class="title-header">
+    <div class="pull-right">
+        <?= $this->fireViewEvent('pixel.shop.extendOrdersHeader') ?>
+    </div>
+
 	<h3><?= trans('pixel.shop::lang.menu.manage') ?></h3>
-	<h2><?= e($this->pageTitle) ?></h2>
+    <h2><?= e($this->pageTitle) ?></h2>
 </div>
 
 <?= $this->listRender() ?>

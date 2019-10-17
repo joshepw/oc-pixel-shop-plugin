@@ -89,7 +89,7 @@ secondaryTabs:
               label: 'pixel.shop::lang.fields.values'
               span: left
               type: taglist
-              placeholder: ''
+              placeholder: 'x,y,z...'
               trigger: 
                 action: hide
                 field: field
@@ -133,7 +133,7 @@ secondaryTabs:
               label: 'pixel.shop::lang.fields.values'
               span: left
               type: taglist
-              placeholder: ''
+              placeholder: 'x,y,z...'
               trigger: 
                 action: hide
                 field: field

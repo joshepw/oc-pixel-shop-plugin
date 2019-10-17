@@ -1,4 +1,8 @@
 <div class="title-header">
+    <div class="pull-right">
+        <?= $this->fireViewEvent('pixel.shop.extendCategoriesHeader') ?>
+    </div>
+
 	<h3><?= trans('pixel.shop::lang.menu.manage') ?></h3>
 	<h2><?= e($this->pageTitle) ?></h2>
 </div>

@@ -37,5 +37,7 @@
 			data-control="delete-button">
 			<?= e(trans('backend::lang.form.delete')) ?>
 		</button>
-	<?php endif ?>
+    <?php endif ?>
+    
+    <?= $this->fireViewEvent('pixel.shop.extendItemPostToolbar') ?>
 </div>

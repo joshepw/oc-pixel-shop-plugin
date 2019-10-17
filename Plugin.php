@@ -409,7 +409,7 @@ class Plugin extends PluginBase{
 
 	private function productsStockCounter(){
 		$low_stock = Item::getLowStockProducts();
-		return ($low_stock) ? "⬇︎".$low_stock : null;
+		return ($low_stock) ? $low_stock : null;
 	}
 
 	private function ordersCounter(){
