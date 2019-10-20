@@ -56,11 +56,11 @@
 	<div class="col-billing-zip col-md-2">
 		<div class="form-group">
 			<label>{{ 'pixel.shop::lang.fields.zip'|trans }}</label>
-			<input type="hidden" name="billing_zip_required">
 			<input type="text" class="form-control" name="billing_address[zip]" value="{{ user.billing_address.zip ?: cart.billing_address.zip }}" minlength="5" maxlength="12">
 			<div class="invalid-feedback" data-validate-for="billing_address.zip"></div>
 		</div>
     </div>
+    <input type="hidden" name="billing_zip_required">
     
 </div>
 

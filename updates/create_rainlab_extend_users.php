@@ -21,7 +21,7 @@ class CreateRainlabExtendUsers extends Migration
         {
             $table->text('billing_address')->nullable();
             $table->text('shipping_address')->nullable();
-            $table->boolean('is_ship_same_bill');
+            $table->boolean('is_ship_same_bill')->nullable()->default(false);
             $table->string('phone')->nullable();
         });
     }

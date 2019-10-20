@@ -332,6 +332,7 @@ class UserProfile extends ComponentBase{
             $user->avatar = Input::file('avatar');
 
         $user->fill(post());
+        $user->is_ship_same_bill = $user->is_ship_same_bill ?? false;
         $user->save();
 
         if (strlen(post('password')))

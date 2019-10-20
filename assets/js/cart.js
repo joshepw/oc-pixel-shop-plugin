@@ -21,10 +21,12 @@ Cart.evalAddressSelect = function (countryCode, type) {
         $('.col-' + type).removeClass('col-md-4').addClass('col-md-3');
         $('.col-' + type + '-zip').fadeIn(300);
         $('.col-' + type + '-zip').find('input').mask(Cart.zipCodes[countryCode]);
+        $('.col-' + type + '-zip').find('input').prop('required', true);
         $('[name="' + type + '_zip_required"]').val('required');
     } else {
         $('.col-' + type).removeClass('col-md-3').addClass('col-md-4');
         $('.col-' + type + '-zip').hide();
+        $('.col-' + type + '-zip').find('input').prop('required', false);
         $('[name="' + type + '_zip_required"]').val('');
     }
 }
