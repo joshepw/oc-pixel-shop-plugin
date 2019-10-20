@@ -43,6 +43,14 @@ class Order extends Model
         'custom_fields'
     ];
 
+    protected $casts = [
+		'is_paid' => 'boolean',
+		'is_confirmed' => 'boolean',
+        'is_fulfill' => 'boolean'
+    ];
+
+    protected $guarded = ['id'];
+
     // RELACIONES
 	public $belongsTo = [
 		'user' => ['RainLab\User\Models\User'],

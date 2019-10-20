@@ -146,13 +146,14 @@ class Cart{
 	}
 
 	public function createOrderFromCart(){
-		if($order = Order::find($this->order))
-			return $order;
-
-		$order = new Order();
+		$order = Order::find($this->order) ?? new Order();
 		$order->shipping_address = $this->shipping_address;
         $order->billing_address = $this->billing_address;
         $order->custom_fields = $this->custom_fields;
+        
+        $order->is_paid = $order->is_paid ?? false;
+        $order->is_confirmed = $order->is_confirmed ?? false;
+        $order->is_fulfill = $order->is_fulfill ?? false;
 
 		if(!empty($this->user))
 			$order->user_id = $this->user;

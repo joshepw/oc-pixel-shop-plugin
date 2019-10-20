@@ -50,7 +50,7 @@
 			</div>
 
 			{% if product.quantity > 0 or product.quantity == null %}
-			<form data-request="onAddToCart" data-request-flash>
+			<form data-request="onAddToCart" data-request-flash data-request-success="CartButton.onSuccess(data)">
 				{% if showQuickAdd %}
 				{% if product.is_with_variants and product.variants|length > 0 %}
 				<a href="{{ product.url }}" class="btn btn-primary btn-block btn-footer">

@@ -167,11 +167,14 @@ Cart.focusToInvalidFields = function (data) {
 };
 
 jQuery(document).ready(function ($) {
-    if ($('[name="shipping_address[country]"]').val())
+
+    setTimeout(function (){
+        if ($('[name="shipping_address[country]"]').val())
         Cart.evalAddressSelect($('[name="shipping_address[country]"]').val(), 'shipping');
 
-    if ($('[name="billing_address[country]"]').val())
-        Cart.evalAddressSelect($('[name="billing_address[country]"]').val(), 'billing');
+        if ($('[name="billing_address[country]"]').val())
+            Cart.evalAddressSelect($('[name="billing_address[country]"]').val(), 'billing');
+    }, 100);
 
     if ($('#same-address').prop('checked'))
         Cart.checkSameAddress($('#same-address'));

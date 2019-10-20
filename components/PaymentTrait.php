@@ -114,7 +114,7 @@ trait PaymentTrait{
 			$cart->user = $user->id;
 
 			$user->phone = input('customer_phone');
-			$user->is_ship_same_bill =input('is_ship_same_bill') == 'on' ? 1 : 0;
+			$user->is_ship_same_bill =input('is_ship_same_bill') == 'on' ? true : false;
 			$user->shipping_address = input('shipping_address');
 			$user->billing_address = input('is_ship_same_bill' == 'on') ? input('shipping_address') : input('billing_address');
 
