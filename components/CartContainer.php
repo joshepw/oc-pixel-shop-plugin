@@ -171,7 +171,7 @@ class CartContainer extends ComponentBase{
 		if(Country::isEnabled()->count() == 1){
             $onlyOneCountry = Country::isEnabled()->first();
             $shippingCountry = $billingCountry = $onlyOneCountry;
-			$this->page['shipping_states'] = $this->page['billing_states'] = $onlyOneCountry->states;
+			$this->page['shipping_states'] = $this->page['billing_states'] = $onlyOneCountry->states ?? null;
         }
         
         if(!empty($cart->billing_address['country'])){
@@ -189,14 +189,14 @@ class CartContainer extends ComponentBase{
             $shippingCountry = Country::isEnabled()->where('code', $user->shipping_address['country'])->first();
         }
 
-        $this->page['billing_country'] = $billingCountry->code;
-        $this->page['shipping_country'] = $shippingCountry->code;
+        $this->page['billing_country'] = $billingCountry->code ?? null;
+        $this->page['shipping_country'] = $shippingCountry->code ?? null;
 
         $this->page['billing_states'] = $billingCountry ? $billingCountry->states : null;
         $this->page['shipping_states'] = $shippingCountry ? $shippingCountry->states : null;
 
-        $this->page['methods_list'] = $this->getPaymentMethodsList($billingCountry->code);
-        $this->page['method_country_code'] = $billingCountry->code;
+        $this->page['methods_list'] = $this->getPaymentMethodsList($billingCountry->code) ?? null;
+        $this->page['method_country_code'] = $billingCountry->code ?? null;
 
 		$this->addCss('/plugins/pixel/shop/assets/css/cart.css');
         $this->addJs('/plugins/pixel/shop/assets/js/jquery.mask.min.js');
