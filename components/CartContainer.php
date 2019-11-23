@@ -195,7 +195,7 @@ class CartContainer extends ComponentBase{
         $this->page['billing_states'] = $billingCountry ? $billingCountry->states : null;
         $this->page['shipping_states'] = $shippingCountry ? $shippingCountry->states : null;
 
-        $this->page['methods_list'] = $this->getPaymentMethodsList($billingCountry->code) ?? null;
+        $this->page['methods_list'] = $billingCountry && property_exists($billingCountry, 'code') ? $this->getPaymentMethodsList($billingCountry->code) : null;
         $this->page['method_country_code'] = $billingCountry->code ?? null;
 
 		$this->addCss('/plugins/pixel/shop/assets/css/cart.css');
