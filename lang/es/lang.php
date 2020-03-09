@@ -354,7 +354,7 @@
         'product_not_found' => 'Producto no encontrado',
         'attachments' => 'Archivos adjuntos',
         'accessories' => 'Accesorios',
-        'moreinfo' => 'Más información',
+        'moreinfo' => 'Ver más',
         'order_reserve' => 'Orden / Reserva',
         'viewmore' => 'Ver más...',
         'viewless' => 'Ver menos ...',

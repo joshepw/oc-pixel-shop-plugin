@@ -43,10 +43,10 @@
 }
 
 .product-card .card-status-label .label{
-	font-size: 12px;
+	font-size: 0.8em;
 	text-transform: uppercase;
 	/*border-radius: 0 4px 0 4px;*/
-	padding: 6px 10px;
+	padding: 4px 8px;
 	margin: 0;
 }
 
@@ -332,7 +332,34 @@
     display: table-cell;
 }
 
+@media (max-width: 620px) {
+	.products-container .container{
+		padding-left: 0px;
+		padding-right: 0px;
+	}
+
+	.products-container .container > .row{
+		margin-left: -6px;
+		margin-right: -6px;
+	}
+
+	.products-container .container > .row > .col, 
+	.products-container .container > .row > [class^="col-"]{
+		padding-left: 3px;
+		padding-right: 3px;
+	}
+
+	.products-container .product-card{
+		font-size: 12px;
+	}
+
+	.products-container .product-card .card-actions .btn{
+		font-size: 1em;
+	}
+}
+
 @media (min-width: 544px) {
+
 	.card-deck {
 		display: table;
 		table-layout: fixed;
@@ -347,9 +374,7 @@
 		margin-right: -1.25rem;
 		margin-left: -1.25rem;
 	}
-}
 
-@media (min-width: 544px) {
 	.card-group {
 		display: table;
 		width: 100%;
@@ -390,9 +415,7 @@
 	.card-group .card:not(:first-child):not(:last-child) .card-img-bottom {
 		border-radius: 0;
 	}
-}
 
-@media (min-width: 544px) {
 	.card-columns {
 		-webkit-column-count: 3;
 		-moz-column-count: 3;
@@ -408,13 +431,19 @@
 }
 
 .shop__product-title{
+	font-size: 1em;
 	margin-top: 5px;
 	margin-bottom: 5px;
 }
 
 .shop__product-price{
+	font-size: 1.5em;
 	margin-top: 5px;
 	margin-bottom: 5px; 
+}
+
+.shop__product-old-price{
+	font-size: 0.8em;
 }
 
 .shop__product-short-description{
@@ -427,10 +456,10 @@
 	background-color: transparent;
 	border: none;
 	border-radius: 3px;
-	width: 32px;
-	height: 32px;
+	width: 1.5em;
+	height: 1.5em;
 	text-align: center;
-	font-size: 22px;
+	font-size: 1.2em;
 	padding: 2px 0;
 	color: #FFA63B;
 	position: absolute;

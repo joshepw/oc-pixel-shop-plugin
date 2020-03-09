@@ -19,6 +19,9 @@ return [
 		'desactivate_account_cancel' => 'Cambié de opinión',
 		'is_activated' => 'Su dirección de correo electrónico aún no ha sido verificada.',
 		'is_activated_comment' => 'Debe verificar su cuenta de lo contrario puede ser eliminado. Por favor revise su correo electrónico para verificar.',
+		'recovery' => 'Recuperar contraseña',
+		'recovery_button' => 'Enviar',
+		'recovery_password' => 'Olvide mi contraseña'
 	],
 	'order' => [
 		'not_confirmed' => 'SU PEDIDO NO ESTÁ CONFIRMADO',

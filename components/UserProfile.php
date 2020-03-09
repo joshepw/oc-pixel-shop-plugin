@@ -13,11 +13,13 @@ use ValidationException;
 use ApplicationException;
 use Pixel\Shop\Models\Order;
 use Cms\Classes\ComponentBase;
+use Mail;
 use Pixel\Shop\Models\Favorite;
 use RainLab\Location\Models\State;
 use RainLab\Location\Models\Country;
 use Pixel\Shop\Classes\PartialMaker;
 use RainLab\User\Models\Settings as UserSettings;
+use RainLab\User\Models\User;
 
 class UserProfile extends ComponentBase{
 
@@ -304,7 +306,32 @@ class UserProfile extends ComponentBase{
             else 
             	Flash::error($ex->getMessage());
         }
-    }
+	}
+	
+	public function onRecovery() {
+		$this->prepareLang();
+		$email = post('email');
+
+		$user = User::where('email', $email)->first();
+
+		if(!$user) {
+			Flash::error('El usuario no existe');
+			return;
+		}
+
+		$password = str_random(10);
+
+		$user->password = $password;
+		$user->save();
+
+		Mail::sendTo($email, 'pixel.shop::mail.recovery_password', [
+			'user' => $user->name,
+			'password' => $password
+		]);
+
+		Flash::success('Su contraseña fue re-establecida, recibira un correo con su nueva contrseña');
+		return;
+	}
 
 	public function onLogOut(){
 		Auth::logout();

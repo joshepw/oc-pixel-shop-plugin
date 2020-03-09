@@ -1,4 +1,4 @@
-<div class="col col-md-3">
+<div class="col col-md-3 col-xs-4">
 	<div class="product-container product-card">
 		<form id="favorite-product-{{ product.id }}" data-request="onSetFavorite" data-request-flash>
 			{% partial '@favorite' product=product %}
@@ -14,7 +14,7 @@
 			{% endif %}
 		</div>
 
-		<div class="card-block">
+		<div class="card-block card-actions">
 			{% if product.image %}
 			<a href="{{ product.url }}">
 				<img class="card-img-top img-responsive" src="{{ product.image.thumb(500,500,'crop') }}" alt="">
