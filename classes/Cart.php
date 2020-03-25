@@ -124,12 +124,12 @@ class Cart{
 
 			if($item['total'] > 0)
 				$total += floatval($item['total']);
-
-			if($state && $state->shipping_fee > 0)
-				$shipping_total += floatval($state->shipping_fee);
-			elseif($country && $country->shipping_fee > 0)
-				$shipping_total += floatval($country->shipping_fee);
 		}
+
+		if($state && floatval($state->shipping_fee) > 0.00)
+			$shipping_total += floatval($state->shipping_fee);
+		elseif($country && floatval($country->shipping_fee) > 0.00)
+			$shipping_total += floatval($country->shipping_fee);
 
 		if(!empty($this->coupon) && array_key_exists('amount', $this->coupon))
 			$total -= floatval($this->coupon['amount']);
