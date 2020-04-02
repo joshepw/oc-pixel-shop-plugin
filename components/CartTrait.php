@@ -17,7 +17,7 @@ trait CartTrait{
     	$optionsIndex = $this->parseOptions(input('options_index'));
     	$index = input('options_index');
     	$qty = input('quantity');
-    	$price = input('price');
+		$price = input('price');
 
     	if($item->is_with_variants){
 	    	foreach ($item->variants as $variant) {					

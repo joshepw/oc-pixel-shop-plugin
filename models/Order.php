@@ -181,45 +181,65 @@ class Order extends Model
     		return;
 
     	foreach ($this->items as $indexItem => $item) {
-    		$product = Item::find($item['id']);
+			$product = Item::find($item['id']);
 
     		if(!$product)
-    			continue;
+				continue;
 
     		if(!array_key_exists('index', $item))
-    			continue;
+				continue;
 
     		$reducer = $item['quantity'];
-    		$options = $this->parseOptions($item['index']);
-    		$product->increment('sales_count', $reducer);
+			$product->increment('sales_count', $reducer);
 
-    		if(empty($options))
-    			continue;
+			if($product->is_with_variants) {
+				$options = $this->parseOptions($item['index']);
 
-    		$variants = $product->variants;
+				if(empty($options))
+					continue;
 
-    		foreach ($variants as $indexVariant => $variant) {
-    			if(array_key_exists($variant['id'], $options) && !empty($options[$variant['id']])){
-    				$i = $this->getVariantIndex($variant, $options[$variant['id']]);
+				$variants = $product->variants;
 
-    				if($i === null)
-    					continue;
+				foreach ($variants as $indexVariant => $variant) {
+					if(array_key_exists($variant['id'], $options) && !empty($options[$variant['id']])){
+						$i = $this->getVariantIndex($variant, $options[$variant['id']]);
 
-    				$quantity = intval($variants[$indexVariant]['items'][$i]['quantity']);
+						if($i === null)
+							continue;
 
-    				if($quantity === null)
-    					continue;
+						$rawQty = $variants[$indexVariant]['items'][$i]['quantity'];
 
-    				if($increment)
-    					$quantity += intval($reducer);
-    				else
-    					$quantity -= intval($reducer);
+						if($rawQty == "" && $rawQty === null) {
+							continue;
+						}
 
-    				$variants[$indexVariant]['items'][$i]['quantity'] = $quantity;
-    			}
-    		}
+						$quantity = intval($rawQty);
 
-    		$product->variants = $variants;
+						if($increment)
+							$quantity += intval($reducer);
+						else
+							$quantity -= intval($reducer);
+
+						$variants[$indexVariant]['items'][$i]['quantity'] = $quantity;
+					}
+				}
+
+				$product->variants = $variants;
+			} else {
+				if($product->quantity == "" && $product->quantity === null) {
+					continue;
+				}
+
+				$quantity = intval($product->quantity);
+
+				if($increment)
+					$quantity += intval($reducer);
+				else
+					$quantity -= intval($reducer);
+
+				$product->quantity = $quantity;
+			}
+			
     		$product->save();
     	}
     }

@@ -18,8 +18,8 @@ class Item extends Model{
 		'name' => 'required|min:3|max:180',
 		'code' => 'min:3|max:180',
 		'price' => 'required',
-		'variants.*.variant' => 'required_if:is_with_variants,on|max:60',
-		'variants.*.items.*.val' => 'required_if:is_with_variants,on|max:60',
+		'variants.*.variant' => 'required_if:is_with_variants,1|max:60',
+		'variants.*.items.*.val' => 'required_if:is_with_variants,1|max:60',
 	];
 
 	public $attributeNames = [

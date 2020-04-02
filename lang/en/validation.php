@@ -29,6 +29,10 @@ return [
     'values' => [
     	'gateway' => [
     		'cc' => 'credit card'
-    	]
+		],
+		'is_with_variants' => [
+			'1' => 'on',
+			'on' => 'on'
+		]
     ]
 ];
