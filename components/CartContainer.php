@@ -143,7 +143,7 @@ class CartContainer extends ComponentBase{
 						$order->paid_at = Carbon::now();
 						$order->save();
 
-						$order->reduceInventory();
+						// $order->reduceInventory();
 						$order->sendNotification();
 						Cart::clear();
 					}else{
