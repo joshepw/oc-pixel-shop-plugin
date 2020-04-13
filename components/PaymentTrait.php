@@ -357,7 +357,7 @@ trait PaymentTrait{
 	}
 
 	protected function preparePixelPay($order){
-		$pixelDomain = 'https://www.pixel-pay.com';
+		$pixelDomain = 'https://www.pixelpay.app';
 		$apiURL = '/hosted/payment/october';
 
 		$json = json_encode($order->items);
@@ -428,8 +428,10 @@ trait PaymentTrait{
             $response->body = $body;
             $response->code = $code;
 
+			\Log::debug($body);
+
             return $response;
-        } catch (Throwable $th) {
+        } catch (\Throwable $th) {
             report($th);
             return $response;
         }
