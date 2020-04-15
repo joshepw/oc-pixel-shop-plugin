@@ -357,7 +357,7 @@ trait PaymentTrait{
 	}
 
 	protected function preparePixelPay($order){
-		$pixelDomain = 'https://www.pixelpay.app';
+		$pixelDomain = 'https://pixelpay.app';
 		$apiURL = '/hosted/payment/october';
 
 		$json = json_encode($order->items);

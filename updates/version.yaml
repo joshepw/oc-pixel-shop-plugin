@@ -31,3 +31,4 @@
 1.1.10: 'Fix double reduce inventory'
 1.1.11: 'PixelPay Endpoint change'
 1.1.12: 'PixelPay AWS Endpoint stable'
+1.1.13: 'PixelPay AWS Endpoint to pixelpay.app'
