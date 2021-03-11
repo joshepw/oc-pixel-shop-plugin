@@ -18,7 +18,10 @@ return [
 		'desactivate_account_confirm' => 'Confirm Deactivate Account',
 		'desactivate_account_cancel' => 'I changed my mind',
 		'is_activated' => 'Your email address has not yet been verified.',
-		'is_activated_comment' => 'You should verify your account otherwise it may be deleted. Please check your email to verify.',
+        'is_activated_comment' => 'You should verify your account otherwise it may be deleted. Please check your email to verify.',
+        'recovery' => 'Recover password',
+        'recovery_password' => 'Forgot your password?',
+        'recovery_button' => 'Recover password',
 	],
 	'order' => [
 		'not_confirmed' => 'YOUR ORDER IS NOT CONFIRMED',
@@ -53,6 +56,7 @@ return [
         'pixelpay_comment' => 'On the next page your payment is processed through <b style="color: #226DF6">PixelPay&reg;</b><br>We do not store card data. The transaction is <b style="color: #226DF6">encrypted and secure</b>',
 
         'name_card' => 'Name on card',
+        'full_name' => 'Full name as displayed on card',
         'card_number' => 'Credit card number',
         'expiration' => 'Expiration',
         'card_accept' => 'We accept these credit cards.',

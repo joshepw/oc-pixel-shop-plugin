@@ -87,8 +87,9 @@ class CartButton extends ComponentBase
             $lang = $activeLocale;
         }
 
-        if(!empty(post('lang')))
-            $lang = post('lang');
+        if(!empty(post('lang'))){
+			$lang = post('lang');
+		}
 
         \App::setLocale($lang);
     }

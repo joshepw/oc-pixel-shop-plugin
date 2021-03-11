@@ -1,61 +1,54 @@
 fields:
     is_active:
-        label: pixel.shop::lang.fields.active
-        comment: pixel.shop::lang.fields.coupon_active_comment
+        label: 'pixel.shop::lang.fields.active'
+        comment: 'pixel.shop::lang.fields.coupon_active_comment'
         type: switch
         span: auto
         default: true
-
     used_count:
-        comment: pixel.shop::lang.fields.used_count
+        comment: 'pixel.shop::lang.fields.used_count'
         cssClass: text-right
         type: partial
         path: used_count
         span: auto
-
     code:
-        label: pixel.shop::lang.fields.coupon_code
+        label: 'pixel.shop::lang.fields.coupon_code'
         span: full
         cssClass: oc-icon-barcode
-        
+        type: text
     valid_from:
-        label: pixel.shop::lang.fields.valid_from
-        comment: pixel.shop::lang.fields.valid_to_comment
+        label: 'pixel.shop::lang.fields.valid_from'
+        comment: 'pixel.shop::lang.fields.valid_to_comment'
         span: auto
         type: datepicker
         mode: date
         cssClass: oc-icon-calendar-minus-o
-        
     valid_to:
-        label: pixel.shop::lang.fields.valid_to
-        comment: pixel.shop::lang.fields.valid_to_comment
+        label: 'pixel.shop::lang.fields.valid_to'
+        comment: 'pixel.shop::lang.fields.valid_to_comment'
         span: auto
         type: datepicker
         mode: date
         cssClass: oc-icon-calendar-plus-o
-
     value:
-        label: pixel.shop::lang.fields.value
+        label: 'pixel.shop::lang.fields.value'
         type: shop-currency
         span: auto
         cssClass: oc-icon-usd
-        
     type_value:
-        label: pixel.shop::lang.fields.type_value
+        label: 'pixel.shop::lang.fields.type_value'
         type: dropdown
         span: auto
         cssClass: oc-icon-percent
-
     count:
-        label: pixel.shop::lang.fields.count
-        comment: pixel.shop::lang.fields.count_comment
+        label: 'pixel.shop::lang.fields.count'
+        comment: 'pixel.shop::lang.fields.count_comment'
         type: number
         span: auto
         cssClass: oc-icon-hashtag
         default: 0
-
     minimum_value_cart:
-        label: pixel.shop::lang.fields.minimum_value_cart
+        label: 'pixel.shop::lang.fields.minimum_value_cart'
         type: shop-currency
         span: auto
         cssClass: oc-icon-shopping-cart

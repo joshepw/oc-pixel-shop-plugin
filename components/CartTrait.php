@@ -24,11 +24,13 @@ trait CartTrait{
 				$id = $variant['id'];
 				$optionVal = null;
 
-				if(array_key_exists($id, $optionsIndex) && !empty($optionsIndex[$id]))
+				if(array_key_exists($id, $optionsIndex) && !empty($optionsIndex[$id])){
 					$optionVal = $optionsIndex[$id];
+				}
 
-				if($optionVal == null && !$variant['optional'])
+				if($optionVal == null && !$variant['optional']){
 					return [ Flash::error(trans('pixel.shop::lang.messages.option_required', ['option' => $variant['variant']])) ];
+				}
 			}
 		}
 
@@ -50,8 +52,9 @@ trait CartTrait{
     	$options = [];
 
     	foreach ($option_index as $el) {
-    		if(empty($el))
-    			continue;
+    		if(empty($el)){
+				continue;
+			}
 
     		$el = explode('::', $el);
     		$options[$el[0]] = $el[1];
@@ -90,8 +93,9 @@ trait CartTrait{
 
     	$cart = Cart::load();
 
-    	if($coupon = Coupon::where('code', $cart->coupon['code'])->first())
+    	if($coupon = Coupon::where('code', $cart->coupon['code'])->first()){
     		$coupon->decrement('used_count', 1);
+		}
 
     	$cart->coupon = null;
     	$cart->updateTotals();
@@ -106,15 +110,17 @@ trait CartTrait{
         $this->prepareLang();
 
     	$code = strtoupper(input('coupon_code'));
-    	if(!$coupon = Coupon::where('code', $code)->first())
-    		return [ Flash::error(trans('pixel.shop::lang.coupon_codes.code_5')) ];
+    	if(!$coupon = Coupon::where('code', $code)->first()){
+			return [ Flash::error(trans('pixel.shop::lang.coupon_codes.code_5')) ];
+		}
 
     	$cart = Cart::load();
 
     	$coupon->isValid($cart->subtotal);
 
-    	if($coupon->errorCode > 0)
-    		return [ Flash::error(trans('pixel.shop::lang.coupon_codes.code_' . $coupon->errorCode)) ];
+    	if($coupon->errorCode > 0){
+			return [ Flash::error(trans('pixel.shop::lang.coupon_codes.code_' . $coupon->errorCode)) ];
+		}
 
     	$cart->coupon = [
     		'id' => $coupon->id,

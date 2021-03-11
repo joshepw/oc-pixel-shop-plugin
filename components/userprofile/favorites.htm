@@ -1,8 +1,9 @@
 <section class="products-container">
 	<div class="container">
-
+		
 		{% for productGroup in favorites.chunk(4) %}
 			<div class="row">
+				
 				{% for product in productGroup %}
 					{% partial '@product' product=product.item %}
 				{% endfor %}

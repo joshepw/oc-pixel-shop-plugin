@@ -249,6 +249,27 @@ secondaryTabs:
         placeholder: '••••••••••••••••••••••••••••••••'
         tab: 'pixel.shop::lang.fields.pixelpay'
 
+    pixelpay_endpoint:
+        label: 'End point'
+        type: text
+        span: auto
+        placeholder: 'pixelpay.app'
+        tab: 'pixel.shop::lang.fields.pixelpay'
+    
+    pixelpay_savecard:
+        label: 'pixel.shop::lang.fields.savecard'
+        type: switch
+        span: full
+        placeholder: 'pixelpay.app'
+        tab: 'pixel.shop::lang.fields.pixelpay'
+    
+    pixelpay_3ds:
+        label: 'pixel.shop::lang.fields.active3ds'
+        type: switch
+        span: full
+        placeholder: 'pixelpay.app'
+        tab: 'pixel.shop::lang.fields.pixelpay'
+
     pixelpay_countries:
         label: 'pixel.shop::lang.fields.allowed_countries'
         comment: 'pixel.shop::lang.messages.allowed_countries'

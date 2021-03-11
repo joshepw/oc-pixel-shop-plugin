@@ -4,71 +4,17 @@ fields:
         oc.commentPosition: ''
         span: auto
         type: text
-        placeholder: pixel.shop::lang.fields.create_title
-
+        placeholder: 'pixel.shop::lang.fields.create_title'
     price:
         label: 'pixel.shop::lang.fields.base_price'
         span: auto
         type: shop-currency
         cssClass: left-price
-
     toolbar:
         type: partial
         path: post_toolbar
         cssClass: collapse-visible
-
-secondaryTabs:
-    fields:
-        retail_price_with_tax:
-            label: pixel.shop::lang.fields.price_with_tax
-            comment: pixel.shop::lang.messages.price_with_tax 
-            type: partial
-            path: price_with_tax
-            span: full
-
-        old_price:
-            label: 'pixel.shop::lang.fields.old_price'
-            oc.commentPosition: ''
-            span: full
-            type: shop-currency
-            cssClass: oc-icon-percent
-            onSale: true
-            trigger:
-              action: show
-              field: is_on_sale
-              condition: checked
-        is_visible:
-            label: 'pixel.shop::lang.fields.visible'
-            span: full
-            type: switch
-            default: true
-            comment: 'pixel.shop::lang.messages.is_visible'
-        is_with_variants:
-            label: 'pixel.shop::lang.fields.is_with_variants'
-            span: full
-            type: switch
-            default: false
-            comment: 'pixel.shop::lang.messages.is_with_variants'
-        is_on_sale:
-            label: 'pixel.shop::lang.fields.on_sale'
-            span: full
-            type: switch
-            default: false
-            comment: 'pixel.shop::lang.messages.on_sale'
-            cssClass: trigger-currency-field
-        tax:
-            label: 'pixel.shop::lang.fields.tax'
-            oc.commentPosition: ''
-            span: full
-            cssClass: oc-icon-database
-            type: checkboxlist
-        _tax_info:
-            type: partial
-            path: $/pixel/shop/controllers/items/_field_tax_info.htm
-
 tabs:
-    cssClass: master-area
-    stretch: true
     fields:
         currency:
             label: 'pixel.shop::lang.fields.currency'
@@ -76,7 +22,6 @@ tabs:
             cssClass: oc-icon-usd
             span: auto
             tab: 'pixel.shop::lang.fields.details'
-
         type:
             label: 'pixel.shop::lang.fields.type'
             oc.commentPosition: ''
@@ -87,7 +32,6 @@ tabs:
             span: auto
             type: dropdown
             tab: 'pixel.shop::lang.fields.details'
-
         brand:
             label: 'pixel.shop::lang.fields.brand'
             oc.commentPosition: ''
@@ -95,17 +39,16 @@ tabs:
             cssClass: oc-icon-copyright
             span: auto
             type: shop-selector
-            modelClass: 'Pixel\Shop\Models\Brand'
+            modelClass: Pixel\Shop\Models\Brand
             formTitle: 'pixel.shop::lang.fields.brand'
-            form: '$/pixel/shop/models/brand/fields.yaml'
-            permission: 'pixel.shop.brands'
+            form: $/pixel/shop/models/brand/fields.yaml
+            permission: pixel.shop.brands
             tab: 'pixel.shop::lang.fields.details'
-            emptyOption: - - - -
+            emptyOption: '- - - -'
             trigger:
-              action: disable
-              field: type
-              condition: value[service]
-
+                action: disable
+                field: type
+                condition: 'value[service]'
         categories:
             label: 'pixel.shop::lang.fields.categories'
             oc.commentPosition: ''
@@ -115,7 +58,6 @@ tabs:
             mode: relation
             nameFrom: name
             tab: 'pixel.shop::lang.fields.details'
-
         code:
             label: 'pixel.shop::lang.fields.code'
             oc.commentPosition: ''
@@ -124,10 +66,9 @@ tabs:
             cssClass: oc-icon-qrcode
             tab: 'pixel.shop::lang.fields.details'
             trigger:
-              action: hide
-              field: is_with_variants
-              condition: checked
-
+                action: hide
+                field: is_with_variants
+                condition: checked
         quantity:
             label: 'pixel.shop::lang.fields.quantity'
             oc.commentPosition: ''
@@ -135,12 +76,11 @@ tabs:
             type: number
             cssClass: oc-icon-barcode
             tab: 'pixel.shop::lang.fields.details'
-            placeholder: '&infin;'
+            placeholder: ∞
             trigger:
-              action: hide
-              field: is_with_variants
-              condition: checked
-
+                action: hide
+                field: is_with_variants
+                condition: checked
         short_description:
             label: 'pixel.shop::lang.fields.short_description'
             oc.commentPosition: ''
@@ -149,7 +89,6 @@ tabs:
             size: tiny
             cssClass: oc-icon-edit
             tab: 'pixel.shop::lang.fields.details'
-
         _gallery:
             label: 'pixel.shop::lang.fields.gallery'
             type: section
@@ -165,7 +104,6 @@ tabs:
             span: full
             type: fileupload
             tab: 'pixel.shop::lang.fields.details'
-
         _attachments:
             label: 'pixel.shop::lang.fields.attachments'
             type: section
@@ -177,61 +115,105 @@ tabs:
             span: full
             type: fileupload
             tab: 'pixel.shop::lang.fields.details'
-
         variants:
             label: ''
             oc.commentPosition: ''
             span: full
             type: shop-variants
             tab: 'pixel.shop::lang.fields.variants'
-
         description:
             span: full
             type: richeditor
             tab: 'pixel.shop::lang.fields.description'
             stretch: true
-
         _size:
-            label: pixel.shop::lang.fields.size
+            label: 'pixel.shop::lang.fields.size'
             type: section
-            tab: pixel.shop::lang.fields.package
-
+            tab: 'pixel.shop::lang.fields.package'
         package_width:
-            tab: pixel.shop::lang.fields.package
-            label: pixel.shop::lang.fields.package_width
+            tab: 'pixel.shop::lang.fields.package'
+            label: 'pixel.shop::lang.fields.package_width'
             span: auto
             type: number
-
         package_height:
-            tab: pixel.shop::lang.fields.package
-            label: pixel.shop::lang.fields.package_height
+            tab: 'pixel.shop::lang.fields.package'
+            label: 'pixel.shop::lang.fields.package_height'
             span: auto
             type: number
-
         _weight:
-            label: pixel.shop::lang.fields.weight
+            label: 'pixel.shop::lang.fields.weight'
             type: section
-            tab: pixel.shop::lang.fields.package
-
+            tab: 'pixel.shop::lang.fields.package'
         package_weight:
-            tab: pixel.shop::lang.fields.package
-            label: pixel.shop::lang.fields.package_weight
+            tab: 'pixel.shop::lang.fields.package'
+            label: 'pixel.shop::lang.fields.package_weight'
             span: auto
             type: number
-
         package_depth:
-            tab: pixel.shop::lang.fields.package
-            label: pixel.shop::lang.fields.package_depth
+            tab: 'pixel.shop::lang.fields.package'
+            label: 'pixel.shop::lang.fields.package_depth'
             span: auto
             type: number
-
         _fees:
-            label: pixel.shop::lang.fields.shipping
+            label: 'pixel.shop::lang.fields.shipping'
             type: section
-            tab: pixel.shop::lang.fields.package
-
+            tab: 'pixel.shop::lang.fields.package'
         additional_shipping_fees:
-            tab: pixel.shop::lang.fields.package
-            label: pixel.shop::lang.fields.additional_shipping_fees
-            span: auto  
+            tab: 'pixel.shop::lang.fields.package'
+            label: 'pixel.shop::lang.fields.additional_shipping_fees'
+            span: auto
             type: shop-currency
+secondaryTabs:
+    fields:
+        retail_price_with_tax:
+            label: 'pixel.shop::lang.fields.price_with_tax'
+            comment: 'pixel.shop::lang.messages.price_with_tax'
+            type: partial
+            path: price_with_tax
+            span: full
+            tab: Misc
+        old_price:
+            label: 'pixel.shop::lang.fields.old_price'
+            oc.commentPosition: ''
+            span: full
+            type: shop-currency
+            cssClass: oc-icon-percent
+            onSale: true
+            trigger:
+                action: show
+                field: is_on_sale
+                condition: checked
+            tab: Misc
+        is_visible:
+            label: 'pixel.shop::lang.fields.visible'
+            span: full
+            type: switch
+            default: true
+            comment: 'pixel.shop::lang.messages.is_visible'
+            tab: Misc
+        is_with_variants:
+            label: 'pixel.shop::lang.fields.is_with_variants'
+            span: full
+            type: switch
+            default: false
+            comment: 'pixel.shop::lang.messages.is_with_variants'
+            tab: Misc
+        is_on_sale:
+            label: 'pixel.shop::lang.fields.on_sale'
+            span: full
+            type: switch
+            default: false
+            comment: 'pixel.shop::lang.messages.on_sale'
+            cssClass: trigger-currency-field
+            tab: Misc
+        tax:
+            label: 'pixel.shop::lang.fields.tax'
+            oc.commentPosition: ''
+            span: full
+            cssClass: oc-icon-database
+            type: checkboxlist
+            tab: Misc
+        _tax_info:
+            type: partial
+            path: $/pixel/shop/controllers/items/_field_tax_info.htm
+            tab: Misc

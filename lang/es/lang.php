@@ -31,6 +31,9 @@
         'manage' => 'Gestionar',
     ],
     'fields' => [
+        'savecard' => 'Activar tokenizacion',
+        'active3ds' => 'Activar 3DS',
+        'shipping_tega' => 'Nota: El tiempo de entrega en Tegucigalpa es de 2 días hábiles.',
         'shop' => 'Tienda',
         'shop_name' => 'Nombre de la tienda',
         'shop_email' => 'Correo de contacto',

@@ -6,6 +6,7 @@ use Redirect;
 use stdClass;
 use Validator;
 use Exception;
+use Event;
 use Carbon\Carbon;
 use Omnipay\Omnipay;
 use ValidationException;
@@ -49,11 +50,13 @@ trait PaymentTrait{
 			'cc_cvv' => 'required_if:gateway,cc|cvv:cc_number'
         ];
         
-		if(input('shipping_zip_required') == 'required')
+		if(input('shipping_zip_required') == 'required'){
 			$rules['shipping_address.zip'] = 'required';
+		}
 
-		if(!input('is_ship_same_bill') && input('billing_zip_required') == 'required')
+		if(!input('is_ship_same_bill') && input('billing_zip_required') == 'required'){
 			$rules['billing_address.zip'] = 'required';
+		}
 
         $names = [
 			'customer_first_name' => strtolower( trans('pixel.shop::lang.fields.first_name') ),
@@ -83,12 +86,15 @@ trait PaymentTrait{
         
         if($extras = $this->getCustomFieldsSettings()){
             foreach ($extras as $group => $fields) {
-                if(!count($fields))
-                    continue;
+                if(!count($fields)){
+					continue;
+				}
 
                 foreach ($fields as $field) {
-                    if(empty($field['rules']))
-                        continue;
+                    if(empty($field['rules'])){
+						
+						continue;
+					}
 
                     $rules['custom_fields.' . $group . '.' . $field['name'] . '.value'] = $field['rules'];
                     $names['custom_fields.' . $group . '.' . $field['name'] . '.value'] = $field['label'];
@@ -96,19 +102,23 @@ trait PaymentTrait{
             }
         }
 
-		if(input('shipping_zip_required') == 'required')
+		if(input('shipping_zip_required') == 'required'){
 			$rules['shipping_address.zip'] = 'required';
+		}
 
-		if(!input('is_ship_same_bill') && input('billing_zip_required') == 'required')
+		if(!input('is_ship_same_bill') && input('billing_zip_required') == 'required'){
 			$rules['billing_address.zip'] = 'required';
+		}
 
 		$validation = Validator::make($data, $rules, trans('pixel.shop::validation'), $names);
 
-		if ($validation->fails())
+		if ($validation->fails()){
 			throw new ValidationException($validation);
+		}
 
-		if (count($cart->items) < 1)
+		if (count($cart->items) < 1){
 			return [Flash::error(trans('pixel.shop::lang.messages.empty_cart'))];
+		}
 
 		if($user = $this->user()){
 			$cart->user = $user->id;
@@ -116,10 +126,11 @@ trait PaymentTrait{
 			$user->phone = input('customer_phone');
 			$user->is_ship_same_bill =input('is_ship_same_bill') == 'on' ? true : false;
 			$user->shipping_address = input('shipping_address');
-			$user->billing_address = input('is_ship_same_bill' == 'on') ? input('shipping_address') : input('billing_address');
+			$user->billing_address = input('is_ship_same_bill') == 'on' ? input('shipping_address') : input('billing_address');
 
-			if(input('is_save_for_later'))
+			if(input('is_save_for_later')){
 				$user->save();
+			}
 		}
 
 		$cart->customer_first_name = input('customer_first_name');
@@ -128,7 +139,7 @@ trait PaymentTrait{
 		$cart->customer_phone = input('customer_phone');
 
 		$cart->shipping_address = input('shipping_address');
-		$cart->billing_address = input('is_ship_same_bill' == 'on') ? input('shipping_address') : input('billing_address');
+		$cart->billing_address = input('is_ship_same_bill')  == 'on'? input('shipping_address') : input('billing_address');
         $cart->notes = input('notes');
         $cart->custom_fields = input('custom_fields', array());
         
@@ -141,7 +152,6 @@ trait PaymentTrait{
 		$cart->save();
 
 		$order = $cart->createOrderFromCart();
-
 		if($cart->gateway == 'cash_on_delivery' || $cart->gateway == 'bank_transfer'){
 			$order->gateway = $cart->gateway;
 			$order->status = 'await_pay';
@@ -156,7 +166,9 @@ trait PaymentTrait{
 			])];
 		}
 
-		if($cart->gateway == 'pixelpay'){
+		$pixelEvent = Event::fire('pixel.shop.isTokenizationPlugin');
+
+		if($cart->gateway == 'pixelpay' && count($pixelEvent) == 0){
 			$order->gateway = 'pixelpay';
 			$order->status = 'await_pay';
 			$order->save();
@@ -165,6 +177,31 @@ trait PaymentTrait{
 			$cart->save();
 
 			return $this->preparePixelPay($order);
+		}
+		if(($cart->gateway == 'pixelpay' || strlen(input('gateway')) > 25) && count($pixelEvent) == 1){
+			$order->gateway = 'pixelpay';
+			$order->status = 'pending';
+			$order->save();
+			$cardParams = [
+				'cc_name'=> input('cc_name'),
+				'cc_number' => input('cc_number'),
+				'cc_exp' => input('cc_exp'),
+				'cc_cvv' => input('cc_cvv'),
+				'card_token' =>'',
+			];
+			/*
+			*metodo que envia la orden al checkout del api de pagos inline
+			*/
+			if (strlen(input('gateway')) > 25) {
+				
+				$cardParams['card_token'] = input('gateway');
+				$response = Event::fire('pixel.shop.makePaymentWithToken', [$this, $cardParams,$order, $cart, $settings] );
+				return $response[0];
+			}else {
+				$response = Event::fire('pixel.shop.makePaymentWithCard', [$this, $cardParams,$order, $cart, $settings, input('set_default')] );
+				return $response[0];		
+			}
+			//return $this->processPaymentCC($order);
 		}
 
 		if($cart->gateway == 'cc'){
@@ -353,17 +390,19 @@ trait PaymentTrait{
 			$eventLog->save();
 
 			Flash::error($e->getMessage());
+			
 		}
 	}
-
+	protected function getPixelDomain(){
+		return empty(GatewaysSettings::get('pixelpay_endpoint')) ?
+			'https://pixel-pay.com' : 'https://' . GatewaysSettings::get('pixelpay_endpoint'); //END POINT
+	}
 	protected function preparePixelPay($order){
-		$pixelDomain = 'https://pixelpay.app';
+		$pixelDomain = $this->getPixelDomain();
 		$apiURL = '/hosted/payment/october';
-
 		$json = json_encode($order->items);
 		$base64 = base64_encode($json);
 		$order_content = urlencode($base64);
-
 		$fields = [
 			'pixelpay_key' => GatewaysSettings::get('pixelpay_app'),
 			'order_callback' => url('/api/pixel/shop/pixelpay-response'),

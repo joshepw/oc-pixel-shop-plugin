@@ -4,6 +4,7 @@
 </h4>
 
 <ul class="list-group">
+	<input type="hidden" value="{{cart | json_encode()}}" id="cartvalue">
 	{% for item in cart.items %}
 	<li class="list-group-item">
         {% if item.thumb %}

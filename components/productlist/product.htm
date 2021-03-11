@@ -31,7 +31,7 @@
 						{{ str_limit( product.name, 48,'...')  }}
 					</h4>
 					<h3 class="card-price shop__product-price">
-						{{ product.getPrice()|currency }}
+						{{ product.getPrice()|currency }} 
 					</h3>
 					{% if product.is_on_sale %}
 					<small class="shop__product-old-price">

@@ -1,0 +1,225 @@
+<div class="text-danger mt-5" data-validate-for="gateway"></div>
+<ul class="list-group">
+  {% for method in methods_list %} {% if method.gateway == 'pixelpay' %} 
+  {% for
+  card in cards[0].data %}
+  <li
+    id="item-class"
+    class="list-group-item {% if not card.status == 'active' %}disabled{% endif %}"
+  >
+    <div class="list-radio">
+      <input type="radio" value="{{ card.token }}" name="gateway" {% if not
+      card.status == 'active' %} disabled="disabled" {% endif %} id="card-{{
+      card.token }}" >
+      <label for="card-{{ card.token }}">
+        <div class="info">
+          <strong>**** **** **** {{card.card_last}}</strong>
+          <p>Expire {{ card.exp_month }} / {{card.exp_year}}</p>
+        </div>
+        <div class="card" style="border: none">
+          <img
+            src="{{ '/plugins/pixel/shop/assets/img/icon-'|app }}{{ card.card_network }}.svg"
+            alt=""
+            width="64"
+            height="64"
+          />
+        </div>
+      </label>
+    </div>
+  </li>
+  {% endfor %} {%endif%}
+
+  <li class="list-group-item" id="item-class">
+    <div class="list-radio">
+      <input type="radio" value="{{ method.gateway }}" name="gateway"
+      data-msg-required="{{ 'pixel.shop::validation.gateway.required'|trans }}"
+      {% if method.gateway == cart.gateway or methods_list|length == 1 %}
+      checked="checked" {% endif %} id="method-{{ method.gateway }}" required>
+      <label for="method-{{ method.gateway }}">
+        {% if method.gateway == 'pixelpay' %} {% if not user.is_activated %} {{
+        'tecnocomp.tokenization::component.cart.pay_with_card'|trans }} {%else%}
+        {{ 'tecnocomp.tokenization::component.cart.add_new_card'|trans }} {%
+        endif %} {%else%} {{ method.title }} {%endif%}
+      </label>
+    </div>
+    <div class="list-partial">
+      {% if method.gateway == 'pixelpay' %}
+      <form
+        data-request="onContinueToFinish"
+        data-request-flash
+        data-request-validate
+      >
+        <br />
+        <div class="text-danger" data-validate-for="card_id"></div>
+        <ul class="list-group list-of-cards">
+          <li
+            class="list-group-item"
+            id="item-class"
+            style="border: none !important"
+          >
+            <div class="list-content">
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label
+                      >{{ 'pixel.shop::component.cart.card_number'|trans
+                      }}</label
+                    >
+                    <input
+                      name="cc_number"
+                      type="text"
+                      class="form-control"
+                      placeholder="**** **** **** ****"
+                    />
+                    <div
+                      class="invalid-feedback"
+                      data-validate-for="cc_number"
+                    ></div>
+                  </div>
+                </div>
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <label
+                      >{{ 'pixel.shop::component.cart.expiration'|trans
+                      }}</label
+                    >
+                    <input
+                      name="cc_exp"
+                      type="text"
+                      class="form-control"
+                      placeholder="** / **"
+                    />
+                    <div
+                      class="invalid-feedback"
+                      data-validate-for="cc_exp"
+                    ></div>
+                  </div>
+                </div>
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <label>CVV</label>
+                    <input
+                      name="cc_cvv"
+                      type="text"
+                      class="form-control"
+                      placeholder="***"
+                    />
+                    <div
+                      class="invalid-feedback"
+                      data-validate-for="cc_cvv"
+                    ></div>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label
+                      >{{ 'pixel.shop::component.cart.name_card'|trans }}</label
+                    >
+                    <input
+                      name="cc_name"
+                      type="text"
+                      class="form-control"
+                      placeholder="{{ 'pixel.shop::component.cart.full_name'|trans }}"
+                    />
+                    <div
+                      class="invalid-feedback"
+                      data-validate-for="cc_name"
+                    ></div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <input
+                      type="hidden"
+                      name="cc_default"
+                      value="{{ settings.cc_default }}"
+                    />
+                    <label
+                      >{{ 'pixel.shop::component.cart.card_accept'|trans
+                      }}</label
+                    >
+                    <br />
+                    <img
+                      src="{{ '/plugins/pixel/shop/assets/img/icon-visa.svg'|app }}"
+                      alt=""
+                      width="32"
+                      height="32"
+                    />
+                    <img
+                      src="{{ '/plugins/pixel/shop/assets/img/icon-mastercard.svg'|app }}"
+                      alt=""
+                      width="32"
+                      height="32"
+                    />
+                    <!-- <img src="{{ '/plugins/pixel/shop/assets/img/icon-amex.svg'|app }}" alt="" width="32" height="32">
+                            <img src="{{ '/plugins/pixel/shop/assets/img/icon-discover.svg'|app }}" alt="" width="32" height="32"> -->
+                  </div>
+                </div>
+              </div>
+              {% if user %}
+              <div class="col-sm-12 list-radio checkbox mt-2" >
+                <input
+                  type="checkbox"
+                  name="set_default"
+                  id="set_default"
+                  style="margin-left: -15px;
+              margin-top: 0px;"
+                  checked="checked"
+                  value="on"
+                />
+                <label for="set_default" style="padding: 20px 10px">
+                  <b>
+                    {{ 'tecnocomp.tokenization::component.cart.save_card'|trans
+                    }}</b
+                  >
+                </label>
+              </div>
+              {% endif %}
+              {% if method.gateway == 'pixelpay' %}
+              <div class="row {% if not user %}  mt-5 {% endif %}" >
+                <div class="col-sm-6">
+                    Este cobro es <strong>seguro</strong> gracias a nuestra certificacion 
+                   <span style="color:green"> <strong>PCI DSS </strong></span> para pagos con tarjetas de crédito y débito.
+                </div>
+                <div class="col-sm-6 text-right">
+                    <img
+                    class="pci-logo"
+                      src="{{ '/plugins/pixel/shop/assets/img/pci-logo.png'|app }}"
+                      alt=""
+                      width="200"
+                    />
+                </div>
+              </div>
+              {% endif %}
+            </div>
+          </li>
+        </ul>
+      </form>
+      {%else%} {{ method.partial|raw }} {%endif%}
+    </div>
+  </li>
+  {% else %}
+  <li class="list-group-item" id="item-class">
+    <input
+      type="hidden"
+      name="gateway"
+      class="ignore-rule"
+      data-msg-required="{{ 'pixel.shop::validation.gateway.required'|trans }}"
+      required
+    />
+    <img
+      src="{{ '/plugins/pixel/shop/assets/img/icon-no-card.svg'|app }}"
+      alt=""
+      width="32"
+      height="32"
+      style="float: left; margin-right: 8px"
+    />
+    <p style="line-height: 32px; margin-bottom: 0px">
+      {{ 'pixel.shop::component.cart.no_gateway_support'|trans({country:
+      method_country_code}) }}
+    </p>
+  </li>
+  {% endfor %}
+</ul>

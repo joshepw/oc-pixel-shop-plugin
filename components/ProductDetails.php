@@ -6,6 +6,7 @@ use Pixel\Shop\Models\Item;
 use Pixel\Shop\Classes\Cart;
 use Pixel\Shop\Models\SalesSettings;
 use Pixel\Shop\Components\CartTrait;
+use Event;
 
 use Cms\Classes\ComponentBase;
 
@@ -50,16 +51,24 @@ class ProductDetails extends ComponentBase{
     	$this->addCss('/plugins/pixel/shop/assets/css/product.css');
 		$this->addJs('/plugins/pixel/shop/assets/js/product.js');
 
-		if ($product == null)
-            return redirect($this->property('productsPage'));
-        else
-        	$product->increment('views_count');
+		if ($product == null){
+			return redirect($this->property('productsPage'));
+		}
+        else{
+			$product->increment('views_count');
+		}
 
         $this->page['product'] = $product;
         $this->page['shopSetting'] = SalesSettings::instance();
         $this->page['relatedProducts'] = $this->getRelatedProducts($product);
 
-        $product->setUrl($this->page->code, $this->controller);
+		$product->setUrl($this->page->code, $this->controller);
+		
+			/**
+			 * Quantity Event
+			 */
+			$newQuantity = Event::fire('pixel.shop.getQuantityProperty', [$this, $product]);
+			$product->quantity = !empty($newQuantity) > 0 ? $newQuantity[0]['quantity'] : $product->quantity;
 
         if (isset($product)) {
             $this->page->meta_title = $product->meta_title;
@@ -77,8 +86,9 @@ class ProductDetails extends ComponentBase{
             $lang = $activeLocale;
         }
 
-        if(!empty(post('lang')))
-            $lang = post('lang');
+        if(!empty(post('lang'))){
+			$lang = post('lang');
+		}
 
         \App::setLocale($lang);
     }
@@ -97,6 +107,12 @@ class ProductDetails extends ComponentBase{
 
 		foreach ($products as $product) {
 			$product->setUrl($this->page->code, $this->controller);
+		
+			/**
+			 * Quantity Event
+			 */
+			$newQuantity = Event::fire('pixel.shop.getQuantityProperty', [$this, $product]);
+			$product->quantity = !empty($newQuantity) > 0 ? $newQuantity[0]['quantity'] : $product->quantity;
 		}
 
 		return $products;

@@ -2,6 +2,7 @@
 
 use Model;
 use CurrencyShop;
+use Event;
 use Carbon\Carbon;
 use Pixel\Shop\Models\SalesSettings;
 use Responsiv\Currency\Models\Currency as CurrencyModel;
@@ -163,6 +164,8 @@ class Item extends Model{
 	}
 
 	public function getPrice($with_tax = null){
+		$newPrice = Event::fire('pixel.shop.getPriceProperty', [$this]);
+        $this->price = !empty($newPrice) > 0 ? $newPrice[0]['price'] : $this->price;
 		$code = CurrencyShop::default();
 		$tax = 0.00;
 
@@ -177,7 +180,8 @@ class Item extends Model{
 		}
 
 		if($code == $this->currency)
-			return ($this->price + $tax);
+			return ($this->price + $tax);		
+		
 
 		return CurrencyConverter::instance()->convert(($this->price + $tax), $this->currency, $code, 2);
 	}
@@ -201,7 +205,6 @@ class Item extends Model{
 
 	public function getPriceWithTax(){
 		$tax = 0.00;
-
 		if($this->tax){
 			foreach ($this->tax as $inTax) {
 				if($inTax > 0)

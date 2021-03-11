@@ -2,7 +2,7 @@
 
 return [
 	'user' => [
-		'sign_in' => 'Cliente frecuente',
+		'sign_in' => 'Ir a Iniciar Sesión',
 		'register' => 'Registrarse para una cuenta',
 		'orders' => 'Historial de pedidos',
 		'favorites' => 'Mis favoritos',
@@ -59,7 +59,7 @@ return [
         'card_number' => 'Numero de la tarjeta',
         'expiration' => 'Fecha de expiración',
         'card_accept' => 'Aceptamos estas tarjetas de crédito.',
-
+        'full_name' => 'Nombre completo como aparece en la tarjeta',
         'filter_by_category' => 'Filtrar por Categoría',
         'no_results' => 'No hay resultados para mostrar.',
         'return' => 'Regresar',

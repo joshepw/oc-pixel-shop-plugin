@@ -4,7 +4,7 @@ use Flash;
 use Lang;
 use Cms\Classes\Page;
 use Cms\Classes\ComponentBase;
-
+use Event;
 use Pixel\Shop\Models\Item;
 use Pixel\Shop\Models\Category;
 use Pixel\Shop\Models\Favorite;
@@ -145,19 +145,22 @@ class ProductList extends ComponentBase
             $lang = $activeLocale;
         }
 
-        if(!empty(post('lang')))
-            $lang = post('lang');
+        if(!empty(post('lang'))){
+			$lang = post('lang');
+		}
 
         \App::setLocale($lang);
     }
 
     // LOAD MODELS
     protected function loadCategory(){
-		if (!$categoryId = $this->property('categoryFilter'))
+		if (!$categoryId = $this->property('categoryFilter')){
 			return null;
+		}
 
-		if (!$category = Category::whereSlug($categoryId)->first())
+		if (!$category = Category::whereSlug($categoryId)->first()){
 			return null;
+		}
 
 		return $category;
 	}
@@ -180,27 +183,39 @@ class ProductList extends ComponentBase
 			$query->where(function($query){
 				$words = explode(' ', input('search'));
 
-				foreach ($words as $word)
+				foreach ($words as $word){
 					$query->orWhere('name', 'LIKE', '%'.$word.'%');
+				}
 			});
 		}
 
-		if($scope)
+		if($scope){
 			$query->$scope();
+		}
 
-		if($category)
+		if($category){
 			$query->categories($category);
+		}
 
-		if($orderBy)
+		if($orderBy){
 			$query->orderBy($orderBy, $orderSort);
+		}
 
-		if($this->property('limitType') == 'take')
+		if($this->property('limitType') == 'take'){
 			$products = $query->take($take)->get();
-		else
+		}
+		else{
 			$products = $query->paginate($take);
+		}
 		
 		$products->each(function($product) use ($page) {
 			$product->setUrl($page, $this->controller);
+			
+			/**
+			 * Quantity Event
+			 */
+			$newQuantity = Event::fire('pixel.shop.getQuantityProperty', [$this, $product]);
+			$product->quantity = !empty($newQuantity) > 0 ? $newQuantity[0]['quantity'] : $product->quantity;
 		});
 
 		return $products;
@@ -224,8 +239,9 @@ class ProductList extends ComponentBase
 
 	// METHODS
 	public function getCategoryList(){
-		if(!$param = $this->paramName('categoryFilter'))
+		if(!$param = $this->paramName('categoryFilter')){
 			return;
+		}
 
 		$categories = Category::all();
 		$page = $this->property('categoryPage');
@@ -240,8 +256,9 @@ class ProductList extends ComponentBase
 		$categories->each(function($item) use ($page, $param, &$list) {
 			$item->setUrl($page, $this->controller, $param);
 
-			if($item->items->count() > 0)
+			if($item->items->count() > 0){
 				$list[] = $item;
+			}
 		});
 
 		return $list;

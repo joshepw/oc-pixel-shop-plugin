@@ -12,7 +12,8 @@ class CreateRainlabExtendUsers extends Migration
             "billing_address",
             "shipping_address",
             "is_ship_same_bill",
-            'phone'
+            'phone',
+            'pixel_token'
             ])){
             return;
         }
@@ -23,6 +24,8 @@ class CreateRainlabExtendUsers extends Migration
             $table->text('shipping_address')->nullable();
             $table->boolean('is_ship_same_bill')->nullable()->default(false);
             $table->string('phone')->nullable();
+            $table->string('pixel_token')->nullable();
+
         });
     }
     
@@ -33,6 +36,7 @@ class CreateRainlabExtendUsers extends Migration
 			$table->dropColumn('shipping_address');
 			$table->dropColumn('is_ship_same_bill');
 			$table->dropColumn('phone');
+            $table->dropColumn('pixel_token');
 		});
     }
     

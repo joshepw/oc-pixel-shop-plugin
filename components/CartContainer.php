@@ -3,7 +3,7 @@
 use Auth;
 use Flash;
 use Request;
-use Redirect;
+use Event;
 use Validator;
 use Carbon\Carbon;
 use Cms\Classes\Page;
@@ -21,7 +21,7 @@ class CartContainer extends ComponentBase{
 
 	use CartTrait;
 	use PaymentTrait;
-
+	
 	public function componentDetails(){
 		return [
 			'name'        => 'Cart',
@@ -73,8 +73,9 @@ class CartContainer extends ComponentBase{
     public function prepareFields($key){
         $fields = SalesSettings::get($key . '_custom_fields');
 
-        if(!$fields)
+        if(!$fields){
             return [];
+		}
 
         foreach ($fields as $key => $field) {
             $fields[$key]['name'] = str_slug($field['label'], '_');
@@ -86,17 +87,21 @@ class CartContainer extends ComponentBase{
                 foreach ($rules as $rule) {
                     $parts = explode(':', $rule);
 
-                    if(strpos($rule, 'min:') !== false)
-                        $attrs .= ' minlength="'.$parts[1].'"';
+                    if(strpos($rule, 'min:') !== false){
+						$attrs .= ' minlength="'.$parts[1].'"';
+					}
 
-                    if(strpos($rule, 'max:') !== false)
-                        $attrs .= ' maxlength="'.$parts[1].'"';
+                    if(strpos($rule, 'max:') !== false){
+						$attrs .= ' maxlength="'.$parts[1].'"';
+					}
 
-                    if(strpos($rule, 'required') !== false)
-                        $attrs .= ' required';
+                    if(strpos($rule, 'required') !== false){
+						$attrs .= ' required';
+					}
 
-                    if(strpos($rule, 'email') !== false)
-                        $fields[$key]['type'] = 'email';
+                    if(strpos($rule, 'email') !== false){
+						$fields[$key]['type'] = 'email';
+					}
                 }
 
                 $fields[$key]['attributes'] = $attrs;
@@ -116,7 +121,6 @@ class CartContainer extends ComponentBase{
 
 	public function onRun(){
         $this->prepareLang();
-
 		if(input('cart_id'))
 			Cart::load(input('cart_id'));
 
@@ -198,23 +202,44 @@ class CartContainer extends ComponentBase{
         $this->page['methods_list'] = $billingCountry && property_exists($billingCountry, 'code') ? $this->getPaymentMethodsList($billingCountry->code) : null;
         $this->page['method_country_code'] = $billingCountry->code ?? null;
 
+		$this->page['secure'] = GatewaysSettings::get('pixelpay_3ds');
+		$this->page['is_tokenization_active'] = $this->isTokenizationActive();
+		$this->page['config'] = 
+		[
+		'key'=> GatewaysSettings::get('pixelpay_app'),
+		'hash' =>  md5(GatewaysSettings::get('pixelpay_hash')),
+		'end_point' => $this->isTokenizationActive() ? \Tecnocomp\Tokenization\Components\PaymentTraitTecnocomp::getEndPoint(): null,
+		];
+		
+		$this->page['config'] = json_encode($this->page['config']);
+
+
 		$this->addCss('/plugins/pixel/shop/assets/css/cart.css');
         $this->addJs('/plugins/pixel/shop/assets/js/jquery.mask.min.js');
 		$this->addJs('/plugins/pixel/shop/assets/js/jquery.validate.min.js');
         $this->addJs('/plugins/pixel/shop/assets/js/jquery.steps.min.js');
 		$this->addJs('/plugins/pixel/shop/assets/js/cart.js');
+
+		$this->addJs('https://unpkg.com/@pixelpay/sdk');
+		$this->addJs('https://unpkg.com/axios/dist/axios.min.js');
+		$this->addJs('/plugins/tecnocomp/tokenization/assets/js/pixel_3ds.js');
+
 	}
 
+	public function isTokenizationActive () {
+		return count(Event::fire('pixel.shop.isTokenizationPlugin')) > 0;
+	}
 	public function user(){
 		if (!$user = Auth::getUser())
+		{
 			return null;
+		}
 
 		return $user;
 	}
 
 	public function onShippingCountrySelect(){
-        $this->prepareLang();
-        
+		$this->prepareLang();
 		if($country = Country::where('code', input('shipping_address.country'))->first()){
             $cart = Cart::load();
             $cart->shipping_address['country'] = input('shipping_address.country');
@@ -224,16 +249,21 @@ class CartContainer extends ComponentBase{
 			$return = [
                 '#shop__cart-partial' => $this->renderPartial('@cart', [ 'cart' => $cart ]),
                 '.shippingStateContainer' => $this->renderPartial('@shipping_states', [
-                    'shipping_states' => $country->states
+					'shipping_states' => $country->states,
+					'user' => $this->user(),
+					'cards' => Event::fire('pixel.shop.getCardsByUser', [$this]),
                 ]), 
                 'code' => $country->code
             ];
 
-			if(input('is_ship_same_bill'))
-				$return['.shop__methods-list'] = $this->renderPartial('@methods', [
+			if(input('is_ship_same_bill')){
+				$return['.shop__methods-list'] = $this->renderPartial(  $this->isTokenizationActive() ?'@methodsWithToken' : '@methods', [
                     'methods_list' => $this->getPaymentMethodsList(input('shipping_address.country')),
-                    'method_country_code' => input('shipping_address.country')
+					'method_country_code' => input('shipping_address.country'),
+					'cards' => Event::fire('pixel.shop.getCardsByUser', [$this]),
+					'user' => $this->user()
 				]);
+			}
 
 			return $return;
 		}
@@ -247,9 +277,11 @@ class CartContainer extends ComponentBase{
 				'billing_states' => $country->states
 			]), 'code' => $country->code];
 
-			$return['.shop__methods-list'] = $this->renderPartial('@methods', [
+			$return['.shop__methods-list'] = $this->renderPartial(  $this->isTokenizationActive() ?'@methodsWithToken' : '@methods', [
                 'methods_list' => $this->getPaymentMethodsList(input('billing_address.country')),
-                'method_country_code' => input('billing_address.country')
+				'method_country_code' => input('billing_address.country'),
+				'cards' => Event::fire('pixel.shop.getCardsByUser', [$this]),
+				'user' => $this->user()
 			]);
 
 			return $return;
@@ -281,9 +313,11 @@ class CartContainer extends ComponentBase{
 
 		return [ 
             '#shop__cart-partial' => $this->renderPartial('@cart', [ 'cart' => $cart ]),
-            '.shop__methods-list' => $this->renderPartial('@methods', [
+            '.shop__methods-list' => $this->renderPartial(  $this->isTokenizationActive() ?'@methodsWithToken' : '@methods', [
                 'methods_list' => $this->getPaymentMethodsList(input($methodCountry . '_address.country')),
-                'method_country_code' => input($methodCountry . '_address.country')
+				'method_country_code' => input($methodCountry . '_address.country'),
+				'cards' => Event::fire('pixel.shop.getCardsByUser', [$this]),
+				'user' => $this->user()
 			])
         ];
     }

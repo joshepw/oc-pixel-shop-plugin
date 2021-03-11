@@ -54,7 +54,9 @@ class Plugin extends PluginBase{
 			'pixel.shop.brands' => [ 'tab' => 'pixel.shop::lang.plugin.name', 'label' => 'pixel.shop::lang.plugin.access_brands' ],
 			'pixel.shop.coupons' => [ 'tab' => 'pixel.shop::lang.plugin.name', 'label' => 'pixel.shop::lang.plugin.access_coupons' ],
 			'pixel.shop.gateways_settings' => [ 'tab' => 'pixel.shop::lang.plugin.name', 'label' => 'pixel.shop::lang.plugin.gateways_settings' ],
-			'pixel.shop.sales_settings' => [ 'tab' => 'pixel.shop::lang.plugin.name', 'label' => 'pixel.shop::lang.plugin.sales_settings' ]
+			'pixel.shop.sales_settings' => [ 'tab' => 'pixel.shop::lang.plugin.name', 'label' => 'pixel.shop::lang.plugin.sales_settings' ],
+			'pixel.shop.shipping' => [ 'tab' => 'pixel.shop::lang.plugin.name', 'label' => 'pixel.shop::lang.plugin.access_coupons' ],
+
 		];
 	}
 
@@ -100,6 +102,12 @@ class Plugin extends PluginBase{
 						'icon' => 'icon-ticket',
 						'url' => Backend::url('pixel/shop/coupons'),
 						'permissions' => ['pixel.shop.coupons'],
+					],
+					'shipping' => [
+						'label' => 'Shipping and delivery',
+						'icon' => 'icon-truck',
+						'url' => Backend::url('pixel/shop/shipping'),
+						'permissions' => ['pixel.shop.shipping'],
 					],
 				]
 			]
@@ -150,6 +158,18 @@ class Plugin extends PluginBase{
 			'Pixel\Shop\FormWidgets\Variants' => [
 				'label' => 'Variants',
 				'code'  => 'shop-variants'
+			],
+			'Pixel\Shop\FormWidgets\Rates' => [
+				'label' => 'Rates',
+				'code'  => 'shop-rates'
+			],
+			'Pixel\Shop\FormWidgets\Zones' => [
+				'label' => 'Zone',
+				'code'  => 'shop-zones'
+			],
+			'Pixel\Shop\FormWidgets\ZoneProfile' => [
+				'label' => 'Zone Profile',
+				'code'  => 'shop-zone-profile'
 			],
 		];
     }

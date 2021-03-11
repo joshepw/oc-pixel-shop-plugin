@@ -54,8 +54,9 @@ class UserProfile extends ComponentBase{
     }
 
     public function onRun(){
-        if ($code = $this->activationCode())
+        if ($code = $this->activationCode()){
             $this->onActivate($code);
+        }
 
         $this->prepareVars();
         $this->prepareLang();
@@ -96,8 +97,9 @@ class UserProfile extends ComponentBase{
             $lang = $activeLocale;
         }
 
-        if(!empty(post('lang')))
+        if(!empty(post('lang'))){
             $lang = post('lang');
+        }
 
         \App::setLocale($lang);
     }
@@ -108,8 +110,9 @@ class UserProfile extends ComponentBase{
 
         usort($this->tabs, function($a, $b){
             if(array_key_exists('order', $a) && array_key_exists('order', $b)){
-                if($a['order'] == $b['order'])
+                if($a['order'] == $b['order']){
                     return 0;
+                }
 
                 return ($a['order'] < $b['order']) ? -1 : 1;
             }else{
@@ -128,20 +131,23 @@ class UserProfile extends ComponentBase{
 
         if($user){
             if($user->billing_address && is_array($user->billing_address) && array_key_exists('country', $user->billing_address)){
-                if($thisCountry = Country::isEnabled()->where('code', $user->billing_address['country'])->first())
+                if($thisCountry = Country::isEnabled()->where('code', $user->billing_address['country'])->first()){
                     $this->page['billing_states'] = $thisCountry->states;
+                }
             }
     
             if($user->shipping_address && is_array($user->shipping_address) && array_key_exists('country', $user->shipping_address)){
-                if($thisCountry = Country::isEnabled()->where('code', $user->shipping_address['country'])->first())
+                if($thisCountry = Country::isEnabled()->where('code', $user->shipping_address['country'])->first()){
                     $this->page['shipping_states'] = $thisCountry->states;
+                }
             }
         }
     }
 
     public function user(){
-        if (!Auth::check())
+        if (!Auth::check()){
             return null;
+        }
 
         return Auth::getUser();
     }
@@ -153,8 +159,9 @@ class UserProfile extends ComponentBase{
     public function activationCode(){
         $routeParameter = $this->property('paramCode');
 
-        if ($code = $this->param($routeParameter))
+        if ($code = $this->param($routeParameter)){
             return $code;
+        }
 
         return get('activate');
     }
@@ -167,35 +174,40 @@ class UserProfile extends ComponentBase{
             $errorFields = ['code' => trans('rainlab.user::lang.account.invalid_activation_code')];
 
             $parts = explode('!', $code);
-            if (count($parts) != 2)
+            if (count($parts) != 2){
                 throw new ValidationException($errorFields);
+            }
 
             list($userId, $code) = $parts;
 
-            if (!strlen(trim($userId)) || !strlen(trim($code)))
+            if (!strlen(trim($userId)) || !strlen(trim($code))){
                 throw new ValidationException($errorFields);
+            }
 
-            if (!$user = Auth::findUserById($userId))
+            if (!$user = Auth::findUserById($userId)){
                 throw new ValidationException($errorFields);
+            }
 
-            if (!$user->attemptActivation($code))
+            if (!$user->attemptActivation($code)){
                 throw new ValidationException($errorFields);
+            }
 
             Flash::success(trans('rainlab.user::lang.account.success_activation'));
 
             Auth::login($user);
         }
         catch (Exception $ex) {
-            if (Request::ajax()) 
-            	throw $ex;
-            else 
-            	Flash::error($ex->getMessage());
+            if (Request::ajax()) {
+                throw $ex;
+            }
+            else {
+                Flash::error($ex->getMessage());
+            }
         }
     }
 
     public function onShippingCountrySelect(){
         $this->prepareLang();
-
 		if($country = Country::where('code', input('shipping_address.country'))->first()){
 			$return = ['.shippingStateWrapper' => $this->renderPartial('@states', [
 				'states' => $country->states
@@ -229,8 +241,9 @@ class UserProfile extends ComponentBase{
 
             $validation = Validator::make($data, $rules);
 
-            if ($validation->fails())
+            if ($validation->fails()){
                 throw new ValidationException($validation);
+            }
 
             $credentials = [
                 'login'    => array_get($data, 'username'),
@@ -245,13 +258,16 @@ class UserProfile extends ComponentBase{
                 throw new Exception(trans('rainlab.user::lang.account.banned'));
             }
 
-            if ($redirect = $this->makeRedirection('Login'))
+            if ($redirect = $this->makeRedirection('Login')){
                 return $redirect;
+            }
         }catch (Exception $ex) {
-            if (Request::ajax()) 
-            	throw $ex;
-            else 
-            	Flash::error($ex->getMessage());
+            if (Request::ajax()) {
+                throw $ex;
+            }
+            else {
+                Flash::error($ex->getMessage());
+            }
         }
     }
 
@@ -259,16 +275,19 @@ class UserProfile extends ComponentBase{
     	try {
             $this->prepareLang();
 
-            if (!$this->canRegister())
-            	throw new Exception(trans('rainlab.user::lang.account.registration_disabled'));
+            if (!$this->canRegister()){
+                throw new Exception(trans('rainlab.user::lang.account.registration_disabled'));
+            }
 
             $data = post();
 
-            if (!array_key_exists('password_confirmation', $data))
+            if (!array_key_exists('password_confirmation', $data)){
                 $data['password_confirmation'] = post('password');
+            }
 
-            if (!array_key_exists('username', $data))
+            if (!array_key_exists('username', $data)){
                 $data['username'] = post('email');
+            }
 
             $rules = [
             	'name' => 'required|min:3|max:191',
@@ -278,8 +297,9 @@ class UserProfile extends ComponentBase{
 
             $validation = Validator::make($data, $rules);
 
-            if ($validation->fails())
+            if ($validation->fails()){
                 throw new ValidationException($validation);
+            }
 
             Event::fire('rainlab.user.beforeRegister', [&$data]);
 
@@ -295,16 +315,20 @@ class UserProfile extends ComponentBase{
                 Flash::success(trans('rainlab.user::lang.account.activation_email_sent'));
             }
 
-            if ($automaticActivation || !$requireActivation)
+            if ($automaticActivation || !$requireActivation){
                 Auth::login($user);
+            }
 
-            if ($redirect = $this->makeRedirection('Register'))
+            if ($redirect = $this->makeRedirection('Register')){
                 return $redirect;
+            }
         }catch (Exception $ex) {
-            if (Request::ajax()) 
-            	throw $ex;
-            else 
-            	Flash::error($ex->getMessage());
+            if (Request::ajax()) {
+                throw $ex;
+            }
+            else {
+                Flash::error($ex->getMessage());
+            }
         }
 	}
 	
@@ -322,6 +346,7 @@ class UserProfile extends ComponentBase{
 		$password = str_random(10);
 
 		$user->password = $password;
+        $user->password_confirmation = $password; 
 		$user->save();
 
 		Mail::sendTo($email, 'pixel.shop::mail.recovery_password', [
@@ -340,13 +365,15 @@ class UserProfile extends ComponentBase{
     protected function makeRedirection($from = 'Login'){
         $property = trim((string) $this->property('redirectOn' . $from));
         
-        if ($property === '')
+        if ($property === ''){
             return ['action' => 'refresh'];
+        }
 
         $redirectUrl = $this->pageUrl($property) ?: $property;
 
-        if (!empty(post('redirect')))
+        if (!empty(post('redirect'))){
             return ['action' => 'redirect', 'url' => post('redirect')];
+        }
 
         return ['action' => 'redirect', 'url' => $redirectUrl];
     }
@@ -354,18 +381,21 @@ class UserProfile extends ComponentBase{
 	public function onUpdate(){
         $this->prepareLang();
 
-        if (!$user = $this->user())
+        if (!$user = $this->user()){
             return;
+        }
 
-        if (Input::hasFile('avatar'))
+        if (Input::hasFile('avatar')){
             $user->avatar = Input::file('avatar');
+        }
 
         $user->fill(post());
         $user->is_ship_same_bill = $user->is_ship_same_bill ?? false;
         $user->save();
 
-        if (strlen(post('password')))
+        if (strlen(post('password'))){
             Auth::login($user->reload(), true);
+        }
 
         Flash::success(post('flash', trans('rainlab.user::lang.account.success_saved')));
 
@@ -375,11 +405,13 @@ class UserProfile extends ComponentBase{
     public function onDeactivate(){
         $this->prepareLang();
         
-        if (!$user = $this->user())
+        if (!$user = $this->user()){
             return;
+        }
 
-        if (!$user->checkHashValue('password', post('password')))
+        if (!$user->checkHashValue('password', post('password'))){
             throw new ValidationException(['password' => trans('rainlab.user::lang.account.invalid_deactivation_pass')]);
+        }
 
         Auth::logout();
         $user->delete();
@@ -395,7 +427,12 @@ class UserProfile extends ComponentBase{
 			$favorites = $user->favorites;
 
 			$favorites->each(function($favorite) use ($page) {
-				$favorite->item->setUrl($page, $this->controller);
+                $favorite->item->setUrl($page, $this->controller);
+			/**
+			 * Quantity Event
+			 */
+			$newQuantity = Event::fire('pixel.shop.getQuantityProperty', [$this, $favorite]);
+			$favorite->quantity = !empty($newQuantity) > 0 ? $newQuantity[0]['quantity'] : $favorite->quantity;
 			});
 		}
 
@@ -440,8 +477,9 @@ class UserProfile extends ComponentBase{
 
 		$item_id = post('id');
 
-		if(!$order = Order::find($item_id))
-			return;
+		if(!$order = Order::find($item_id)){
+            return;
+        }
 
 		return ['#orders-content' => $this->renderPartial('@order', [ 'order' => $order ])];
 	}
