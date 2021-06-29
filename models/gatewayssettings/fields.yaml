@@ -262,13 +262,6 @@ secondaryTabs:
         span: full
         placeholder: 'pixelpay.app'
         tab: 'pixel.shop::lang.fields.pixelpay'
-    
-    pixelpay_3ds:
-        label: 'pixel.shop::lang.fields.active3ds'
-        type: switch
-        span: full
-        placeholder: 'pixelpay.app'
-        tab: 'pixel.shop::lang.fields.pixelpay'
 
     pixelpay_countries:
         label: 'pixel.shop::lang.fields.allowed_countries'

@@ -1,4 +1,6 @@
-<?php namespace Pixel\Shop;
+<?php
+
+namespace Pixel\Shop;
 
 use App;
 use Yaml;
@@ -19,14 +21,16 @@ use Illuminate\Foundation\AliasLoader;
 use October\Rain\Exception\ApplicationException;
 use Backend\Classes\Controller as BackendController;
 
-class Plugin extends PluginBase{
-	
+class Plugin extends PluginBase
+{
+
 	// DEPENDENCIES
 	public $require = ['RainLab.User', 'RainLab.Location', 'Responsiv.Currency'];
-	
+
 
 	// PLUGIN DETAILS
-	public function pluginDetails() {
+	public function pluginDetails()
+	{
 		return [
 			'name' => 'pixel.shop::lang.plugin.name',
 			'description' => 'pixel.shop::lang.plugin.description',
@@ -35,7 +39,8 @@ class Plugin extends PluginBase{
 		];
 	}
 
-	public function registerComponents(){
+	public function registerComponents()
+	{
 		return [
 			'Pixel\Shop\Components\ProductList' => 'shopProductsList',
 			'Pixel\Shop\Components\ProductDetails' => 'shopProductsDetails',
@@ -46,22 +51,24 @@ class Plugin extends PluginBase{
 	}
 
 	// REGISTER PERMISSIONS
-	public function registerPermissions() {
-		return [			
-			'pixel.shop.orders' => [ 'tab' => 'pixel.shop::lang.plugin.name', 'label' => 'pixel.shop::lang.plugin.access_orders' ],
-			'pixel.shop.items' => [ 'tab' => 'pixel.shop::lang.plugin.name', 'label' => 'pixel.shop::lang.plugin.access_items' ],
-			'pixel.shop.categories' => [ 'tab' => 'pixel.shop::lang.plugin.name', 'label' => 'pixel.shop::lang.plugin.access_categories' ],
-			'pixel.shop.brands' => [ 'tab' => 'pixel.shop::lang.plugin.name', 'label' => 'pixel.shop::lang.plugin.access_brands' ],
-			'pixel.shop.coupons' => [ 'tab' => 'pixel.shop::lang.plugin.name', 'label' => 'pixel.shop::lang.plugin.access_coupons' ],
-			'pixel.shop.gateways_settings' => [ 'tab' => 'pixel.shop::lang.plugin.name', 'label' => 'pixel.shop::lang.plugin.gateways_settings' ],
-			'pixel.shop.sales_settings' => [ 'tab' => 'pixel.shop::lang.plugin.name', 'label' => 'pixel.shop::lang.plugin.sales_settings' ],
-			'pixel.shop.shipping' => [ 'tab' => 'pixel.shop::lang.plugin.name', 'label' => 'pixel.shop::lang.plugin.access_coupons' ],
+	public function registerPermissions()
+	{
+		return [
+			'pixel.shop.orders' => ['tab' => 'pixel.shop::lang.plugin.name', 'label' => 'pixel.shop::lang.plugin.access_orders'],
+			'pixel.shop.items' => ['tab' => 'pixel.shop::lang.plugin.name', 'label' => 'pixel.shop::lang.plugin.access_items'],
+			'pixel.shop.categories' => ['tab' => 'pixel.shop::lang.plugin.name', 'label' => 'pixel.shop::lang.plugin.access_categories'],
+			'pixel.shop.brands' => ['tab' => 'pixel.shop::lang.plugin.name', 'label' => 'pixel.shop::lang.plugin.access_brands'],
+			'pixel.shop.coupons' => ['tab' => 'pixel.shop::lang.plugin.name', 'label' => 'pixel.shop::lang.plugin.access_coupons'],
+			'pixel.shop.gateways_settings' => ['tab' => 'pixel.shop::lang.plugin.name', 'label' => 'pixel.shop::lang.plugin.gateways_settings'],
+			'pixel.shop.sales_settings' => ['tab' => 'pixel.shop::lang.plugin.name', 'label' => 'pixel.shop::lang.plugin.sales_settings'],
+			'pixel.shop.shipping' => ['tab' => 'pixel.shop::lang.plugin.name', 'label' => 'pixel.shop::lang.plugin.access_coupons'],
 
 		];
 	}
 
 	// REGISTER MENU NAVIGATION
-	public function registerNavigation() {
+	public function registerNavigation()
+	{
 		return [
 			'shop' => [
 				'label' => 'pixel.shop::lang.menu.shop',
@@ -115,7 +122,8 @@ class Plugin extends PluginBase{
 	}
 
 	// SETTINGS
-	public function registerSettings(){
+	public function registerSettings()
+	{
 		return [
 			'sales' => [
 				'label'       => 'pixel.shop::lang.plugin.sales_settings',
@@ -124,8 +132,8 @@ class Plugin extends PluginBase{
 				'class'       => 'Pixel\Shop\Models\SalesSettings',
 				'category'    => 'pixel.shop::lang.menu.shop',
 				'order'       => 100,
-                'keywords'    => 'crm customer relationship management invoice estimate',
-                'permissions' => ['pixel.shop.sales_settings']
+				'keywords'    => 'crm customer relationship management invoice estimate',
+				'permissions' => ['pixel.shop.sales_settings']
 			],
 			'gateways' => [
 				'label'       => 'pixel.shop::lang.plugin.gateways_settings',
@@ -134,14 +142,15 @@ class Plugin extends PluginBase{
 				'class'       => 'Pixel\Shop\Models\GatewaysSettings',
 				'category'    => 'pixel.shop::lang.menu.shop',
 				'order'       => 101,
-                'keywords'    => 'management gateways payment method',
-                'permissions' => ['pixel.shop.gateways_settings']
+				'keywords'    => 'management gateways payment method',
+				'permissions' => ['pixel.shop.gateways_settings']
 			]
 		];
 	}
 
 	// FORM WIDGETS
-	public function registerFormWidgets(){
+	public function registerFormWidgets()
+	{
 		return [
 			'Pixel\Shop\FormWidgets\Currency' => [
 				'label' => 'Currency',
@@ -172,38 +181,39 @@ class Plugin extends PluginBase{
 				'code'  => 'shop-zone-profile'
 			],
 		];
-    }
+	}
 
-    // MAIL TEMPLATES
-    public function registerMailPartials()
-    {
-        return [
-            'badge'  => 'pixel.shop::partials.badge',
-            'items'  => 'pixel.shop::partials.items',
-        ];
-    }
+	// MAIL TEMPLATES
+	public function registerMailPartials()
+	{
+		return [
+			'badge'  => 'pixel.shop::partials.badge',
+			'items'  => 'pixel.shop::partials.items',
+		];
+	}
 
-    public function registerMailTemplates()
-    {
-        return [
-            'pixel.shop::mail.new_order',
-            'pixel.shop::mail.order_awaitpay',
-            'pixel.shop::mail.order_cancelled',
-            'pixel.shop::mail.order_completed',
-            'pixel.shop::mail.order_payed',
-        ];
-    }
+	public function registerMailTemplates()
+	{
+		return [
+			'pixel.shop::mail.new_order',
+			'pixel.shop::mail.order_awaitpay',
+			'pixel.shop::mail.order_cancelled',
+			'pixel.shop::mail.order_completed',
+			'pixel.shop::mail.order_payed',
+		];
+	}
 
 	// RAINLAB PAGES MENU SUPPORT
-	private function bootMenuItem() {
-		Event::listen('pages.menuitem.listTypes', function() {
+	private function bootMenuItem()
+	{
+		Event::listen('pages.menuitem.listTypes', function () {
 			return [
 				'pixel-shop-categories' => 'All Shop Categories',
 				'pixel-shop-brands' => 'All Shop Brands',
 			];
 		});
 
-		Event::listen('pages.menuitem.getTypeInfo', function($type) {
+		Event::listen('pages.menuitem.getTypeInfo', function ($type) {
 			if ($type == 'pixel-shop-categories')
 				return Category::getMenuTypeInfo($type);
 
@@ -211,7 +221,7 @@ class Plugin extends PluginBase{
 				return Brand::getMenuTypeInfo($type);
 		});
 
-		Event::listen('pages.menuitem.resolveItem', function($type, $item, $url, $theme) {
+		Event::listen('pages.menuitem.resolveItem', function ($type, $item, $url, $theme) {
 			if ($type == 'pixel-shop-categories')
 				return Category::resolveMenuItem($item, $url, $theme);
 
@@ -221,10 +231,11 @@ class Plugin extends PluginBase{
 	}
 
 	// EXTEND PLUGIN RAINLAB USER
-	private function bootRainlabUserExtend() {	
+	private function bootRainlabUserExtend()
+	{
 		if (class_exists("\RainLab\User\Models\User")) {
-			
-			Event::listen('backend.list.extendColumns', function($widget) {
+
+			Event::listen('backend.list.extendColumns', function ($widget) {
 				if (!$widget->getController() instanceof \RainLab\Location\Controllers\Locations) {
 					return;
 				}
@@ -247,9 +258,9 @@ class Plugin extends PluginBase{
 					]);
 				}
 			});
-		
+
 			// FILLABE ATTRIBUTE
-			\RainLab\User\Models\User::extend(function($model) {
+			\RainLab\User\Models\User::extend(function ($model) {
 				$model->addFillable([
 					"billing_address",
 					"shipping_address",
@@ -267,7 +278,7 @@ class Plugin extends PluginBase{
 			});
 
 			// EXTEND FIELDS
-			\RainLab\User\Controllers\Users::extendFormFields(function($widget) {
+			\RainLab\User\Controllers\Users::extendFormFields(function ($widget) {
 				if (!$widget->model instanceof \RainLab\User\Models\User)
 					return;
 
@@ -276,8 +287,8 @@ class Plugin extends PluginBase{
 				$widget->addSecondaryTabFields($config);
 			});
 
-			\RainLab\Location\Controllers\Locations::extendFormFields(function($widget) {
-				if ($widget->model instanceof \RainLab\Location\Models\Country){
+			\RainLab\Location\Controllers\Locations::extendFormFields(function ($widget) {
+				if ($widget->model instanceof \RainLab\Location\Models\Country) {
 					$widget->addFields([
 						'name' => [
 							'label' => 'rainlab.location::lang.country.name',
@@ -292,14 +303,14 @@ class Plugin extends PluginBase{
 					]);
 				}
 
-				if ($widget->model instanceof \RainLab\Location\Models\State){
+				if ($widget->model instanceof \RainLab\Location\Models\State) {
 					$widget->addFields([
 						'name' => [
 							'label' => 'rainlab.location::lang.state.name',
 							'span' => 'full',
 							'comment' => 'rainlab.location::lang.state.name_comment'
 						],
-						'code'=> [
+						'code' => [
 							'label' => 'rainlab.location::lang.state.code',
 							'span' => 'auto',
 							'comment' => 'rainlab.location::lang.state.code_comment',
@@ -319,7 +330,7 @@ class Plugin extends PluginBase{
 			});
 
 			// EXTEND RELATIONS
-			\RainLab\User\Models\User::extend(function($model) {
+			\RainLab\User\Models\User::extend(function ($model) {
 				$model->hasMany['orders'] = [
 					'Pixel\Shop\Models\Order',
 					'order' => 'created_at desc'
@@ -334,9 +345,10 @@ class Plugin extends PluginBase{
 	}
 
 	// EXTENDING VALIDATION TYPES
-	private function bootValidatorExtend() {
+	private function bootValidatorExtend()
+	{
 
-		Validator::extend('ccn', function($attribute, $value, $parameters, $validator) {
+		Validator::extend('ccn', function ($attribute, $value, $parameters, $validator) {
 			$number = preg_replace('/\D/', '', $value);
 
 			$number_length = strlen($number);
@@ -346,42 +358,61 @@ class Plugin extends PluginBase{
 			for ($i = 0; $i < $number_length; $i++) {
 				$digit = $number[$i];
 				if ($i % 2 == $parity) {
-					$digit*=2;
+					$digit *= 2;
 
 					if ($digit > 9)
-						$digit-=9;
+						$digit -= 9;
 				}
 
-				$total+=$digit;
+				$total += $digit;
 			}
 
-			if($total % 10 != 0)
+			if ($total % 10 != 0)
 				return false;
 
 			return self::evaluatePAN($value);
 		});
 
-		Validator::extend('cvv', function($attribute, $value, $parameters, $validator) {
+		Validator::extend('cvv', function ($attribute, $value, $parameters, $validator) {
 			$data = $validator->getData();
 
-			if(is_array($parameters) 
+			if (
+				is_array($parameters)
 				&& !array_key_exists($parameters[0], $data)
-				&& !empty($data[$parameters[0]]))
+				&& !empty($data[$parameters[0]])
+			)
 				return;
 
 			$type = self::evaluatePAN($data[$parameters[0]]);
 
-			if(!$type)
+			if (!$type)
 				return;
 
-			if($type == 'amex')
+			if ($type == 'amex')
 				return preg_match("/^[0-9]{4}$/", $value);
 			else
 				return preg_match("/^[0-9]{3}$/", $value);
 		});
 
-		Validator::extend('ccexp', function($attribute, $value, $parameters, $validator) {
+		Validator::extend('ccexp', function ($attribute, $value, $parameters, $validator) {
 			$value = preg_replace('/\s/', '', $value);
+			$part =  explode('/', $value);
+			$new_date = $part[1] . '-' . $part[0];
+
+			$dt = \DateTime::createFromFormat('y-m', $new_date);
+			$format = $dt->format('Y-m');
+			$new_format = explode('-', $format);
+			$exp = intval($new_format[0] . $new_format[1]);
+
+			$now = intval(date('Ym'));
+
+			$limit = intval(date('Ym', strtotime('+20 years')));
+
+			if ($exp >= $now && $exp <= $limit)
+				return true;
+
+			return;
+			/* $value = preg_replace('/\s/', '', $value);
 			$exp = intval( date('Ym', strtotime($value)) );
 
 			$now = intval( date('Ym') );
@@ -390,7 +421,7 @@ class Plugin extends PluginBase{
 			if($exp >= $now && $exp <= $limit)
 				return true;
 
-			return;
+			return; */
 		});
 
 		Validator::extend('money', function ($attribute, $value, $parameters, $validator) {
@@ -398,16 +429,16 @@ class Plugin extends PluginBase{
 		});
 
 		Validator::extend('amount', function ($attribute, $value, $parameters, $validator) {
-			if($value < 1)
+			if ($value < 1)
 				return;
 
 			return preg_match("/^\d*(\.\d{1,2})?$/", $value);
 		});
-		
 	}
 
 	// ON BOOT
-	public function boot(){
+	public function boot()
+	{
 		// ALIAS
 		$alias = AliasLoader::getInstance();
 		$alias->alias('CurrencyShop', 'Pixel\Shop\Classes\Currency');
@@ -418,26 +449,29 @@ class Plugin extends PluginBase{
 		$this->bootRainlabUserExtend();
 
 		// PLUGIN ASSETS
-		BackendController::extend(function($controller){
+		BackendController::extend(function ($controller) {
 			$controller->addCss('/plugins/pixel/shop/assets/main.css');
 		});
-		
+
 		// OMNYPAY BOOT
 		App::register('Ignited\LaravelOmnipay\LaravelOmnipayServiceProvider');
 		$alias->alias('Omnipay', 'Ignited\LaravelOmnipay\Facades\OmnipayFacade');
 	}
 
-	private function productsStockCounter(){
+	private function productsStockCounter()
+	{
 		$low_stock = Item::getLowStockProducts();
 		return ($low_stock) ? $low_stock : null;
 	}
 
-	private function ordersCounter(){
+	private function ordersCounter()
+	{
 		$orders = Order::where("is_paid", true)->where('status', '<>', 'completed')->count();
 		return ($orders) ? $orders : null;
 	}
 
-	public static function evaluatePAN($value){
+	public static function evaluatePAN($value)
+	{
 		$cards = array(
 			"visa" => "(4\d{12}(?:\d{3})?)",
 			"amex" => "(3[47]\d{13})",
@@ -449,19 +483,19 @@ class Plugin extends PluginBase{
 		);
 
 		$names = array(
-			"visa", 
-			"amex", 
-			"maestro", 
-			"mastercard", 
-			"jcb", 
-			"solo", 
+			"visa",
+			"amex",
+			"maestro",
+			"mastercard",
+			"jcb",
+			"solo",
 			"switch"
 		);
 
 		$matches = array();
-		$pattern = "#^(?:".implode("|", $cards).")$#";
+		$pattern = "#^(?:" . implode("|", $cards) . ")$#";
 		$result = preg_match($pattern, str_replace(" ", "", $value), $matches);
 
-		return ($result>0) ? $names[sizeof($matches)-2] : false;
+		return ($result > 0) ? $names[sizeof($matches) - 2] : false;
 	}
 }

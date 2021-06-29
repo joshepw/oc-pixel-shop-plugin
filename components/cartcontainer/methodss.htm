@@ -1,0 +1,31 @@
+<div class="text-danger" data-validate-for="gateway"></div>
+<ul class="list-group">
+	{% for method in methods_list %} 
+	<li class="list-group-item">
+		<div class="list-radio">
+			<input 
+				type="radio" 
+				value="{{ method.gateway }}" 
+				name="gateway"
+				data-msg-required="{{ 'pixel.shop::validation.gateway.required'|trans }}" 
+				{% if method.gateway == cart.gateway or methods_list|length == 1 %}
+				checked="checked" 
+				{% endif %}
+				id="method-{{ method.gateway }}" required>
+			<label for="method-{{ method.gateway }}">{{ method.title }}</label>
+		</div>
+		<div class="list-partial">
+			{{ method.partial|raw }}
+		</div>
+    </li>
+    {% else %}
+    <li class="list-group-item">
+        <input type="hidden" name="gateway" class="ignore-rule" data-msg-required="{{ 'pixel.shop::validation.gateway.required'|trans }}"  required>
+        <img src="{{ '/plugins/pixel/shop/assets/img/icon-no-card.svg'|app }}" alt="" width="32" height="32"
+            style="float: left; margin-right: 8px">
+        <p style="line-height: 32px; margin-bottom: 0px">
+            {{ 'pixel.shop::component.cart.no_gateway_support'|trans({country: method_country_code}) }}
+        </p>
+    </li>
+	{% endfor %}
+</ul>

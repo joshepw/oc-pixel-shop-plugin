@@ -1,4 +1,6 @@
-<?php namespace Pixel\Shop\Components;
+<?php
+
+namespace Pixel\Shop\Components;
 
 use Auth;
 use Lang;
@@ -18,197 +20,309 @@ use Pixel\Shop\Models\Favorite;
 use RainLab\Location\Models\State;
 use RainLab\Location\Models\Country;
 use Pixel\Shop\Classes\PartialMaker;
+use Pixel\Shop\Components\PaymentTrait;
 use RainLab\User\Models\Settings as UserSettings;
 use RainLab\User\Models\User;
 
-class UserProfile extends ComponentBase{
+class UserProfile extends ComponentBase
+{
+	use PaymentTrait;
 
-    public $tabs;
+	public $tabs;
 
-    public function componentDetails(){
-        return [
-            'name'        => 'Account',
-            'description' => 'User management form'
-        ];
-    }
+	public function componentDetails()
+	{
+		return [
+			'name'        => 'Account',
+			'description' => 'User management form'
+		];
+	}
 
-    public function defineProperties(){
-        return [
-            'redirectOnLogin' => [
-                'title'       => 'Redirect on login',
-                'type'        => 'dropdown',
-                'default'     => ''
-            ],
-            'redirectOnRegister' => [
-                'title'       => 'Redirect on register',
-                'type'        => 'dropdown',
-                'default'     => ''
-            ],
-        	'productPage' => [
+	public function defineProperties()
+	{
+		return [
+			'redirectOnLogin' => [
+				'title'       => 'Redirect on login',
+				'type'        => 'dropdown',
+				'default'     => ''
+			],
+			'redirectOnRegister' => [
+				'title'       => 'Redirect on register',
+				'type'        => 'dropdown',
+				'default'     => ''
+			],
+			'productPage' => [
 				'title'       => 'Product page',
 				'description' => 'Product detail page',
 				'type'        => 'dropdown',
 				'default'     => 'product',
-            ]
-        ];
-    }
+			]
+		];
+	}
 
-    public function onRun(){
-        if ($code = $this->activationCode()){
+	public function onRun()
+	{
+		/* if ($code = $this->activationCode()){
             $this->onActivate($code);
-        }
+        } */
 
-        $this->prepareVars();
-        $this->prepareLang();
+		$this->prepareVars();
+		$this->prepareLang();
 
-        $this->addCss('/plugins/pixel/shop/assets/css/user.css');
-        $this->addCss('/plugins/pixel/shop/assets/css/products.css');
-        $this->addJs('/plugins/pixel/shop/assets/js/jquery.mask.min.js');
-        $this->addJs('/plugins/pixel/shop/assets/js/user.js');
+		$this->addCss('/plugins/pixel/shop/assets/css/user.css');
+		$this->addCss('/plugins/pixel/shop/assets/css/products.css');
+		$this->addJs('/plugins/pixel/shop/assets/js/jquery.mask.min.js');
+		$this->addJs('/plugins/pixel/shop/assets/js/user.js');
 
-        // Extend Tabs and content
-        $this->addComponentTab('orders', [
-            'title' => 'pixel.shop::component.user.orders',
-            'order' => 20,
-            'content' => $this->renderPartial('@orders')
-        ]);
-            
-        $this->addComponentTab('favorites', [
-            'title' => 'pixel.shop::component.user.favorites',
-            'order' => 30,
-            'content' => $this->renderPartial('@favorites')
-        ]);
+		// Extend Tabs and content
+		$this->addComponentTab('orders', [
+			'title' => 'pixel.shop::component.user.orders',
+			'order' => 20,
+			'content' => $this->renderPartial('@orders')
+		]);
 
-        $this->addComponentTab('account', [
-            'title' => 'pixel.shop::component.user.account',
-            'order' => 10,
-            'content' => $this->renderPartial('@account')
-        ]);
+		$this->addComponentTab('favorites', [
+			'title' => 'pixel.shop::component.user.favorites',
+			'order' => 30,
+			'content' => $this->renderPartial('@favorites')
+		]);
 
-        Event::fire('pixel.shop.profile.extendtabs', [$this]);
-    }
+		$this->addComponentTab('account', [
+			'title' => 'pixel.shop::component.user.account',
+			'order' => 10,
+			'content' => $this->renderPartial('@account')
+		]);
 
-    protected function prepareLang(){
-        $lang = \Config::get('app.locale', 'en');
+		if (Auth::user()) {
+			$responseCards =  $this->getCardsByUser();
+			if ($responseCards == null) {
+				return;
+			}
+			//dd($responseCards);
+			$this->page['cards']  = $responseCards['success'] ? $responseCards['data'] : [];
+			$this->addComponentTab('cards', [
+				'title' => 'pixel.shop::component.user.cards',
+				'order' => 40,
+				'content' => $this->renderPartial($this->alias . '::cards')
+			]);
+		}
 
-        if(\System\Models\PluginVersion::where('code', 'RainLab.Translate')->where('is_disabled', 0)->first()){
-            $translator = \RainLab\Translate\Classes\Translator::instance();
-            $activeLocale = $translator->getLocale();
-            $lang = $activeLocale;
-        }
+		//Event::fire('pixel.shop.profile.extendtabs', [$this]);
+	}
 
-        if(!empty(post('lang'))){
-            $lang = post('lang');
-        }
+	protected function getCardInfo($token)
+	{
+		$pixelDomain = $this->getPixelDomain();
+		$url = $pixelDomain . '/api/v2/card/' . $token;
+		return $this->doPixelPayRequest($url);
+	}
 
-        \App::setLocale($lang);
-    }
+	public function onLoadCard()
+	{
+		$this->prepareLang();
+		$token = post('token');
+		$cards = $this->getCardInfo($token);
+		$countries = Country::isEnabled()->orderBy('is_pinned', 'desc')->get();
+		$states = [];
 
-    public function addComponentTab($id, $tab){
-        $tab['id'] = $id;
-        $this->tabs[] = $tab;
+		if ($cards) {
 
-        usort($this->tabs, function($a, $b){
-            if(array_key_exists('order', $a) && array_key_exists('order', $b)){
-                if($a['order'] == $b['order']){
-                    return 0;
-                }
+			$exp = $cards['data']['exp_month'] . substr($cards['data']['exp_year'], -2);
+			$states = Country::where('code', $cards['data']['billing_country'])->first();
+			$states = $states->states;
+		}
 
-                return ($a['order'] < $b['order']) ? -1 : 1;
-            }else{
-                return 0;
-            }
-        });
-    }
+		return ['#cards-content' => $this->renderPartial($this->alias . '::card', [
+			'card' => $cards ? $cards['data'] : [],
+			'token' => $token,
+			'countries' => $countries,
+			'billing_states' => $states,
+			'exp' => $exp
+		])];
+	}
 
-    public function prepareVars(){
-    	$this->page['user'] = $user = $this->user();
-    	$this->page['canRegister'] = $this->canRegister();
-    	$this->page['countries'] = Country::isEnabled()->orderBy('is_pinned', 'desc')->get();
-        $this->page['favorites'] = $this->loadFavorites($user);
-        
-        $this->tabs = array();
+	public function onLoadCards()
+	{
+		$this->prepareLang();
+		$responseCards =  $this->getCardsByUser();
+		return ['#cards-content' => $this->renderPartial($this->alias . '::cards', ['cards' => $responseCards['success'] ? $responseCards['data'] : []])];
+	}
 
-        if($user){
-            if($user->billing_address && is_array($user->billing_address) && array_key_exists('country', $user->billing_address)){
-                if($thisCountry = Country::isEnabled()->where('code', $user->billing_address['country'])->first()){
-                    $this->page['billing_states'] = $thisCountry->states;
-                }
-            }
-    
-            if($user->shipping_address && is_array($user->shipping_address) && array_key_exists('country', $user->shipping_address)){
-                if($thisCountry = Country::isEnabled()->where('code', $user->shipping_address['country'])->first()){
-                    $this->page['shipping_states'] = $thisCountry->states;
-                }
-            }
-        }
-    }
+	public function onLoadCardUpdate()
+	{
+		$this->prepareLang();
+		$cc_number = str_replace(' ', '', post("cc_number"));
+		$cc_em = substr(post("cc_exp"), 0, 2);
+		$cc_ey = substr(post("cc_exp"), -2);
 
-    public function user(){
-        if (!Auth::check()){
-            return null;
-        }
+		if (!empty(input('cc_cvv'))) {
+			$cardParams["cvc"] = input('cc_cvv');
+		}
+		if (!empty($cc_number)) {
+			$cardParams["pan"] = $cc_number;
+		}
 
-        return Auth::getUser();
-    }
+		$cardParams = array(
+			"card_token" => input('cc_token'),
+			"exp_month" => $cc_em,
+			"exp_year" => "20" . $cc_ey,
+			"card_holder" => input('cc_name'),
+			"address" => input('billing_address.first_line'),
+			"country" => input('shipping_address.country'),
+			"city" => input('billing_address.city'),
+			"state" => input('shipping_address.state') == null ? input('_address.state') : input('shipping_address.state'),
+			"zip" => input('billing_address.zip'),
+			"email" => input('cc_email'),
+			"customer_token" => Auth::user()->pixel_token,
+			"phone" => input('cc_phone')
+		);
+		//dd($cardParams);
+		$response =  $this->updatePixelCard($cardParams);
+		//dd($response);
+		if ($response['success']) {
+			Flash::success(trans('pixel.shop::component.cart.updated_card'));
+		} else {
+			Flash::error($response['message']);
+		}
+	}
 
-    public function canRegister(){
-        return UserSettings::get('allow_registration', true);
-    }
+	public function onLoadCardDelete()
+	{
+		$this->prepareLang();
+		$token = post('token');
+		$response = $this->deletePixelCard($token);
+		$responseCards =  $this->getCardsByUser();
 
-    public function activationCode(){
-        $routeParameter = $this->property('paramCode');
+		return ['#cards-content' => $this->renderPartial($this->alias . '::cards', ['cards' => $responseCards['success'] ? $responseCards['data'] : []])];
+	}
 
-        if ($code = $this->param($routeParameter)){
-            return $code;
-        }
+	protected function prepareLang()
+	{
+		$lang = \Config::get('app.locale', 'en');
 
-        return get('activate');
-    }
+		if (\System\Models\PluginVersion::where('code', 'RainLab.Translate')->where('is_disabled', 0)->first()) {
+			$translator = \RainLab\Translate\Classes\Translator::instance();
+			$activeLocale = $translator->getLocale();
+			$lang = $activeLocale;
+		}
 
-    public function onActivate($code = null){
-        $this->prepareLang();
+		if (!empty(post('lang'))) {
+			$lang = post('lang');
+		}
 
-        try {
-            $code = post('code', $code);
-            $errorFields = ['code' => trans('rainlab.user::lang.account.invalid_activation_code')];
+		\App::setLocale($lang);
+	}
 
-            $parts = explode('!', $code);
-            if (count($parts) != 2){
-                throw new ValidationException($errorFields);
-            }
+	public function addComponentTab($id, $tab)
+	{
+		$tab['id'] = $id;
+		$this->tabs[] = $tab;
 
-            list($userId, $code) = $parts;
+		usort($this->tabs, function ($a, $b) {
+			if (array_key_exists('order', $a) && array_key_exists('order', $b)) {
+				if ($a['order'] == $b['order']) {
+					return 0;
+				}
 
-            if (!strlen(trim($userId)) || !strlen(trim($code))){
-                throw new ValidationException($errorFields);
-            }
+				return ($a['order'] < $b['order']) ? -1 : 1;
+			} else {
+				return 0;
+			}
+		});
+	}
 
-            if (!$user = Auth::findUserById($userId)){
-                throw new ValidationException($errorFields);
-            }
+	public function prepareVars()
+	{
+		$this->page['user'] = $user = $this->user();
+		$this->page['canRegister'] = $this->canRegister();
+		$this->page['countries'] = Country::isEnabled()->orderBy('is_pinned', 'desc')->get();
+		$this->page['favorites'] = $this->loadFavorites($user);
 
-            if (!$user->attemptActivation($code)){
-                throw new ValidationException($errorFields);
-            }
+		$this->tabs = array();
 
-            Flash::success(trans('rainlab.user::lang.account.success_activation'));
+		if ($user) {
+			if ($user->billing_address && is_array($user->billing_address) && array_key_exists('country', $user->billing_address)) {
+				if ($thisCountry = Country::isEnabled()->where('code', $user->billing_address['country'])->first()) {
+					$this->page['billing_states'] = $thisCountry->states;
+				}
+			}
 
-            Auth::login($user);
-        }
-        catch (Exception $ex) {
-            if (Request::ajax()) {
-                throw $ex;
-            }
-            else {
-                Flash::error($ex->getMessage());
-            }
-        }
-    }
+			if ($user->shipping_address && is_array($user->shipping_address) && array_key_exists('country', $user->shipping_address)) {
+				if ($thisCountry = Country::isEnabled()->where('code', $user->shipping_address['country'])->first()) {
+					$this->page['shipping_states'] = $thisCountry->states;
+				}
+			}
+		}
+	}
 
-    public function onShippingCountrySelect(){
-        $this->prepareLang();
-		if($country = Country::where('code', input('shipping_address.country'))->first()){
+	public function user()
+	{
+		if (!Auth::check()) {
+			return null;
+		}
+
+		return Auth::getUser();
+	}
+
+	public function canRegister()
+	{
+		return UserSettings::get('allow_registration', true);
+	}
+
+	public function activationCode()
+	{
+		$routeParameter = $this->property('paramCode');
+
+		if ($code = $this->param($routeParameter)) {
+			return $code;
+		}
+
+		return get('activate');
+	}
+
+	public function onActivate($code = null)
+	{
+		$this->prepareLang();
+
+		try {
+			$code = post('code', $code);
+			$errorFields = ['code' => trans('rainlab.user::lang.account.invalid_activation_code')];
+
+			$parts = explode('!', $code);
+			if (count($parts) != 2) {
+				throw new ValidationException($errorFields);
+			}
+
+			list($userId, $code) = $parts;
+
+			if (!strlen(trim($userId)) || !strlen(trim($code))) {
+				throw new ValidationException($errorFields);
+			}
+
+			if (!$user = Auth::findUserById($userId)) {
+				throw new ValidationException($errorFields);
+			}
+
+			if (!$user->attemptActivation($code)) {
+				throw new ValidationException($errorFields);
+			}
+
+			Flash::success(trans('rainlab.user::lang.account.success_activation'));
+
+			Auth::login($user);
+		} catch (Exception $ex) {
+			if (Request::ajax()) {
+				throw $ex;
+			} else {
+				Flash::error($ex->getMessage());
+			}
+		}
+	}
+
+	public function onShippingCountrySelect()
+	{
+		$this->prepareLang();
+		if ($country = Country::where('code', input('shipping_address.country'))->first()) {
 			$return = ['.shippingStateWrapper' => $this->renderPartial('@states', [
 				'states' => $country->states
 			]), 'code' => $country->code];
@@ -217,128 +331,130 @@ class UserProfile extends ComponentBase{
 		}
 	}
 
-	public function onBillingCountrySelect(){
-        $this->prepareLang();
+	public function onBillingCountrySelect()
+	{
+		$this->prepareLang();
 
-		if($country = Country::where('code', input('billing_address.country'))->first()){
+		if ($country = Country::where('code', input('billing_address.country'))->first()) {
 			$return = ['.billingStateWrapper' => $this->renderPartial('@states', [
 				'states' => $country->states
 			]), 'code' => $country->code];
 
 			return $return;
-		}    	
+		}
 	}
 
-	public function onSignin(){
-        try {
-            $this->prepareLang();
+	public function onSignin()
+	{
+		try {
+			$this->prepareLang();
 
-            $data = post();
-            $rules = [
-            	'username' => 'required|email|between:6,255',
-            	'password' => 'required|between:4,255'
-            ];
+			$data = post();
+			$rules = [
+				'username' => 'required|email|between:6,255',
+				'password' => 'required|between:4,255'
+			];
 
-            $validation = Validator::make($data, $rules);
+			$validation = Validator::make($data, $rules);
 
-            if ($validation->fails()){
-                throw new ValidationException($validation);
-            }
+			if ($validation->fails()) {
+				throw new ValidationException($validation);
+			}
 
-            $credentials = [
-                'login'    => array_get($data, 'username'),
-                'password' => array_get($data, 'password')
-            ];
+			$credentials = [
+				'login'    => array_get($data, 'username'),
+				'password' => array_get($data, 'password')
+			];
 
-            Event::fire('rainlab.user.beforeAuthenticate', [$this, $credentials]);
-            $user = Auth::authenticate($credentials, true);
+			Event::fire('rainlab.user.beforeAuthenticate', [$this, $credentials]);
+			$user = Auth::authenticate($credentials, true);
 
-            if ($user->isBanned()) {
-                Auth::logout();
-                throw new Exception(trans('rainlab.user::lang.account.banned'));
-            }
+			if ($user->isBanned()) {
+				Auth::logout();
+				throw new Exception(trans('rainlab.user::lang.account.banned'));
+			}
 
-            if ($redirect = $this->makeRedirection('Login')){
-                return $redirect;
-            }
-        }catch (Exception $ex) {
-            if (Request::ajax()) {
-                throw $ex;
-            }
-            else {
-                Flash::error($ex->getMessage());
-            }
-        }
-    }
-
-    public function onRegister(){
-    	try {
-            $this->prepareLang();
-
-            if (!$this->canRegister()){
-                throw new Exception(trans('rainlab.user::lang.account.registration_disabled'));
-            }
-
-            $data = post();
-
-            if (!array_key_exists('password_confirmation', $data)){
-                $data['password_confirmation'] = post('password');
-            }
-
-            if (!array_key_exists('username', $data)){
-                $data['username'] = post('email');
-            }
-
-            $rules = [
-            	'name' => 'required|min:3|max:191',
-                'email'    => 'required|email|between:6,255',
-                'password' => 'required|between:4,255|confirmed'
-            ];
-
-            $validation = Validator::make($data, $rules);
-
-            if ($validation->fails()){
-                throw new ValidationException($validation);
-            }
-
-            Event::fire('rainlab.user.beforeRegister', [&$data]);
-
-            $requireActivation = UserSettings::get('require_activation', true);
-            $automaticActivation = UserSettings::get('activate_mode') == UserSettings::ACTIVATE_AUTO;
-            $userActivation = UserSettings::get('activate_mode') == UserSettings::ACTIVATE_USER;
-            $user = Auth::register($data, $automaticActivation);
-
-            Event::fire('rainlab.user.register', [$user, $data]);
-
-            if ($userActivation) {
-                $this->sendActivationEmail($user);
-                Flash::success(trans('rainlab.user::lang.account.activation_email_sent'));
-            }
-
-            if ($automaticActivation || !$requireActivation){
-                Auth::login($user);
-            }
-
-            if ($redirect = $this->makeRedirection('Register')){
-                return $redirect;
-            }
-        }catch (Exception $ex) {
-            if (Request::ajax()) {
-                throw $ex;
-            }
-            else {
-                Flash::error($ex->getMessage());
-            }
-        }
+			if ($redirect = $this->makeRedirection('Login')) {
+				return $redirect;
+			}
+		} catch (Exception $ex) {
+			if (Request::ajax()) {
+				throw $ex;
+			} else {
+				Flash::error($ex->getMessage());
+			}
+		}
 	}
-	
-	public function onRecovery() {
+
+	public function onRegister()
+	{
+		try {
+			$this->prepareLang();
+
+			if (!$this->canRegister()) {
+				throw new Exception(trans('rainlab.user::lang.account.registration_disabled'));
+			}
+
+			$data = post();
+
+			if (!array_key_exists('password_confirmation', $data)) {
+				$data['password_confirmation'] = post('password');
+			}
+
+			if (!array_key_exists('username', $data)) {
+				$data['username'] = post('email');
+			}
+
+			$rules = [
+				'name' => 'required|min:3|max:191',
+				'email'    => 'required|email|between:6,255',
+				'password' => 'required|between:4,255|confirmed'
+			];
+
+			$validation = Validator::make($data, $rules);
+
+			if ($validation->fails()) {
+				throw new ValidationException($validation);
+			}
+
+			Event::fire('rainlab.user.beforeRegister', [&$data]);
+
+			$requireActivation = UserSettings::get('require_activation', true);
+			$automaticActivation = UserSettings::get('activate_mode') == UserSettings::ACTIVATE_AUTO;
+			$userActivation = UserSettings::get('activate_mode') == UserSettings::ACTIVATE_USER;
+			$user = Auth::register($data, $automaticActivation);
+
+			Event::fire('rainlab.user.register', [$user, $data]);
+
+			if ($userActivation) {
+				$this->sendActivationEmail($user);
+				Flash::success(trans('rainlab.user::lang.account.activation_email_sent'));
+			}
+
+			if ($automaticActivation || !$requireActivation) {
+				Auth::login($user);
+			}
+
+			if ($redirect = $this->makeRedirection('Register')) {
+				return $redirect;
+			}
+		} catch (Exception $ex) {
+			if (Request::ajax()) {
+				throw $ex;
+			} else {
+				Flash::error($ex->getMessage());
+			}
+		}
+	}
+
+	public function onRecovery()
+	{
 		$this->prepareLang();
 		$email = post('email');
 
 		$user = User::where('email', $email)->first();
 
-		if(!$user) {
+		if (!$user) {
 			Flash::error('El usuario no existe');
 			return;
 		}
@@ -346,7 +462,7 @@ class UserProfile extends ComponentBase{
 		$password = str_random(10);
 
 		$user->password = $password;
-        $user->password_confirmation = $password; 
+		$user->password_confirmation = $password;
 		$user->save();
 
 		Mail::sendTo($email, 'pixel.shop::mail.recovery_password', [
@@ -358,106 +474,113 @@ class UserProfile extends ComponentBase{
 		return;
 	}
 
-	public function onLogOut(){
+	public function onLogOut()
+	{
 		Auth::logout();
-    }
-    
-    protected function makeRedirection($from = 'Login'){
-        $property = trim((string) $this->property('redirectOn' . $from));
-        
-        if ($property === ''){
-            return ['action' => 'refresh'];
-        }
+	}
 
-        $redirectUrl = $this->pageUrl($property) ?: $property;
+	protected function makeRedirection($from = 'Login')
+	{
+		$property = trim((string) $this->property('redirectOn' . $from));
 
-        if (!empty(post('redirect'))){
-            return ['action' => 'redirect', 'url' => post('redirect')];
-        }
+		if ($property === '') {
+			return ['action' => 'refresh'];
+		}
 
-        return ['action' => 'redirect', 'url' => $redirectUrl];
-    }
+		$redirectUrl = $this->pageUrl($property) ?: $property;
 
-	public function onUpdate(){
-        $this->prepareLang();
+		if (!empty(post('redirect'))) {
+			return ['action' => 'redirect', 'url' => post('redirect')];
+		}
 
-        if (!$user = $this->user()){
-            return;
-        }
+		return ['action' => 'redirect', 'url' => $redirectUrl];
+	}
 
-        if (Input::hasFile('avatar')){
-            $user->avatar = Input::file('avatar');
-        }
+	public function onUpdate()
+	{
+		$this->prepareLang();
 
-        $user->fill(post());
-        $user->is_ship_same_bill = $user->is_ship_same_bill ?? false;
-        $user->save();
+		if (!$user = $this->user()) {
+			return;
+		}
 
-        if (strlen(post('password'))){
-            Auth::login($user->reload(), true);
-        }
+		if (Input::hasFile('avatar')) {
+			$user->avatar = Input::file('avatar');
+		}
 
-        Flash::success(post('flash', trans('rainlab.user::lang.account.success_saved')));
+		$user->fill(post());
+		$user->is_ship_same_bill = $user->is_ship_same_bill ?? false;
+		$user->save();
 
-        $this->prepareVars();
-    }
+		if (strlen(post('password'))) {
+			Auth::login($user->reload(), true);
+		}
 
-    public function onDeactivate(){
-        $this->prepareLang();
-        
-        if (!$user = $this->user()){
-            return;
-        }
+		Flash::success(post('flash', trans('rainlab.user::lang.account.success_saved')));
 
-        if (!$user->checkHashValue('password', post('password'))){
-            throw new ValidationException(['password' => trans('rainlab.user::lang.account.invalid_deactivation_pass')]);
-        }
+		$this->prepareVars();
+	}
 
-        Auth::logout();
-        $user->delete();
+	public function onDeactivate()
+	{
+		$this->prepareLang();
 
-        Flash::success(post('flash', trans('rainlab.user::lang.account.success_deactivation')));
-    }
+		if (!$user = $this->user()) {
+			return;
+		}
 
-	protected function loadFavorites($user){
+		if (!$user->checkHashValue('password', post('password'))) {
+			throw new ValidationException(['password' => trans('rainlab.user::lang.account.invalid_deactivation_pass')]);
+		}
+
+		Auth::logout();
+		$user->delete();
+
+		Flash::success(post('flash', trans('rainlab.user::lang.account.success_deactivation')));
+	}
+
+	protected function loadFavorites($user)
+	{
 		$page = $this->property('productPage');
 		$favorites = null;
 
-		if($user){
+		if ($user) {
 			$favorites = $user->favorites;
 
-			$favorites->each(function($favorite) use ($page) {
-                $favorite->item->setUrl($page, $this->controller);
-			/**
-			 * Quantity Event
-			 */
-			$newQuantity = Event::fire('pixel.shop.getQuantityProperty', [$this, $favorite]);
-			$favorite->quantity = !empty($newQuantity) > 0 ? $newQuantity[0]['quantity'] : $favorite->quantity;
+			$favorites->each(function ($favorite) use ($page) {
+				$favorite->item->setUrl($page, $this->controller);
+				/**
+				 * Quantity Event
+				 */
+				$newQuantity = Event::fire('pixel.shop.getQuantityProperty', [$this, $favorite]);
+				$favorite->quantity = !empty($newQuantity) > 0 ? $newQuantity[0]['quantity'] : $favorite->quantity;
 			});
 		}
 
 		return $favorites;
 	}
 
-	public function getProductPageOptions(){
+	public function getProductPageOptions()
+	{
 		return Page::sortBy('baseFileName')->lists('baseFileName', 'baseFileName');
 	}
 
-	public function onSetFavorite(){
-        $this->prepareLang();
+	public function onSetFavorite()
+	{
+		$this->prepareLang();
 
 		$item_id = post('id');
-		
-		if (class_exists("\RainLab\User\Models\User")){
+
+		if (class_exists("\RainLab\User\Models\User")) {
 			$user = \RainLab\User\Facades\Auth::getUser();
-		}else{
+		} else {
 			Flash::error('The plugin RainLab.User not found, please install first');
 			return;
 		}
 
-		if($user){
-			if($item_id){
-				if($fav = Favorite::where('user_id', $user->id)->where('item_id', $item_id)->first()){
+		if ($user) {
+			if ($item_id) {
+				if ($fav = Favorite::where('user_id', $user->id)->where('item_id', $item_id)->first()) {
 					$fav->is_favorite = !$fav->is_favorite;
 					$fav->save();
 				}
@@ -466,36 +589,38 @@ class UserProfile extends ComponentBase{
 					'favorites' => $this->loadFavorites($user)
 				])];
 			}
-		}else{
+		} else {
 			Flash::error(trans('pixel.shop::lang.components.pl_please_login'));
 			return;
 		}
 	}
 
-	public function onLoadOrder(){
-        $this->prepareLang();
+	public function onLoadOrder()
+	{
+		$this->prepareLang();
 
 		$item_id = post('id');
 
-		if(!$order = Order::find($item_id)){
-            return;
-        }
+		if (!$order = Order::find($item_id)) {
+			return;
+		}
 
-		return ['#orders-content' => $this->renderPartial('@order', [ 'order' => $order ])];
+		return ['#orders-content' => $this->renderPartial('@order', ['order' => $order])];
 	}
 
-	public function onLoadOrders(){
-        $this->prepareLang();
-		return ['#orders-content' => $this->renderPartial('@orders', [ 'user' => $this->user() ])];
-    }
-    
-    public function getRedirectOnLoginOptions()
-    {
-        return [''=>'- refresh page -'] + Page::sortBy('baseFileName')->lists('baseFileName', 'baseFileName');
-    }
+	public function onLoadOrders()
+	{
+		$this->prepareLang();
+		return ['#orders-content' => $this->renderPartial('@orders', ['user' => $this->user()])];
+	}
 
-    public function getRedirectOnRegisterOptions()
-    {
-        return [''=>'- refresh page -'] + Page::sortBy('baseFileName')->lists('baseFileName', 'baseFileName');
-    }
+	public function getRedirectOnLoginOptions()
+	{
+		return ['' => '- refresh page -'] + Page::sortBy('baseFileName')->lists('baseFileName', 'baseFileName');
+	}
+
+	public function getRedirectOnRegisterOptions()
+	{
+		return ['' => '- refresh page -'] + Page::sortBy('baseFileName')->lists('baseFileName', 'baseFileName');
+	}
 }

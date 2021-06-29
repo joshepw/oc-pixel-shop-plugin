@@ -1,35 +1,37 @@
 <div class="text-danger mt-5" data-validate-for="gateway"></div>
 <ul class="list-group">
-  {% for method in methods_list %} {% if method.gateway == 'pixelpay' %} 
-  {% for
-  card in cards[0].data %}
-  <li
-    id="item-class"
-    class="list-group-item {% if not card.status == 'active' %}disabled{% endif %}"
-  >
-    <div class="list-radio">
-      <input type="radio" value="{{ card.token }}" name="gateway" {% if not
-      card.status == 'active' %} disabled="disabled" {% endif %} id="card-{{
-      card.token }}" >
-      <label for="card-{{ card.token }}">
-        <div class="info">
-          <strong>**** **** **** {{card.card_last}}</strong>
-          <p>Expire {{ card.exp_month }} / {{card.exp_year}}</p>
-        </div>
-        <div class="card" style="border: none">
-          <img
-            src="{{ '/plugins/pixel/shop/assets/img/icon-'|app }}{{ card.card_network }}.svg"
-            alt=""
-            width="64"
-            height="64"
-          />
-        </div>
-      </label>
-    </div>
-  </li>
-  {% endfor %} {%endif%}
-
-  <li class="list-group-item" id="item-class">
+  {% for method in methods_list %} 
+    {% if method.gateway == 'pixelpay' %} 
+        {% for
+        card in cards %}
+        <li
+            id="item-class"
+            class="list-group-item {% if not card.status == 'active' %}disabled{% endif %}"
+            onclick="hiddenDataHolder()"
+        >
+            <div class="list-radio">
+            <input type="radio" value="{{ card.token }}" name="gateway" {% if not
+            card.status == 'active' %} disabled="disabled" {% endif %} id="card-{{
+            card.token }}" >
+            <label for="card-{{ card.token }}">
+                <div class="info">
+                <strong>**** **** **** {{card.card_last}}</strong>
+                <p>Expire {{ card.exp_month }} / {{card.exp_year}}</p>
+                </div>
+                <div class="card" style="border: none">
+                <img
+                    src="{{ '/plugins/pixel/shop/assets/img/icon-'|app }}{{ card.card_network }}.svg"
+                    alt=""
+                    width="64"
+                    height="64"
+                />
+                </div>
+            </label>
+            </div>
+        </li>
+        {% endfor %} 
+    {% endif %}
+  <li class="list-group-item" id="item-class" onclick="showDataHolder()">
     <div class="list-radio">
       <input type="radio" value="{{ method.gateway }}" name="gateway"
       data-msg-required="{{ 'pixel.shop::validation.gateway.required'|trans }}"
@@ -37,12 +39,12 @@
       checked="checked" {% endif %} id="method-{{ method.gateway }}" required>
       <label for="method-{{ method.gateway }}">
         {% if method.gateway == 'pixelpay' %} {% if not user.is_activated %} {{
-        'tecnocomp.tokenization::component.cart.pay_with_card'|trans }} {%else%}
-        {{ 'tecnocomp.tokenization::component.cart.add_new_card'|trans }} {%
+        'pixel.shop::component.cart.pay_with_card'|trans }} {%else%}
+        {{ 'pixel.shop::component.cart.add_new_card'|trans }} {%
         endif %} {%else%} {{ method.title }} {%endif%}
       </label>
     </div>
-    <div class="list-partial">
+    <div class="list-partial" id="pixel_card_holder">
       {% if method.gateway == 'pixelpay' %}
       <form
         data-request="onContinueToFinish"
@@ -165,13 +167,13 @@
                   name="set_default"
                   id="set_default"
                   style="margin-left: -15px;
-              margin-top: 0px;"
+                    margin-top: 0px;"
                   checked="checked"
                   value="on"
                 />
                 <label for="set_default" style="padding: 20px 10px">
                   <b>
-                    {{ 'tecnocomp.tokenization::component.cart.save_card'|trans
+                    {{ 'pixel.shop::component.cart.save_card'|trans
                     }}</b
                   >
                 </label>
@@ -192,7 +194,7 @@
                     />
                 </div>
               </div>
-              {% endif %}
+             {% endif %}
             </div>
           </li>
         </ul>

@@ -1,10 +1,8 @@
 {
+    "name": "pixel/shop-plugin",
+    "type": "october-plugin",
+    "description": "None",
     "require": {
-        "stripe/stripe-php": "3.*",
-        "ignited/laravel-omnipay": "^2.3",
-        "omnipay/paypal": "^2.6",
-        "omnipay/stripe": "^2.4",
-        "omnipay/common": "^2.5"
-    },
-    "minimum-stability": "stable"
+        "composer/installers": "~1.0"
+    }
 }

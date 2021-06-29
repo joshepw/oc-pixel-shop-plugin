@@ -1,0 +1,145 @@
+<div class="row">
+	 
+
+	<div class="col-2"></div>
+	<div class="col-md-8 col-md-offset-2 ">
+		<div class="shop__order-summary step-content">
+			<form data-request="{{ __SELF__ }}::onLoadCardUpdate" data-request-flash data-request-validate>
+				<br>
+				<div class="text-danger" data-validate-for="card_id"></div>
+				<ul class="list-group list-of-cards">     
+					<li class="list-group-item step-content" id="item-class" style="border:none !important">
+						 <div class="list-content ">
+							<div class="row">
+								<div class="col-12">
+									<legend class="shop__billing-elements">{{ 'pixel.shop::component.cart.card_info'|trans }}</legend>
+	
+								</div>
+								<div class="col-md-6 ">
+									<div class="form-group kobolg-input-wrapper">
+										<label>{{ 'pixel.shop::component.cart.name_card'|trans }}</label>
+										<input name="cc_name" type="text" value="{{card.card_holder}}" class="form-control" placeholder="Full name as displayed on card">
+										<input name="cc_email" hidden type="text" value="{{card.billing_email}}">
+										<input name="cc_phone" hidden type="text" value="{{card.billing_phone}}">
+										<div class="invalid-feedback" data-validate-for="cc_name"></div>
+									</div>
+								</div>
+								<div class="col-md-6">
+									<div class="form-group kobolg-input-wrapper" id="cc_number">
+										<label>{{ 'pixel.shop::component.cart.card_number'|trans }}</label>
+										<input  name="cc_number" type="text" class="form-control" placeholder="**** **** **** {{card.card_last}}">
+										<div class="invalid-feedback" data-validate-for="cc_number"></div>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-3">
+									<div class="form-group kobolg-input-wrapper">
+										<label>{{ 'pixel.shop::component.cart.expiration'|trans }}</label>
+										<input name="cc_exp" type="text" value="{{exp}}" class="form-control" placeholder="** / **">
+										<div class="invalid-feedback" data-validate-for="cc_exp"></div>
+									</div>
+								</div>
+								<div class="col-md-3">
+									<div class="form-group kobolg-input-wrapper">
+										<label>CVV</label>
+										<input name="cc_cvv" type="text" class="form-control" placeholder="***">
+										<div class="invalid-feedback" data-validate-for="cc_cvv"></div>
+									</div>
+								</div>
+								<div class="col-md-6">
+									<div class="form-group kobolg-input-wrapper">
+										<input type="hidden" name="cc_default" value="{{ settings.cc_default }}">
+										<input type="hidden" name="cc_token" value="{{ token }}">
+	
+										<label>{{ 'pixel.shop::component.cart.card_accept'|trans }}</label>
+										<br>
+										<img src="{{ '/plugins/pixel/shop/assets/img/icon-visa.svg'|app }}" alt="" width="32" height="32">
+										<img src="{{ '/plugins/pixel/shop/assets/img/icon-mastercard.svg'|app }}" alt="" width="32" height="32">
+										<!-- <img src="{{ '/plugins/pixel/shop/assets/img/icon-amex.svg'|app }}" alt="" width="32" height="32">
+										<img src="{{ '/plugins/pixel/shop/assets/img/icon-discover.svg'|app }}" alt="" width="32" height="32"> -->
+									</div>
+								</div>
+								<div class="col-sm-12" style="margin-top: 25px;">
+									<legend class="shop__billing-elements">{{ 'pixel.shop::component.cart.billing_address'|trans }}</legend>
+								<div class="row small-gutter shop__billing-elements">
+									<div class="col-md-6">
+										<div class="form-group kobolg-input-wrapper">
+											<label>{{ 'pixel.shop::lang.fields.address'|trans }}</label>
+											<input type="text" class="form-control" placeholder="{{ 'pixel.shop::lang.fields.billing_address_ex1'|trans }}" value="{{ card.billing_address }}" name="billing_address[first_line]" minlength="3" maxlength="190">
+											<div class="invalid-feedback" data-validate-for="billing_address.first_line"></div>
+										</div>
+									</div>
+									<div class="col-md-6">
+										<div class="form-group kobolg-input-wrapper">
+											<label>{{ 'pixel.shop::lang.fields.address_alt'|trans }} <span class="text-muted">({{ 'pixel.shop::component.cart.optional'|trans }})</span></label>
+											<input type="text" class="form-control" placeholder="{{ 'pixel.shop::lang.fields.billing_address_ex2'|trans }}" value="{{ user.billing_address.second_line ?: cart.billing_address.second_line }}" name="billing_address[second_line]" minlength="3" maxlength="190">
+										</div>
+									</div>
+								</div>
+								<div class="row small-gutter shop__billing-elements">
+									<div class="col-billing col-md-3">
+										<div class="form-group kobolg-input-wrapper">
+											<label>{{ 'pixel.shop::lang.fields.country'|trans }}</label>
+											<select 
+												class="form-control kobolg-input-wrapper" 
+												name="shipping_address[country]" 
+												data-request="onShippingCountrySelect" 
+												data-request-success="Profile.setShippingCountryOnSelect(data)">
+												<option value="">{{ 'pixel.shop::component.cart.choose'|trans }}</option>
+												{% for country in countries %}
+												<option 
+													value="{{ country.code }}" 
+													{% if card.billing_country == country.code %}
+													selected="{{card.billing_country}}"
+													{% endif %}>
+													{{ country.name }} ({{ country.code }})
+												</option>
+												{% endfor %}
+											</select>
+											<div class="invalid-feedback" data-validate-for="billing_address.country"></div>
+										</div>
+									</div>
+									<div class="col-md-4">
+										<div class="form-group kobolg-input-wrapper">
+											<label>{{ 'pixel.shop::lang.fields.state'|trans }}</label>
+											<div class="shippingStateWrapper" style="    width: 100%;
+											height: 52px;
+											line-height: 50px;
+											background-color: #fff;
+											border-color: #fff;">										
+												{% partial '@states' fieldtype='shipping' states=shipping_states user_state=card.billing_state %}
+										</div>
+											<div class="invalid-feedback" data-validate-for="billing_address.state"></div>
+										</div>
+									</div>
+									<div class="col-billing col-md-3">
+										<div class="form-group kobolg-input-wrapper">
+											<label>{{ 'pixel.shop::lang.fields.city'|trans }}</label>
+											<input type="text" class="form-control" name="billing_address[city]" value="{{ card.billing_city }}" minlength="2" maxlength="90">
+											<div class="invalid-feedback" data-validate-for="billing_address.city"></div>
+										</div>
+									</div>
+									<div class="col-billing-zip col-md-2">
+										<div class="form-group kobolg-input-wrapper">
+											<label>{{ 'pixel.shop::lang.fields.zip'|trans }}</label>
+											<input type="text" class="form-control" name="billing_address[zip]" value="{{ card.billing_zip }}" minlength="5" maxlength="12">
+											<div class="invalid-feedback" data-validate-for="billing_address.zip"></div>
+										</div>
+									</div>
+									<input type="hidden" name="billing_zip_required">								
+								</div>
+								</div>
+								<div class="col-sm-12 text-right">
+									<button  type="submit"  class="btn btn-success"> {{ 'pixel.shop::component.cart.update'|trans }}</button>
+								</div>
+							</div>				
+						</div>				  
+					</li>
+				</ul>		
+			</form>
+		</div>
+		<a href="#" data-request="{{ __SELF__ }}::onLoadCards" class="btn btn-primary"><span class="fas fa-arrow-left"></span> {{ 'pixel.shop::component.cart.return'|trans }}</a>
+		<a href="#" data-request="{{ __SELF__ }}::onLoadCardDelete" data-request-data="token: '{{token}}'" class="btn btn-danger"></span> {{ 'pixel.shop::component.cart.delete'|trans }}</a>
+	</div>
+	</div>

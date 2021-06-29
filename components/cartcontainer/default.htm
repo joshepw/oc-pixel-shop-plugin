@@ -1,10 +1,9 @@
-
 <div class="shop__cart-checkout">
 	<div class="row" id="checkout-container">
 		{% if order %}
 			{% partial '@order_summary' %}
 		{% else %}
-
+        
 		<div class="col-md-4" id="shop__cart-partial">
 			{% partial '@cart' %}
 		</div>
@@ -29,7 +28,7 @@
 
                         <div class="checkbox">
                             <label for="same-address">
-                                <input type="checkbox" name="is_ship_same_bill" id="same-address" {% if user.is_ship_same_bill %}checked="checked"{% endif %} data-request="onSameAddressChange" onchange="Cart.checkSameAddress($(this))">
+                                <input type="checkbox" name="is_ship_same_bill" id="same-address" data-request="onSameAddressChange" onchange="Cart.checkSameAddress($(this))">
                                 <b>{{ 'pixel.shop::component.cart.is_ship_same_bill'|trans }}</b>
                             </label>
                         </div>
@@ -45,7 +44,11 @@
                         <legend>{{ 'pixel.shop::component.cart.payment_method'|trans }}</legend>
 
                         <div class="shop__methods-list">
-                            {% partial '@methods' %}
+                            {% if tokenization %}
+                                {% partial '@methodsWithToken' %}
+                            {% else %}
+                                {% partial '@methods' %}
+                            {% endif %}
                         </div>
                     </div>
                 </div>
@@ -62,7 +65,7 @@
                             <i class="fas fa-credit-card"></i> {{ 'pixel.shop::component.cart.place_order'|trans }} 
                         </button>                       
                         {% else %}
-                        <button class="btn btn-success btn-finish" {% if secure == 0 %} {% endif %} onclick="createrOrder()"  type="button" data-attach-loading style="display: none">
+                        <button class="btn btn-success btn-finish" onclick="createrOrder()"  type="button" data-attach-loading style="display: none">
                             <i class="fas fa-credit-card"></i> {{ 'pixel.shop::component.cart.place_order'|trans }} 
                         </button>
                         
