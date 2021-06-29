@@ -33,3 +33,4 @@
 1.1.12: 'PixelPay AWS Endpoint stable'
 1.1.13: 'PixelPay AWS Endpoint to pixelpay.app'
 1.1.14: 'PixelPay Inline payments and tokenizations of cards'
+1.1.15: 'Fix PixelPay Inline payments and tokenizations of cards'
