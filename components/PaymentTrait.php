@@ -409,7 +409,18 @@ trait PaymentTrait
 			Flash::error($e->getMessage());
 		}
 	}
-
+	protected function updatePixelCard($cardParams)
+	{
+		$pixelDomain = $this->getPixelDomain();
+		$url = $pixelDomain . '/api/v2/card/' . $cardParams['card_token'];
+		return $this->doPixelPayRequest($url, $cardParams, 'PUT');
+	}
+	protected function deletePixelCard($token)
+	{
+		$pixelDomain = $this->getPixelDomain();
+		$url = $pixelDomain . '/api/v2/card/' . $token;
+		return $this->doPixelPayRequest($url, "delete");
+	}
 	protected function getPixelDomain()
 	{
 		return empty(GatewaysSettings::get('pixelpay_endpoint')) ?
@@ -425,11 +436,11 @@ trait PaymentTrait
 		$order_content = urlencode($base64);
 		$fields = [
 			'pixelpay_key' => GatewaysSettings::get('pixelpay_app'),
-			//'order_callback' => url('/api/pixel/shop/pixelpay-response'),
+			
 			'order_cancel' => $this->controller->currentPageUrl() . "?order_id=$order->id&cancel=true",
 			'order_complete' => $this->controller->currentPageUrl() . "?order_id=$order->id&thanks=true",
 			'order_id' => $order->id,
-			'order_currency' => null,
+			'order_currency' => $order->currency,
 			'order_tax_amount' => number_format(floatval($order->tax_total), 2, '.', ''),
 			'order_shipping_amount' => number_format(floatval($order->shipping_total), 2, '.', ''),
 			'order_amount' => number_format(floatval($order->total), 2, '.', ''),
@@ -446,11 +457,11 @@ trait PaymentTrait
 		];
 
 		$response = $this->doPostRequest($pixelDomain . $apiURL, $fields);
+		
 
 		if ($response->success) {
 			$data = $response->body;
 			$json = json_decode($data);
-
 			if (property_exists($json, 'success') && $json->success) {
 				return redirect($json->url);
 			} else {
@@ -499,7 +510,6 @@ trait PaymentTrait
 
 	protected  function makePaymentWithToken($order, $cardParams)
 	{
-		//dd('pago con token');
 		$pixelDomain = $this->getPixelDomain();
 
 		$url = $pixelDomain . '/api/v2/checkout/sale';
@@ -518,14 +528,12 @@ trait PaymentTrait
 				"billing_country" => $order->shipping_address['country'],
 				"billing_phone" => $order->customer_phone,
 			];
-		//dd($data);
 		return  $this->doPixelPayRequest($url, $data);
 	}
 
 	protected function makePaymentWithCard($order, $cardParams)
 	{
-		//$resp = $this->getCardsByUser();
-		//dd($resp);
+		
 		$pixelDomain = $this->getPixelDomain();
 		$url = $pixelDomain . '/api/v2/checkout/sale';
 		$data =
@@ -533,6 +541,7 @@ trait PaymentTrait
 				"customer_name" => $order->customer_first_name,
 				"customer_email" => $order->customer_email,
 				"order_id" => $order->id,
+				"currency" => $order->currency,
 				"order_amount" =>  round($order->total, 2),
 				"order_category" => 'october',
 				"order_currency" => $order->currency,

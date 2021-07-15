@@ -9,9 +9,13 @@
 					<label for="method-pixelpay">PixelPay</label>
 				</div>
 				<div class="payment-info">
-					<div class="info">
+					<div class="info">						
 						<img src="{{ '/plugins/pixel/shop/assets/img/icon-pixelpay-gateway.svg'|app }}" width="50" height="50">
+						
+					{% autoescape false %}
 						<p>{{ 'pixel.shop::component.cart.pixelpay_comment'|trans }}</p>
+					{% endautoescape %}
+
 					</div>
 					<hr>
 					<img src="{{ '/plugins/pixel/shop/assets/img/badge.png'|app }}" alt="Pagos Seguros con PixelPay" height="45" width="480" class="img-responsive">

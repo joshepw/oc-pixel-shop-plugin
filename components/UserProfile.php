@@ -121,6 +121,7 @@ class UserProfile extends ComponentBase
 	{
 		$this->prepareLang();
 		$token = post('token');
+		
 		$cards = $this->getCardInfo($token);
 		$countries = Country::isEnabled()->orderBy('is_pinned', 'desc')->get();
 		$states = [];
@@ -128,8 +129,9 @@ class UserProfile extends ComponentBase
 		if ($cards) {
 
 			$exp = $cards['data']['exp_month'] . substr($cards['data']['exp_year'], -2);
-			$states = Country::where('code', $cards['data']['billing_country'])->first();
-			$states = $states->states;
+			$country = Country::where('code', $cards['data']['billing_country'])->first();
+			$states = $country->states;
+			//dd($states);
 		}
 
 		return ['#cards-content' => $this->renderPartial($this->alias . '::card', [
@@ -155,30 +157,28 @@ class UserProfile extends ComponentBase
 		$cc_em = substr(post("cc_exp"), 0, 2);
 		$cc_ey = substr(post("cc_exp"), -2);
 
-		if (!empty(input('cc_cvv'))) {
-			$cardParams["cvc"] = input('cc_cvv');
+		if (!empty(request()->input('cc_cvv'))) {
+			$cardParams["cvc"] = request()->input('cc_cvv');
 		}
 		if (!empty($cc_number)) {
 			$cardParams["pan"] = $cc_number;
 		}
 
 		$cardParams = array(
-			"card_token" => input('cc_token'),
+			"card_token" => request()->input('cc_token'),
 			"exp_month" => $cc_em,
 			"exp_year" => "20" . $cc_ey,
-			"card_holder" => input('cc_name'),
-			"address" => input('billing_address.first_line'),
-			"country" => input('shipping_address.country'),
-			"city" => input('billing_address.city'),
-			"state" => input('shipping_address.state') == null ? input('_address.state') : input('shipping_address.state'),
-			"zip" => input('billing_address.zip'),
-			"email" => input('cc_email'),
+			"card_holder" => request()->input('cc_name'),
+			"address" => request()->input('billing_address.first_line'),
+			"country" => request()->input('shipping_address.country'),
+			"city" => request()->input('billing_address.city'),
+			"state" => request()->input('shipping_address.state') == null ? request()->input('_address.state') : request()->input('shipping_address.state'),
+			"zip" => request()->input('billing_address.zip'),
+			"email" => request()->input('cc_email'),
 			"customer_token" => Auth::user()->pixel_token,
-			"phone" => input('cc_phone')
+			"phone" => request()->input('cc_phone')
 		);
-		//dd($cardParams);
 		$response =  $this->updatePixelCard($cardParams);
-		//dd($response);
 		if ($response['success']) {
 			Flash::success(trans('pixel.shop::component.cart.updated_card'));
 		} else {
@@ -322,7 +322,7 @@ class UserProfile extends ComponentBase
 	public function onShippingCountrySelect()
 	{
 		$this->prepareLang();
-		if ($country = Country::where('code', input('shipping_address.country'))->first()) {
+		if ($country = Country::where('code', request()->input('shipping_address.country'))->first()) {
 			$return = ['.shippingStateWrapper' => $this->renderPartial('@states', [
 				'states' => $country->states
 			]), 'code' => $country->code];
@@ -335,7 +335,7 @@ class UserProfile extends ComponentBase
 	{
 		$this->prepareLang();
 
-		if ($country = Country::where('code', input('billing_address.country'))->first()) {
+		if ($country = Country::where('code', request()->input('billing_address.country'))->first()) {
 			$return = ['.billingStateWrapper' => $this->renderPartial('@states', [
 				'states' => $country->states
 			]), 'code' => $country->code];

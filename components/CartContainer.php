@@ -140,6 +140,7 @@ class CartContainer extends ComponentBase
 				if (input('cancel')) {
 					$order->status = 'cancelled';
 					$order->save();
+					Cart::clear();
 				}
 
 				if (input('paymentHash')) {
@@ -153,14 +154,17 @@ class CartContainer extends ComponentBase
 					$hash = md5($hash);
 
 					if ($hash == input('paymentHash')) {
-						$order->status = 'await_fulfill';
-						$order->is_paid = true;
-						$order->paid_at = Carbon::now();
-						$order->save();
-
-						// $order->reduceInventory();
-						$order->sendNotification();
-						Cart::clear();
+						if($order->status !== "await_fulfill"){
+							
+							$order->status = 'await_fulfill';
+							$order->is_paid = true;
+							$order->paid_at = Carbon::now();
+							$order->save();
+							$order->reduceInventory();
+							$order->sendNotification();
+							Cart::clear();
+						}
+						
 					} else {
 						$this->page['validationFailed'] = true;
 					}
@@ -180,7 +184,7 @@ class CartContainer extends ComponentBase
 		$this->page['countries'] = Country::isEnabled()->orderBy('is_pinned', 'desc')->get();
 		$this->page['settings'] = GatewaysSettings::instance();
         $this->page['tokenization'] = $this->isTokenizationActive();
-        $this->page['cards'] = $this->getCardsByUser()['success'] ?	$this->getCardsByUser()['data'] : [];
+        $this->page['cards'] = $this->getCardsByUser() ? $this->getCardsByUser()['success'] ?	$this->getCardsByUser()['data'] : [] : [];
 
 
 		$shippingCountry = null;
@@ -225,7 +229,6 @@ class CartContainer extends ComponentBase
 				'hash' =>  md5(GatewaysSettings::get('pixelpay_hash')),
 				'end_point' => $this->isTokenizationActive() ? $this->getEndPoint() : null,
 				'save_card' => GatewaysSettings::get('pixelpay_savecard'),
-				//'end_point' => $this->isTokenizationActive() ? \Tecnocomp\Tokenization\Components\PaymentTraitTecnocomp::getEndPoint() : null,
 			];
 		$this->page['config'] = json_encode($this->page['config']);
 
@@ -235,14 +238,16 @@ class CartContainer extends ComponentBase
 		$this->addJs('/plugins/pixel/shop/assets/js/jquery.steps.min.js');
 		$this->addJs('/plugins/pixel/shop/assets/js/cart.js');
 
-		$this->addJs('https://unpkg.com/@pixelpay/sdk');
+		
 		$this->addJs('https://unpkg.com/axios/dist/axios.min.js');
-		$this->addJs('/plugins/pixel/shop/assets/js/3ds.js');
+		if($this->isTokenizationActive()){
+			$this->addJs('https://unpkg.com/@pixelpay/sdk');
+			$this->addJs('/plugins/pixel/shop/assets/js/3ds.js');
+		}
 	}
 
 	public function isTokenizationActive()
 	{
-		//return count(Event::fire('pixel.shop.isTokenizationPlugin')) > 0;
 		return GatewaysSettings::get('pixelpay_savecard') > 0;
 	}
 	public function user()
@@ -255,11 +260,16 @@ class CartContainer extends ComponentBase
 	}
 
 	public function onShippingCountrySelect()
+
 	{
 		$this->prepareLang();
-		if ($country = Country::where('code', input('shipping_address.country'))->first()) {
+		if ($country = Country::where('code', request()->input('shipping_address.country'))->first()) {
+			$cards = $this->getCardsByUser();
+			if($cards){
+				$cards = $cards['success'] ?$cards['data'] : [];
+			}
 			$cart = Cart::load();
-			$cart->shipping_address['country'] = input('shipping_address.country');
+			$cart->shipping_address['country'] = request()->input('shipping_address.country');
 			$cart->updateTotals();
 			$cart->save();
 
@@ -268,17 +278,17 @@ class CartContainer extends ComponentBase
 				'.shippingStateContainer' => $this->renderPartial('@shipping_states', [
 					'shipping_states' => $country->states,
 					'user' => $this->user(),
-					'cards' => $this->getCardsByUser()['success'] ?	$this->getCardsByUser()['data'] : [],
+					'cards' => $cards,
 					'tokenization' => GatewaysSettings::get('pixelpay_savecard')
 				]),
 				'code' => $country->code
 			];
 
-			if (input('is_ship_same_bill')) {
+			if (request()->input('is_ship_same_bill')) {
 				$return['.shop__methods-list'] = $this->renderPartial($this->isTokenizationActive() ? '@methodsWithToken' : '@methods', [
-					'methods_list' => $this->getPaymentMethodsList(input('shipping_address.country')),
-					'method_country_code' => input('shipping_address.country'),
-					'cards' => $this->getCardsByUser()['success'] ?	$this->getCardsByUser()['data'] : [],
+					'methods_list' => $this->getPaymentMethodsList(request()->input('shipping_address.country')),
+					'method_country_code' => request()->input('shipping_address.country'),
+					'cards' => $cards,
 					'tokenization' => GatewaysSettings::get('pixelpay_savecard'),
 					'user' => $this->user()
 				]);
@@ -291,16 +301,19 @@ class CartContainer extends ComponentBase
 	public function onBillingCountrySelect()
 	{
 		$this->prepareLang();
-
-		if ($country = Country::where('code', input('billing_address.country'))->first()) {
+		$cards = $this->getCardsByUser();
+		if ($cards) {
+			$cards = $cards['success'] ? $cards['data'] : [];
+		}
+		if ($country = Country::where('code', request()->input('billing_address.country'))->first()) {
 			$return = ['.billingStateContainer' => $this->renderPartial('@billing_states', [
 				'billing_states' => $country->states
 			]), 'code' => $country->code];
 
 			$return['.shop__methods-list'] = $this->renderPartial($this->isTokenizationActive() ? '@methodsWithToken' : '@methods', [
-				'methods_list' => $this->getPaymentMethodsList(input('billing_address.country')),
-				'method_country_code' => input('billing_address.country'),
-				'cards' => $this->getCardsByUser()['success'] ?	$this->getCardsByUser()['data'] : [],
+				'methods_list' => $this->getPaymentMethodsList(request()->input('billing_address.country')),
+				'method_country_code' => request()->input('billing_address.country'),
+				'cards' => $cards,
 				'tokenization' => GatewaysSettings::get('pixelpay_savecard'),
 				'user' => $this->user()
 			]);
@@ -314,8 +327,8 @@ class CartContainer extends ComponentBase
 		$this->prepareLang();
 
 		$cart = Cart::load();
-		$cart->shipping_address['state'] = input('shipping_address.state');
-		$cart->shipping_address['country'] = input('shipping_address.country');
+		$cart->shipping_address['state'] = request()->input('shipping_address.state');
+		$cart->shipping_address['country'] = request()->input('shipping_address.country');
 		$cart->updateTotals();
 		$cart->save();
 
@@ -327,21 +340,23 @@ class CartContainer extends ComponentBase
 		$this->prepareLang();
 
 		$cart = Cart::load();
-		$cart->billing_address['state'] = input('shipping_address.state');
-		$cart->billing_address['country'] = input('shipping_address.country');
+		$cart->billing_address['state'] = request()->input('shipping_address.state');
+		$cart->billing_address['country'] = request()->input('shipping_address.country');
 		$cart->updateTotals();
 		$cart->save();
 
-		$methodCountry = input('is_ship_same_bill') ? 'shipping' : 'billing';
-		//dd(GatewaysSettings::get('pixelpay_savecard'));
-		//dd($this->getCardsByUser()['data'][0]);
+		$methodCountry = request()->input('is_ship_same_bill') ? 'shipping' : 'billing';
+		
+		$cards = $this->getCardsByUser();
+		if ($cards) {
+			$cards = $cards['success'] ? $cards['data'] : [];
+		}
 		return [
 			'#shop__cart-partial' => $this->renderPartial('@cart', ['cart' => $cart]),
 			'.shop__methods-list' => $this->renderPartial($this->isTokenizationActive() ? '@methodsWithToken' : '@methods', [
-				'methods_list' => $this->getPaymentMethodsList(input($methodCountry . '_address.country')),
-				'method_country_code' => input($methodCountry . '_address.country'),
-				//'cards' => Event::fire('pixel.shop.getCardsByUser', [$this]),
-				'cards' => $this->getCardsByUser()['success'] ?	$this->getCardsByUser()['data'] : [],
+				'methods_list' => $this->getPaymentMethodsList(request()->input($methodCountry . '_address.country')),
+				'method_country_code' => request()->input($methodCountry . '_address.country'),
+				'cards' => $cards,
 				'tokenization' => GatewaysSettings::get('pixelpay_savecard'),
 				'user' => $this->user()
 			])

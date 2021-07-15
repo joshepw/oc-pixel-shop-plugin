@@ -110,12 +110,7 @@ class Plugin extends PluginBase
 						'url' => Backend::url('pixel/shop/coupons'),
 						'permissions' => ['pixel.shop.coupons'],
 					],
-					'shipping' => [
-						'label' => 'Shipping and delivery',
-						'icon' => 'icon-truck',
-						'url' => Backend::url('pixel/shop/shipping'),
-						'permissions' => ['pixel.shop.shipping'],
-					],
+					
 				]
 			]
 		];

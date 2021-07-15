@@ -1,6 +1,7 @@
 var config = JSON.parse(document.getElementById("config").value);
-console.log(document.getElementById("config").value);
-PixelPay.setup(config.key, config.hash, config.end_point);
+if (config.save_card == 1) {
+  PixelPay.setup(config.key, config.hash, config.end_point);
+}
 
 
 var userToken = document.getElementById("user")?.value;
@@ -17,7 +18,16 @@ function errorMessage(text) {
         interval: 3,
     });
 }
+function logger(message, data) {
+    message = `[pixelpay-easyshop-sdk] ${message}`;
 
+    if (data) {
+      console.log(message, data);
+    } else {
+      console.log(message);
+    }
+  
+}
 function setShippingsAddresses(cart, formData) {
 
   cart = JSON.parse(cart);
@@ -31,23 +41,18 @@ function setShippingsAddresses(cart, formData) {
   cart.billing_address.second_line = formData["billing_address[second_line]"];
   cart.billing_address.zip = formData["billing_address[zip]"];
 
-  console.log('setShipping cart:' , cart);
   return cart;
 }
 
 function createUser(activeUser, customerToken) {
-  console.log("create user ", customerToken);
   if (customerToken == null) {
-    console.log("entro al if");
     PixelPay.tokenize()
       .createCustomer(activeUser.email)
       .then(function (response) {
-        console.log("response del create user 2 ");
         token_user = response.data.token;
         saveTokenToUser(token_user, activeUser.id);
       })
       .catch(function (err) {
-        console.error("Error: ", err);
         reject(err);
         errorMessage(err);
       });
@@ -60,7 +65,6 @@ function tokenCardToUser(card, billing) {
       .createCard(card, billing)
       .then(function (response) {})
       .catch(function (err) {
-        console.error("Error: ", err);
         errorMessage(err);
       });
   });
@@ -97,7 +101,6 @@ function openOrderResume(id, hash) {
 }
 
 function paymentWithToken(cart, hash) {
-	console.log('Hash config: ', hash);
   let order = PixelPay.newOrder();
 
   order.setOrderID(cart.id);
@@ -109,11 +112,10 @@ function paymentWithToken(cart, hash) {
   let card = PixelPay.newCard();
   card.setToken(getCardTokenToPay());
   order.addCard(card);
-  console.log(order);
   //return;
   PixelPay.payOrder(order)
     .then(function (response) {
-      console.log(response);
+      logger(response);
       $.oc.stripeLoadIndicator.hide();
       openOrderResume(cart.id, hash);
     })
@@ -127,8 +129,7 @@ function paymentWithToken(cart, hash) {
 function paymentWith3DS(cart, cardData, hash) {
 try {
   let customerToken = userToken?.pixel_token;
-  console.log('1');
-  console.log('configuracion: ', config);
+
   let order = PixelPay.newOrder();
 
   order.setOrderID(cart.id);
@@ -136,10 +137,8 @@ try {
   order.setFullName(cart.customer_first_name + " " + cart.customer_last_name);
   order.setEmail(cart.customer_email);
   order.setCategory('october');
-  console.log('2');
   let card = PixelPay.newCard();
 
-  console.log('3');
   card.setCardNumber(cardData.cc_number.split(" ").join(""));
   card.setCvv(cardData.cc_cvv);
   card.setCardHolder(cardData.cc_name);
@@ -150,51 +149,40 @@ try {
       cardData.cc_exp[5] +
       cardData.cc_exp[6]
   );
-  console.log('4');
 
   order.addCard(card);
-  console.log('5');
   let billing = PixelPay.newBilling();
 
-  console.log('cart', cart);
   billing.setCity(cart.billing_address.city);
   billing.setState(cart.billing_address.state);
   billing.setCountry(cart.billing_address.country);
-
+  if (cart.billing_address.zip) {
+      billing.setZip(cart.billing_address.zip);
+  }
   billing.setAddress(cart.billing_address.first_line);
   billing.setPhoneNumber(cart.customer_phone);
   order.addBilling(billing);
-  console.log('7');
 
-  console.log(
-    "¿ Tokenizar tarjeta ?",
-    isSaveCardActivated(config.save_card) && customerToken !== null
-  );
-  console.log("customerToken", customerToken);
   if (isSaveCardActivated(config.save_card) && customerToken !== null) {
-    console.log("TARJETA TOKENIZADA a ", customerToken);
     card.setCustomerToken(customerToken);
     tokenCardToUser(card, billing);
   }
-  console.log('8');
   	PixelPay.payOrder(order)
 		.then(function (response) {
 		$.oc.stripeLoadIndicator.hide();
-		console.log(response);
+		logger(response);
 		openOrderResume(cart.id, hash);
 		})
 		.catch(function (err) {
-			console.log('error pay order', err);
+			logger('error ', err);
 		$.oc.stripeLoadIndicator.hide();
-		console.error("Error: ", err);
 		errorMessage(err.message);
 		});
 
-		console.log('9');
 	}catch(err) {
 		$.oc.stripeLoadIndicator.hide();
 		errorMessage(err.message);
-		console.log(err);
+		logger(err);
 	}
 }
 
@@ -231,22 +219,14 @@ function createrOrder() {
       ? null
       : document.getElementById("user").value;
 
-  var datosForm = Object.values(form).reduce((obj, field) => {
-    obj[field.name] = field.value;
-    return obj;
-  }, {}); 
-
   let formData = Object.values(form).reduce((obj, field) => {
     obj[field.name] = field.value;
     return obj;
   }, {});
 
-  console.log('datos formulario; ', formData);
 
   cart = setShippingsAddresses(cart, formData);
-  console.log('cart shipping: ', cart);
   cart = JSON.stringify(cart);
-  console.log('before cart: ', cart);
   formData = JSON.stringify(formData);
   axios
     .post("/createOrder", {
@@ -255,11 +235,8 @@ function createrOrder() {
       user,
     })
     .then(function (response) {
-		console.log('respoonse data config' ,response);
-		//debugger;
       if (response.data.success) {
         if (isPaymentByToken()) {
-			console.log('response config: ', response);
           paymentWithToken(
             response.data.data,
             response.data.payment_hash,
