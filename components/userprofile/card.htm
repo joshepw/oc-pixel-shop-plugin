@@ -18,16 +18,16 @@
 								<div class="col-md-6 ">
 									<div class="form-group kobolg-input-wrapper">
 										<label>{{ 'pixel.shop::component.cart.name_card'|trans }}</label>
-										<input name="cc_name" type="text" value="{{card.card_holder}}" class="form-control" placeholder="Full name as displayed on card">
-										<input name="cc_email" hidden type="text" value="{{card.billing_email}}">
-										<input name="cc_phone" hidden type="text" value="{{card.billing_phone}}">
+										<input name="cc_name" type="text"  class="form-control" placeholder="Full name as displayed on card">
+										<input name="cc_email" hidden type="text" value="{{card.email}}">
+										<input name="cc_phone" hidden type="text" value="{{card.phone}}">
 										<div class="invalid-feedback" data-validate-for="cc_name"></div>
 									</div>
 								</div>
 								<div class="col-md-6">
 									<div class="form-group kobolg-input-wrapper" id="cc_number">
 										<label>{{ 'pixel.shop::component.cart.card_number'|trans }}</label>
-										<input  name="cc_number" type="text" class="form-control" placeholder="**** **** **** {{card.card_last}}">
+										<input  name="cc_number" type="text" class="form-control" placeholder=" {{card.mask}}">
 										<div class="invalid-feedback" data-validate-for="cc_number"></div>
 									</div>
 								</div>
@@ -36,7 +36,7 @@
 								<div class="col-md-3">
 									<div class="form-group kobolg-input-wrapper">
 										<label>{{ 'pixel.shop::component.cart.expiration'|trans }}</label>
-										<input name="cc_exp" type="text" value="{{exp}}" class="form-control" placeholder="** / **">
+										<input name="cc_exp" type="text"  class="form-control" placeholder="** / **">
 										<div class="invalid-feedback" data-validate-for="cc_exp"></div>
 									</div>
 								</div>
@@ -66,7 +66,7 @@
 									<div class="col-md-6">
 										<div class="form-group kobolg-input-wrapper">
 											<label>{{ 'pixel.shop::lang.fields.address'|trans }}</label>
-											<input type="text" class="form-control" placeholder="{{ 'pixel.shop::lang.fields.billing_address_ex1'|trans }}" value="{{ card.billing_address }}" name="billing_address[first_line]" minlength="3" maxlength="190">
+											<input type="text" class="form-control" placeholder="{{ 'pixel.shop::lang.fields.billing_address_ex1'|trans }}" value="{{ card.address }}" name="billing_address[first_line]" minlength="3" maxlength="190">
 											<div class="invalid-feedback" data-validate-for="billing_address.first_line"></div>
 										</div>
 									</div>
@@ -90,8 +90,8 @@
 												{% for country in countries %}
 												<option 
 													value="{{ country.code }}" 
-													{% if card.billing_country == country.code %}
-													selected="{{card.billing_country}}"
+													{% if card.country == country.code %}
+													selected="{{card.country}}"
 													{% endif %}>
 													{{ country.name }} ({{ country.code }})
 												</option>
@@ -108,7 +108,7 @@
 											line-height: 50px;
 											background-color: #fff;
 											border-color: #fff;">										
-												{% partial '@states' fieldtype='shipping' states=billing_states user_state=card.billing_state %}
+												{% partial '@states' fieldtype='shipping' states=billing_states user_state=card.state %}
 										</div>
 											<div class="invalid-feedback" data-validate-for="billing_address.state"></div>
 										</div>
@@ -116,14 +116,14 @@
 									<div class="col-billing col-md-3">
 										<div class="form-group kobolg-input-wrapper">
 											<label>{{ 'pixel.shop::lang.fields.city'|trans }}</label>
-											<input type="text" class="form-control" name="billing_address[city]" value="{{ card.billing_city }}" minlength="2" maxlength="90">
+											<input type="text" class="form-control" name="billing_address[city]" value="{{ card.city }}" minlength="2" maxlength="90">
 											<div class="invalid-feedback" data-validate-for="billing_address.city"></div>
 										</div>
 									</div>
 									<div class="col-billing-zip col-md-2">
 										<div class="form-group kobolg-input-wrapper">
 											<label>{{ 'pixel.shop::lang.fields.zip'|trans }}</label>
-											<input type="text" class="form-control" name="billing_address[zip]" value="{{ card.billing_zip }}" minlength="5" maxlength="12">
+											<input type="text" class="form-control" name="billing_address[zip]" value="{{ card.zip }}" minlength="5" maxlength="12">
 											<div class="invalid-feedback" data-validate-for="billing_address.zip"></div>
 										</div>
 									</div>

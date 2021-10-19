@@ -241,7 +241,7 @@ class CartContainer extends ComponentBase
 		
 		$this->addJs('https://unpkg.com/axios/dist/axios.min.js');
 		if($this->isTokenizationActive()){
-			$this->addJs('https://unpkg.com/@pixelpay/sdk');
+			$this->addJs('https://unpkg.com/@pixelpay/sdk@1.0.35-beta.1/dist/pixelpay.js');
 			$this->addJs('/plugins/pixel/shop/assets/js/3ds.js');
 		}
 	}

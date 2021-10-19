@@ -63,7 +63,10 @@ function tokenCardToUser(card, billing) {
   return new Promise((resolve, reject) => {
     PixelPay.tokenize()
       .createCard(card, billing)
-      .then(function (response) {})
+      .then(function (response) {
+        console.log(response);
+        saveCardTokenInDB(response.data.token, response.data.mask)
+      })
       .catch(function (err) {
         errorMessage(err);
       });
@@ -73,7 +76,22 @@ function tokenCardToUser(card, billing) {
 function isSaveCardActivated(saveCard) {
     return saveCard == 1 && document.querySelector("#set_default:checked")?.value == "on" ? true : false;
 }
-
+function saveCardTokenInDB(cardToken, reference) {
+  const userID = userToken.id;
+  axios
+    .post("/saveCardTokenToUser", {
+      cardToken,
+      userID,
+      reference,
+    })
+    .then(function (response) {
+      $.oc.stripeLoadIndicator.hide();
+    })
+    .catch(function (error) {
+      $.oc.stripeLoadIndicator.hide();
+      errorMessage(error);
+    });
+}
 function saveTokenToUser(token, userID) {
   axios
     .post("/saveTokenToUser", {
@@ -89,6 +107,38 @@ function saveTokenToUser(token, userID) {
     });
 }
 
+function deleteCardTokenFromDB(userID, reference) {
+  axios
+  .post("/deleteCardToken", {
+    userID,
+    reference,
+  })
+  .then(function (response) {
+    $.oc.stripeLoadIndicator.hide();
+  })
+  .catch(function (error) {
+    $.oc.stripeLoadIndicator.hide();
+    errorMessage(error);
+  });
+  return;
+}
+
+function getCardTokenFromDB(userID, reference) {
+  axios
+  .post("/getCardToken", {
+    userID,
+    reference,
+  })
+  .then(function (response) {
+    $.oc.stripeLoadIndicator.hide();
+  })
+  .catch(function (error) {
+    $.oc.stripeLoadIndicator.hide();
+    errorMessage(error);
+  });
+  return;
+}
+
 function openOrderResume(id, hash) {
   window.open(
     window.location.origin +
@@ -101,8 +151,8 @@ function openOrderResume(id, hash) {
 }
 
 function paymentWithToken(cart, hash) {
-  let order = PixelPay.newOrder();
 
+  let order = PixelPay.newOrder();
   order.setOrderID(cart.id);
   order.setAmount(parseFloat(cart.total).toFixed(2));
   order.setFullName(cart.customer_first_name + " " + cart.customer_last_name);
@@ -110,7 +160,7 @@ function paymentWithToken(cart, hash) {
   order.setCategory('october');
 
   let card = PixelPay.newCard();
-  card.setToken(getCardTokenToPay());
+  card.setToken(userToken.pixel_token, getCardTokenToPay());
   order.addCard(card);
   //return;
   PixelPay.payOrder(order)
@@ -162,16 +212,16 @@ try {
   billing.setAddress(cart.billing_address.first_line);
   billing.setPhoneNumber(cart.customer_phone);
   order.addBilling(billing);
-
-  if (isSaveCardActivated(config.save_card) && customerToken !== null) {
-    card.setCustomerToken(customerToken);
-    tokenCardToUser(card, billing);
-  }
+ 
   	PixelPay.payOrder(order)
 		.then(function (response) {
 		$.oc.stripeLoadIndicator.hide();
 		logger(response);
-		openOrderResume(cart.id, hash);
+      openOrderResume(cart.id, hash);
+      if (isSaveCardActivated(config.save_card) && customerToken !== null) {
+        card.setCustomerToken(customerToken);
+        tokenCardToUser(card, billing);
+      }
 		})
 		.catch(function (err) {
 			logger('error ', err);

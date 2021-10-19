@@ -12,6 +12,21 @@ Route::post('/saveTokenToUser', function (Request $request) {
 
 	return PaymentTrait::saveTokenToUser($request);
 });
+
+Route::post('/saveCardTokenToUser', function (Request $request) {
+
+	return PaymentTrait::saveCardTokenToUser($request);
+});
+Route::post('/deleteCardToken', function (Request $request) {
+
+	return PaymentTrait::getCardToken($request, true);
+});
+
+Route::post('/getCardToken', function (Request $request) {
+
+	return PaymentTrait::getCardToken($request);
+});
+
 Route::get('/mail', function () {
 	$order = \Pixel\Shop\Models\Order::find(24);
 	// return view('pixel.shop::mail.new-order', ['order' => $order] );

@@ -11,6 +11,7 @@ use Validator;
 use Exception;
 use Event;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 use Omnipay\Omnipay;
 use ValidationException;
 use Pixel\Shop\Models\Item;
@@ -21,6 +22,7 @@ use Pixel\Shop\Models\GatewaysSettings;
 use RainLab\User\Models\User;
 use Responsiv\Currency\Helpers\Currency;
 use Symfony\Component\Yaml\Inline;
+use System;
 
 trait PaymentTrait
 {
@@ -412,13 +414,13 @@ trait PaymentTrait
 	protected function updatePixelCard($cardParams)
 	{
 		$pixelDomain = $this->getPixelDomain();
-		$url = $pixelDomain . '/api/v2/card/' . $cardParams['card_token'];
+		$url = $pixelDomain . '/api/v2/tokenization/card/' . $cardParams['card_token'];
 		return $this->doPixelPayRequest($url, $cardParams, 'PUT');
 	}
 	protected function deletePixelCard($token)
 	{
 		$pixelDomain = $this->getPixelDomain();
-		$url = $pixelDomain . '/api/v2/card/' . $token;
+		$url = $pixelDomain . '/api/v2/tokenization/card/' . $token;
 		return $this->doPixelPayRequest($url, "delete");
 	}
 	protected function getPixelDomain()
@@ -430,7 +432,7 @@ trait PaymentTrait
 	protected function preparePixelPay($order)
 	{
 		$pixelDomain = $this->getPixelDomain();
-		$apiURL = '/hosted/payment/october';
+		$apiURL = '/api/v2/transaction/hosted/october';
 		$json = json_encode($order->items);
 		$base64 = base64_encode($json);
 		$order_content = urlencode($base64);
@@ -457,7 +459,6 @@ trait PaymentTrait
 		];
 
 		$response = $this->doPostRequest($pixelDomain . $apiURL, $fields);
-		
 
 		if ($response->success) {
 			$data = $response->body;
@@ -482,6 +483,7 @@ trait PaymentTrait
 		$response->success = false;
 		$response->code = null;
 		$response->body = null;
+		
 
 		try {
 			$ch = curl_init();
@@ -512,7 +514,7 @@ trait PaymentTrait
 	{
 		$pixelDomain = $this->getPixelDomain();
 
-		$url = $pixelDomain . '/api/v2/checkout/sale';
+		$url = $pixelDomain . '/api/v2/transaction/sale';
 		$data =
 			[
 				"customer_name" => $order->customer_first_name,
@@ -535,7 +537,7 @@ trait PaymentTrait
 	{
 		
 		$pixelDomain = $this->getPixelDomain();
-		$url = $pixelDomain . '/api/v2/checkout/sale';
+		$url = $pixelDomain . '/api/v2/transaction/sale';
 		$data =
 			[
 				"customer_name" => $order->customer_first_name,
@@ -608,7 +610,7 @@ trait PaymentTrait
 		//preparar los campos para el api de pixelpay
 		if (Auth::user()) {
 			$pixelDomain = $this->getPixelDomain();
-			$url = $pixelDomain . '/api/v2/customer/' . Auth::user()->pixel_token;
+			$url = $pixelDomain . '/api/v2/tokenization/customer/' . Auth::user()->pixel_token;
 			return $this->doPixelPayRequest($url);
 		} else {
 			/* $response = new stdClass();
@@ -711,6 +713,81 @@ trait PaymentTrait
 				'message' => 'Orden creada con exito',
                 'payment_hash' => $hash
 
+			];
+		} catch (Exception $error) {
+			return [
+				'success' => false,
+				'data' => [],
+				'message' => $error->getMessage()
+			];
+		}
+	}
+
+	
+
+	static function saveCardTokenToUser($data)
+	{
+		try {
+			$userID = $data->userID;
+			$cardToken = $data->cardToken;
+			$reference = $data->reference;
+
+			$jsonData = json_encode(
+				[
+					"user_id" => $userID,
+					"card_token" =>$cardToken,
+					"card_reference"=> $reference,
+				]
+			);
+			DB::table('system_settings')->insert(['item' => 'pixel_user_tokens', 'value' => $jsonData ]);
+			
+			return [
+				'success' => true,
+				'data' => [],
+				'message' => "Token guardado correctamente"
+			];
+		} catch (Exception $error) {
+			return [
+				'success' => false,
+				'data' => [],
+				'message' => $error->getMessage()
+			];
+		}
+	}
+
+	static function getCardToken($data, $delete = false)
+	{
+		try {
+			$userID = $data->userID;
+			$reference = $data->reference;
+
+			
+			$tokens = DB::table('system_settings')->where('item' , 'pixel_user_tokens')
+			->where('value->user_id',  $userID)
+			->where('value->card_reference',  $reference);
+
+			if(empty($tokens->first())){
+				return [
+					'success' => false,
+					'data' => [],
+					'message' => "Token no encontrado"
+				];
+						
+			}
+
+			if($delete){
+				$tokens->delete();
+				return [
+					'success' => true,
+					'data' => [],
+					'message' => "Token eliminado correctamente"
+				];
+			}
+
+			return [
+				'success' => true,
+				'data' => json_decode($tokens->first()->value),
+				'message' => "Información obtenida con exito"
 			];
 		} catch (Exception $error) {
 			return [

@@ -30,17 +30,17 @@
 				  onclick="hiddenDataHolder()"
 			  >
 				  <div class="list-radio">
-				  <input type="radio" value="{{ card.token }}" name="gateway" {% if not
+				  <input type="radio" value="{{ card.reference }}" name="gateway" {% if not
 				  card.status == 'active' %} disabled="disabled" {% endif %} id="card-{{
 				  card.token }}" >
-				  <label for="card-{{ card.token }}">
+				  <label for="card-{{ card.reference }}">
 					  <div class="info">
-					  <strong>**** **** **** {{card.card_last}}</strong>
-					  <p>Expire {{ card.exp_month }} / {{card.exp_year}}</p>
+					  <strong> {{card.reference}}</strong>
+					  <p>Type {{ card.type }} </p>
 					  </div>
 					  <div class="card" style="border: none">
 					  <img
-						  src="{{ '/plugins/pixel/shop/assets/img/icon-'|app }}{{ card.card_network }}.svg"
+						  src="{{ '/plugins/pixel/shop/assets/img/icon-'|app }}{{ card.network }}.svg"
 						  alt=""
 						  width="64"
 						  height="64"

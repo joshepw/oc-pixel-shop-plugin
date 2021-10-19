@@ -38,7 +38,8 @@
 			'status' => 'Status',
 			'status_type' => [
 				'active' => 'Active',
-				'inactive' => 'Inactive'
+				'inactive' => 'Inactive',
+				'expired' => ' Expirada'
 			],
 			'edit' => 'Edit',
 

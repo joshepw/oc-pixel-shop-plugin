@@ -15,6 +15,7 @@ use ValidationException;
 use ApplicationException;
 use Pixel\Shop\Models\Order;
 use Cms\Classes\ComponentBase;
+use Illuminate\Support\Facades\DB;
 use Mail;
 use Pixel\Shop\Models\Favorite;
 use RainLab\Location\Models\State;
@@ -113,27 +114,44 @@ class UserProfile extends ComponentBase
 	protected function getCardInfo($token)
 	{
 		$pixelDomain = $this->getPixelDomain();
-		$url = $pixelDomain . '/api/v2/card/' . $token;
+		$url = $pixelDomain . '/api/v2/tokenization/card/' . $token;
 		return $this->doPixelPayRequest($url);
+	}
+
+	static function getCardToken($userID, $reference)
+	{
+		try {
+			
+			$tokens = DB::table('system_settings')->where('item' , 'pixel_user_tokens')
+			->where('value->user_id',  $userID)
+			->where('value->card_reference',  $reference);
+
+			if(empty($tokens->first())){
+				return [];
+						
+			}
+			return json_decode($tokens->first()->value)->card_token;
+		} catch (Exception $error) {
+			return [];
+		}
 	}
 
 	public function onLoadCard()
 	{
 		$this->prepareLang();
-		$token = post('token');
+		$token = $this->getCardToken(Auth::user()->id, post('token'));
 		
 		$cards = $this->getCardInfo($token);
 		$countries = Country::isEnabled()->orderBy('is_pinned', 'desc')->get();
 		$states = [];
+		if ($cards && $cards['success']) {
 
-		if ($cards) {
-
-			$exp = $cards['data']['exp_month'] . substr($cards['data']['exp_year'], -2);
-			$country = Country::where('code', $cards['data']['billing_country'])->first();
+			$exp = [];
+			$country = Country::where('code', $cards['data']['country'])->first();
 			$states = $country->states;
-			//dd($states);
 		}
-
+		
+		
 		return ['#cards-content' => $this->renderPartial($this->alias . '::card', [
 			'card' => $cards ? $cards['data'] : [],
 			'token' => $token,
@@ -166,31 +184,59 @@ class UserProfile extends ComponentBase
 
 		$cardParams = array(
 			"card_token" => request()->input('cc_token'),
-			"exp_month" => $cc_em,
-			"exp_year" => "20" . $cc_ey,
-			"card_holder" => request()->input('cc_name'),
+			"expire_month" => empty($cc_em) ? null : $cc_em,
+			"expire_year" =>  empty($cc_ey) ? null : "20" . $cc_ey,
+			"cardholder" => empty(request()->input('cc_name')) ? null : request()->input('cc_name'),
 			"address" => request()->input('billing_address.first_line'),
 			"country" => request()->input('shipping_address.country'),
 			"city" => request()->input('billing_address.city'),
 			"state" => request()->input('shipping_address.state') == null ? request()->input('_address.state') : request()->input('shipping_address.state'),
 			"zip" => request()->input('billing_address.zip'),
-			"email" => request()->input('cc_email'),
-			"customer_token" => Auth::user()->pixel_token,
-			"phone" => request()->input('cc_phone')
+			"email" => empty(request()->input('cc_email')) ? Auth::user()->email : request()->input('cc_email'),
+			"customer" => Auth::user()->pixel_token,
+			"phone" => request()->input('cc_phone'),
+			"cvv2" => empty(request()->input('cc_cvv')) ? null : request()->input('cc_cvv'),
+			"number" => empty(request()->input('cc_number')) ? null : request()->input('cc_number')
 		);
 		$response =  $this->updatePixelCard($cardParams);
 		if ($response['success']) {
 			Flash::success(trans('pixel.shop::component.cart.updated_card'));
+			$this->updateReferenceCard($response['data']['mask'], $response['data']['token']);
 		} else {
 			Flash::error($response['message']);
 		}
 	}
+	public function updateReferenceCard($reference, $card_token)
+	{
+		try {
+			
+			 DB::table('system_settings')->where('item' , 'pixel_user_tokens')
+			->where('value->user_id',  Auth::user()->id)
+			->where('value->card_token',  $card_token)->update(['value->card_reference' => $reference]);
 
+			
+			return true;
+		} catch (Exception $error) {
+			return [];
+		}
+	}
+	public function deleteCardTokenFromDB($token)
+	{
+		try {
+			$tokens = DB::table('system_settings')->where('item' , 'pixel_user_tokens')
+			->where('value->user_id',  Auth::user()->id)
+			->where('value->card_token',  $token)->delete();
+			return true;
+		} catch (Exception $error) {
+			return false;
+		}
+	}
 	public function onLoadCardDelete()
 	{
 		$this->prepareLang();
 		$token = post('token');
 		$response = $this->deletePixelCard($token);
+		$this->deleteCardTokenFromDB($token);
 		$responseCards =  $this->getCardsByUser();
 
 		return ['#cards-content' => $this->renderPartial($this->alias . '::cards', ['cards' => $responseCards['success'] ? $responseCards['data'] : []])];

@@ -7,7 +7,6 @@
 		<thead>			
 			<tr>
 				<th width="140">{{ 'pixel.shop::lang.fields.card.card'|trans }}</th>
-				<th width="140">{{ 'pixel.shop::lang.fields.card.name'|trans }}</th>
 				<th width="100">{{ 'pixel.shop::lang.fields.card.card_network'|trans }}</th>
 				<th width="40" >{{ 'pixel.shop::lang.fields.card.status'|trans }}</th>
 				<th width="50">{{ 'pixel.shop::lang.fields.action'|trans }}</th>
@@ -17,13 +16,11 @@
 			{% for card in cards %}
 			<tr>
 				<th>
-					**** **** **** {{card.card_last}}
+					 {{card.reference}}
 				</th>
+				
 				<td>
-					{{ card.card_holder}}
-				</td>
-				<td>
-                        <img src="{{ '/plugins/pixel/shop/assets/img/icon-'|app }}{{ card.card_network }}.svg" alt="" width="45" height="35">
+                        <img src="{{ '/plugins/pixel/shop/assets/img/icon-'|app }}{{ card.network }}.svg" alt="" width="45" height="35">
 				</td>
 				
 				<td>
@@ -41,7 +38,7 @@
 				</td>
 				
 				<td>
-					<a href="javascript:;" data-request="{{ __SELF__ }}::onLoadCard" data-request-data="token: '{{card.token}}'" class="btn btn-default btn-xs">
+					<a href="javascript:;" data-request="{{ __SELF__ }}::onLoadCard" data-request-data="token: '{{card.reference}}'" class="btn btn-default btn-xs">
 						<i class="fas fa-search"></i> {{ 'pixel.shop::lang.fields.card.edit'|trans }}
 					</a>
 				</td>

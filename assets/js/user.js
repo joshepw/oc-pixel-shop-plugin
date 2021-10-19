@@ -230,7 +230,11 @@ Profile.onFinishLogin = function(result){
         location.replace(result.url);
 }
 
-jQuery(document).ready(function($) {
+jQuery(document).ready(function ($) {
+	$('[name="cc_number"]').mask('0000 0000 0000 0000')
+	$('[name="cc_exp"]').mask('00 / 00');
+    $('[name="cc_cvv"]').mask('000');
+	console.log("epaaaaaa");
 	var hash = window.location.hash;
   		hash && $('ul.nav a[href="' + hash + '"]').tab('show');
 
