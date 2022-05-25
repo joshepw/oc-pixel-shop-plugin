@@ -40,7 +40,6 @@ class Variants extends FormWidgetBase{
 		$this->prepareVars();
         $this->vars['name'] = $this->getFieldName();
         $this->vars['id'] = $this->getId();
-        var_dump("on render", $this->vars['name'], "end");
 		return $this->makePartial('variants');
 	}
 
