@@ -1,4 +1,4 @@
-<div class="variants-main-container" id="variants-<?= $this->getId() ?>">
+<div class="variants-main-container" id="<?= $id ?>">
 	<div class="variants-items" data-delete-message="<?= trans('pixel.shop::lang.messages.delete_unique') ?>">
 		<?php foreach ($variants as $key => $variant): ?>
 			<?= $this->makePartial('variant-partial', ['variant' => $variant, 'vr_key' => $key]) ?>
@@ -19,5 +19,5 @@
 		<p><?= trans('pixel.shop::lang.messages.enable_variants_comment') ?></p>
 	</div>
 
-	<input name="<?= $this->fieldName ?>" class="form-control variants-field" type="hidden" />
+	<input name="<?= $name ?>" class="form-control variants-field" type="hidden" />
 </div>

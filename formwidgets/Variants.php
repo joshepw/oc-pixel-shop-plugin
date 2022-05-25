@@ -38,6 +38,8 @@ class Variants extends FormWidgetBase{
 	// RENDER
 	public function render(){
 		$this->prepareVars();
+        $this->vars['name'] = $this->getFieldName();
+        $this->vars['id'] = $this->getId();
 		return $this->makePartial('variants');
 	}
 
@@ -50,7 +52,7 @@ class Variants extends FormWidgetBase{
 	}
 
 	public function getSaveValue($value){
-		if (!$input = input($this->fieldName))
+		if (!$input = input($this->getFieldName()))
 			return null;
 
 		$input = urldecode($input);
@@ -69,6 +71,8 @@ class Variants extends FormWidgetBase{
 			]
 		];
 
+        $this->vars['name'] = $this->getFieldName();
+
 		return [
 			'success' => true,
 			'render' => $this->makePartial('variant-partial', $empty)
@@ -76,6 +80,7 @@ class Variants extends FormWidgetBase{
 	}
 
 	public function onAddOption(){
+        $this->vars['name'] = $this->getFieldName();
 		return [
 			'success' => true,
 			'render' => $this->makePartial('option-partial')

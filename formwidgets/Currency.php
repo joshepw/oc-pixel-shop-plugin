@@ -9,11 +9,31 @@ use Responsiv\Currency\Models\Currency as CurrencyModel;
 class Currency extends FormWidgetBase
 {
     /**
+     * @var string the minimum/earliest date that can be selected.
+     * eg: 2000-01-01
+     */
+    public $minPrice = null;
+
+    /**
+     * @var string A unique alias to identify this widget.
+     */
+    protected $defaultAlias = 'shop-currency';
+
+    /**
+    * {@inheritDoc}
+    */
+    public function init()
+    {
+        parent::init();
+    }
+
+    /**
      * Render the form widget
      */
     public function render()
     {
         $this->prepareVars();
+        $this->vars['name'] = $this->getFieldName();
         return $this->makePartial('widget', [
         	'field' => $this->formField,
         	'model' => $this->model
@@ -34,7 +54,7 @@ class Currency extends FormWidgetBase
      */
     public function prepareVars()
     {
-        $this->vars['loadValue'] = $this->getLoadValue();
+        $this->vars['value'] = $this->getLoadValue();
 
         $this->vars['config']['customField'] = $this->customField = isset($this->config->field)
             ? $this->config->field
@@ -82,11 +102,11 @@ class Currency extends FormWidgetBase
      */
     public function getSaveValue($value)
     {
-        if (!$input = input($this->fieldName))
+       if (!$input = input($this->getFieldName()))
             return 0;
 
         $input = preg_replace("/[^0-9]/", '', $input);
-        $input = substr($input, 0, -2) . '.' . substr($input, -2);
+        $input = substr($input, 0, -2) . ',' . substr($input, -2);
         $input = floatval($input);
 
         return $input;
