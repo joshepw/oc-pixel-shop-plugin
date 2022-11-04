@@ -2,23 +2,24 @@
 
 var Variant = {};
 
+$('[data-variant-new]').click(function(event) {
+    event.preventDefault();
+    console.log("NEW VARIANT");
+    $(this).request('onAddVariant', {
+        loading: $.oc.stripeLoadIndicator,
+        success: function(data){
+            if(data.success && data.render){
+                $('.variants-main-container .variants-items').append(data.render);
+                Variant.onRefreshUI();
+            }
+        }
+    });
+});
+
+
 Variant.init = function(){
 	this.onRefreshUI();
 	this.onRefreshValues();
-
-	$('[data-variant-new]').click(function(event) {
-		event.preventDefault();
-
-		$(this).request('onAddVariant', {
-			loading: $.oc.stripeLoadIndicator,
-			success: function(data){
-				if(data.success && data.render){
-					$('.variants-main-container .variants-items').append(data.render);
-					Variant.onRefreshUI();
-				}
-			}
-		});
-	});
 };
 
 Variant.onRefreshUI = function(){
@@ -28,12 +29,11 @@ Variant.onRefreshUI = function(){
 	$('[data-variant-pending]').each(function(index, el) {
 		$(this).find('[data-variant-delete]').click(function(event) {
 			event.preventDefault();
-
-			if($('.variant-item').size() > 1){
-				$(this).closest('.variant-item').remove();
+            let rows = document.querySelectorAll('.variant-item').length;
+            if(rows > 1){
+               $(this).closest('.variant-item').remove();
 				Variant.onRefreshValues();
 			}else{
-				$(this).closest('.variant-item').find('.form-control').val('');
 				$.oc.flashMsg({text: $('.variants-items').data('delete-message'), 'class': 'error'});
 			}
 		});
@@ -41,7 +41,6 @@ Variant.onRefreshUI = function(){
 		$(this).find('[data-option-new]').click(function(event) {
 			event.preventDefault();
 			var el = $(this);
-
 			$(this).request('onAddOption', {
 				loading: $.oc.stripeLoadIndicator,
 				success: function(data){
@@ -56,6 +55,7 @@ Variant.onRefreshUI = function(){
 		});
 
 		$(this).find('.input-option-variant').keyup(function(event) {
+            event.preventDefault();
 			clearTimeout(typingTimerName);
 			typingTimerName = setTimeout(doneTyping, doneTypingIntervalName);
 
@@ -65,6 +65,7 @@ Variant.onRefreshUI = function(){
 		});
 
 		$(this).find('.input-option-optional').change(function(event) {
+            event.preventDefault();
 			Variant.onRefreshValues();
 		});
 
@@ -81,16 +82,21 @@ Variant.onRefreshUI = function(){
 		}
 
 		$(this).find('[data-option-delete]').click(function(event) {
-			if($(this).closest('.wrapper-variants').find('tbody tr').size() > 1){
+            event.preventDefault();
+            let rows = document.querySelectorAll('.item-option').length;
+            console.log("rows before delete ",rows);
+			if(rows > 1){
 				$(this).closest('.item-option').remove();
-				Variant.onRefreshValues();
+                rows = document.querySelectorAll('.item-option').length;
+                console.log("rows after delete ",rows);
+                Variant.onRefreshValues();
 			}else{
-				$(this).closest('.item-option').find('.form-control').val('');
-				$.oc.flashMsg({text: $('.wrapper-variants').data('delete-message'), 'class': 'error'});
-			}
+                $.oc.flashMsg({text: $('.variants-items').data('delete-message'), 'class': 'error'});
+            }
 		});
 
 		$(this).find('.form-control').keyup(function(event) {
+            event.preventDefault();
 			clearTimeout(typingTimerName);
 			typingTimerName = setTimeout(doneTyping, doneTypingIntervalName);
 
@@ -134,8 +140,6 @@ Variant.onRefreshValues = function(){
 
 		variants.push(options);
 	});
-
-	console.log(variants);
 
 	variants = encodeURIComponent(JSON.stringify(variants));
 	$('.variants-field').val(variants);

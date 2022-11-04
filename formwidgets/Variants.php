@@ -47,7 +47,6 @@ class Variants extends FormWidgetBase{
 	public function loadAssets(){
 		$this->addJs('table.drag.js');
 		$this->addJs('mask.jquery.js');
-		$this->addJs('variants.js');
 		$this->addCss('variants.css');
 	}
 
