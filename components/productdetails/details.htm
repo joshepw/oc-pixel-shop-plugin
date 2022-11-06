@@ -26,13 +26,13 @@
 	<div class="form-group">
 		<h3 id="product-price" class="shop__product-price">
 			<span class="shop__product-price-amount" data-currency="{{ product.getDefaultCurrencySymbol() }}">
-				{{ product.getPrice()|currency }}
+				{{ product.price|currency  }}
 			</span>
 
-			<input type="hidden" name="base_price" value="{{ product.getPrice(false) }}">
+			<input type="hidden" name="base_price" value="{{ product.price|currency }}">
 			<input type="hidden" name="old_price" value="{{ product.getOldPrice(false) }}">
 
-			<input type="hidden" name="base_price_with_tax" value="{{ product.getPrice() }}">
+			<input type="hidden" name="base_price_with_tax" value="{{ product.price|currency }}">
 			<input type="hidden" name="old_price_with_tax" value="{{ product.getOldPrice() }}">
 
 			{% if product.is_on_sale %}
@@ -117,7 +117,7 @@
 		<input type="hidden" name="options" value="">
 		<input type="hidden" name="options_index" value="">
 		<button type="submit" class="btn btn-primary btn-block btn-footer" data-attach-loading>
-			<span class="fas fa-shopping-cart" aria-hidden="true"></span> 
+			<span class="fas fa-shopping-cart" aria-hidden="true"></span>
 			{{ 'pixel.shop::lang.frontend.addtocart'|trans }}
 		</button>
 	{% endif %}

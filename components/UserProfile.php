@@ -121,14 +121,14 @@ class UserProfile extends ComponentBase
 	static function getCardToken($userID, $reference)
 	{
 		try {
-			
+
 			$tokens = DB::table('system_settings')->where('item' , 'pixel_user_tokens')
 			->where('value->user_id',  $userID)
 			->where('value->card_reference',  $reference);
 
 			if(empty($tokens->first())){
 				return [];
-						
+
 			}
 			return json_decode($tokens->first()->value)->card_token;
 		} catch (Exception $error) {
@@ -140,7 +140,7 @@ class UserProfile extends ComponentBase
 	{
 		$this->prepareLang();
 		$token = $this->getCardToken(Auth::user()->id, post('token'));
-		
+
 		$cards = $this->getCardInfo($token);
 		$countries = Country::isEnabled()->orderBy('is_pinned', 'desc')->get();
 		$states = [];
@@ -150,8 +150,8 @@ class UserProfile extends ComponentBase
 			$country = Country::where('code', $cards['data']['country'])->first();
 			$states = $country->states;
 		}
-		
-		
+
+
 		return ['#cards-content' => $this->renderPartial($this->alias . '::card', [
 			'card' => $cards ? $cards['data'] : [],
 			'token' => $token,
@@ -209,12 +209,11 @@ class UserProfile extends ComponentBase
 	public function updateReferenceCard($reference, $card_token)
 	{
 		try {
-			
+
 			 DB::table('system_settings')->where('item' , 'pixel_user_tokens')
 			->where('value->user_id',  Auth::user()->id)
 			->where('value->card_token',  $card_token)->update(['value->card_reference' => $reference]);
 
-			
 			return true;
 		} catch (Exception $error) {
 			return [];
@@ -598,8 +597,8 @@ class UserProfile extends ComponentBase
 				/**
 				 * Quantity Event
 				 */
-				$newQuantity = Event::fire('pixel.shop.getQuantityProperty', [$this, $favorite]);
-				$favorite->quantity = !empty($newQuantity) > 0 ? $newQuantity[0]['quantity'] : $favorite->quantity;
+				//$newQuantity = Event::fire('pixel.shop.getQuantityProperty', [$this, $favorite]);
+				//$favorite->quantity = !empty($newQuantity) > 0 ? $newQuantity[0]['quantity'] : $favorite->quantity;
 			});
 		}
 

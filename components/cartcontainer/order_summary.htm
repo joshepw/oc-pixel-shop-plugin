@@ -86,13 +86,15 @@
 
         {% if order.custom_fields.customer %}
         <div class="row">
-            {% for field in order.custom_fields.customer if field.value %}
-            <div class="col-md-3">
-                <div class="text-left">
-                    <label>{{ field.label }}</label>
-                    <p>{{ field.value }}</p>
-                </div>
-            </div>
+            {% for field in order.custom_fields.customer %}
+                {% if field.value %}
+                    <div class="col-md-3">
+                        <div class="text-left">
+                            <label>{{ field.label }}</label>
+                            <p>{{ field.value }}</p>
+                        </div>
+                    </div>
+                {% endif %}
             {% endfor %}
         </div>
         {% endif %}
@@ -191,26 +193,30 @@
 
         {% if order.custom_fields.shipping %}
         <div class="row">
-            {% for field in order.custom_fields.shipping if field.value %}
-            <div class="col-md-3">
-                <div class="text-left">
-                    <label>{{ field.label }}</label>
-                    <p>{{ field.value }}</p>
-                </div>
-            </div>
+            {% for field in order.custom_fields.shipping %}
+                {% if field.value %}
+                    <div class="col-md-3">
+                        <div class="text-left">
+                            <label>{{ field.label }}</label>
+                            <p>{{ field.value }}</p>
+                        </div>
+                    </div>
+                {% endif %}
             {% endfor %}
         </div>
         {% endif %}
 
         {% if order.custom_fields.billing %}
         <div class="row">
-            {% for field in order.custom_fields.billing if field.value %}
-            <div class="col-md-3">
-                <div class="text-left">
-                    <label>{{ field.label }}</label>
-                    <p>{{ field.value }}</p>
-                </div>
-            </div>
+            {% for field in order.custom_fields.billing %}
+                {% if field.value %}
+                    <div class="col-md-3">
+                        <div class="text-left">
+                            <label>{{ field.label }}</label>
+                            <p>{{ field.value }}</p>
+                        </div>
+                    </div>
+                {% endif %}
             {% endfor %}
         </div>
         {% endif %}

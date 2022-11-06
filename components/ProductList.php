@@ -14,7 +14,7 @@ use Pixel\Shop\Components\CartTrait;
 class ProductList extends ComponentBase
 {
     use CartTrait;
-    
+
     public $products = array();
 	public $settings = array();
 
@@ -40,7 +40,7 @@ class ProductList extends ComponentBase
 				'default'     => 'showItems',
 				'type'        => 'dropdown',
 				'options'     => [
-					'showItems' => 'No scope (Show All)', 
+					'showItems' => 'No scope (Show All)',
 					'onSale' => 'On Sale Only',
 				]
 			],
@@ -59,7 +59,7 @@ class ProductList extends ComponentBase
 				'default'     => '20',
 				'type'        => 'string',
 				'validationPattern' => '^[0-9]+$',
-				'validationMessage' => 'The Max Items property can contain only numeric symbols'                
+				'validationMessage' => 'The Max Items property can contain only numeric symbols'
 			],
 			'orderBy' => [
 				'title'       => 'Order By',
@@ -67,25 +67,25 @@ class ProductList extends ComponentBase
 				'default'     => 'name',
 				'type'        => 'dropdown',
 				'options'     => [
-					'name' => 'Name', 
-					'price' => 'Price with Tax', 
+					'name' => 'Name',
+					'price' => 'Price with Tax',
 					'is_on_sale' => 'On Sale',
 					'id' => 'ID',
 					'code' => 'Code or SKU',
-					'quantity' => 'Quantity',	
+					'quantity' => 'Quantity',
 					'updated_at' => 'Updated At',
 					'created_at' => 'Created At',
 					'sales_count' => 'Sales count',
 					'views_count' => 'Views count'
 				]
-			],   
+			],
 			'sort' => [
 				'title'       => 'Sort',
 				'description' => 'Sort ASC or DESC',
 				'default'     => 'asc',
 				'type'        => 'dropdown',
 				'options'     => ['asc'=>'Ascending', 'desc'=>'Descending']
-			],              
+			],
 			'productPage' => [
 				'title'       => 'Product page',
 				'description' => 'Product detail page',
@@ -117,14 +117,14 @@ class ProductList extends ComponentBase
 				'default'     => 'dropdown',
 				'type'        => 'dropdown',
 				'options'     => ['dropdown'=>'Dropdown', 'buttons'=>'Buttons Group']
-			], 
+			],
         ];
     }
 
     public function onRun()
 	{
         $this->prepareLang();
-        
+
 		$this->addCss('/plugins/pixel/shop/assets/css/products.css');
 
 		$this->products = $this->page['products'] = $this->loadProducts();
@@ -135,7 +135,7 @@ class ProductList extends ComponentBase
 		$this->page['showQuickAdd'] = $this->property('showQuickAdd');
         $this->page['typeCategoriesFilter'] = $this->property('typeCategoriesFilter');
     }
-    
+
     protected function prepareLang(){
         $lang = \Config::get('app.locale', 'en');
 
@@ -207,16 +207,16 @@ class ProductList extends ComponentBase
 		else{
 			$products = $query->paginate($take);
 		}
-		
+
 		$products->each(function($product) use ($page) {
 			$product->setUrl($page, $this->controller);
-			
+
 			/**
 			 * Quantity Event
 			 */
-			$newQuantity = Event::fire('pixel.shop.getQuantityProperty', [$this, $product]);
-			$product->quantity = !empty($newQuantity) > 0 ? $newQuantity[0]['quantity'] : $product->quantity;
-		});
+			//$newQuantity = Event::fire('pixel.shop.getQuantityProperty', [$this, $product]);
+			//$product->quantity = !empty($newQuantity) > 0 ? $newQuantity[0]['quantity'] : $product->quantity;
+        });
 
 		return $products;
 	}
@@ -224,7 +224,7 @@ class ProductList extends ComponentBase
     // OPTIONS
     public function getProductPageOptions(){
 		return Page::sortBy('baseFileName')->lists('baseFileName', 'baseFileName');
-	} 
+	}
 
 	public function getCategoryPageOptions(){
 		return Page::sortBy('baseFileName')->lists('baseFileName', 'baseFileName');
@@ -246,13 +246,13 @@ class ProductList extends ComponentBase
 		$categories = Category::all();
 		$page = $this->property('categoryPage');
 		$list = array();
-		
+
 		$empty = new Category();
 		$empty->name = trans('pixel.shop::lang.components.pl_all_cats');
 		$empty->setUrl($page, $this->controller, $param);
 
 		$list[] = $empty;
-		
+
 		$categories->each(function($item) use ($page, $param, &$list) {
 			$item->setUrl($page, $this->controller, $param);
 
@@ -268,7 +268,7 @@ class ProductList extends ComponentBase
         $this->prepareLang();
 
 		$item_id = post('id');
-		
+
 		if (class_exists("\RainLab\User\Models\User")){
 			$user = \RainLab\User\Facades\Auth::getUser();
 		}else{

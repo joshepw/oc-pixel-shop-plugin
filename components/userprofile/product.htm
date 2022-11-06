@@ -31,7 +31,7 @@
 						{{ str_limit( product.name, 48,'...')  }}
 					</h4>
 					<h3 class="card-price shop__product-price">
-						{{ product.getPrice()|currency }}
+						{{ product.price|currency  }}
 					</h3>
 					{% if product.is_on_sale %}
 					<small class="shop__product-old-price">
@@ -49,7 +49,7 @@
 			<form data-request="onAddToCart" data-request-flash>
 				{% if product.is_with_variants and product.variants|length > 0 %}
 				<a href="{{ product.url }}" class="btn btn-primary btn-block btn-footer">
-					<span class="fas fa-info-circle" aria-hidden="true"></span> 
+					<span class="fas fa-info-circle" aria-hidden="true"></span>
 					{{ 'pixel.shop::lang.frontend.moreinfo'|trans }}
 				</a>
 				{% else %}
@@ -57,14 +57,14 @@
 				<input type="hidden" name="price" value="{{ product.price }}">
 				<input type="hidden" name="quantity" value="1">
 				<button type="submit" class="btn btn-primary btn-block btn-footer" data-attach-loading>
-					<span class="fas fa-shopping-cart" aria-hidden="true"></span> 
+					<span class="fas fa-shopping-cart" aria-hidden="true"></span>
 					{{ 'pixel.shop::lang.frontend.addtocart'|trans }}
 				</button>
 				{% endif %}
 			</form>
 			{% else %}
 			<a href="{{ product.url }}" class="btn btn-warning btn-block btn-footer">
-				<span class="fas fa-plus-circle" aria-hidden="true"></span> 
+				<span class="fas fa-plus-circle" aria-hidden="true"></span>
 				{{ 'pixel.shop::lang.frontend.order_reserve'|trans }}
 			</a>
 			{% endif %}
