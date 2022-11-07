@@ -9,7 +9,7 @@
 				<span class="label label-success">{{ 'pixel.shop::lang.frontend.onsale'|trans }}</span>
 			{% endif %}
 
-			{% if product.quantity < 1 and product.quantity != null %}
+			{% if product.quantity <= 0 and product.quantity != null %}
 				<span class="label label-danger">{{ 'pixel.shop::lang.frontend.soldout'|trans }}</span>
 			{% endif %}
 		</div>
@@ -49,29 +49,28 @@
 				</div>
 			</div>
 
-			{% if product.quantity > 0 or product.quantity == null %}
+			{% if product.isInfiniteQuantity() or product.quantity > 0 %}
 			<form data-request="onAddToCart" data-request-flash data-request-success="CartButton.onSuccess(data)">
 				{% if showQuickAdd %}
-				{% if product.is_with_variants and product.variants|length > 0 %}
-				<a href="{{ product.url }}" class="btn btn-primary btn-block btn-footer">
-					<span class="fas fa-info-circle" aria-hidden="true"></span>
-					{{ 'pixel.shop::lang.frontend.moreinfo'|trans }}
-				</a>
+                    {% if product.is_with_variants and product.variants|length > 0 %}
+                        <a href="{{ product.url }}" class="btn btn-primary btn-block btn-footer">
+                            <span class="fas fa-info-circle" aria-hidden="true"></span>
+                            {{ 'pixel.shop::lang.frontend.moreinfo'|trans }}
+                        </a>
+                    {% else %}
+                        <input type="hidden" name="id" value="{{ product.id }}">
+                        <input type="hidden" name="price" value="{{ product.price }}">
+                        <input type="hidden" name="quantity" value="1">
+                        <button type="submit" class="btn btn-primary btn-block btn-footer" data-attach-loading>
+                            <span class="fas fa-shopping-cart" aria-hidden="true"></span>
+                            {{ 'pixel.shop::lang.frontend.addtocart'|trans }}
+                        </button>
+                    {% endif %}
 				{% else %}
-				<input type="hidden" name="id" value="{{ product.id }}">
-				<input type="hidden" name="price" value="{{ product.price }}">
-				<input type="hidden" name="quantity" value="1">
-				<button type="submit" class="btn btn-primary btn-block btn-footer" data-attach-loading>
-					<span class="fas fa-shopping-cart" aria-hidden="true"></span>
-					{{ 'pixel.shop::lang.frontend.addtocart'|trans }}
-				</button>
-				{% endif %}
-
-				{% else %}
-				<a href="{{ product.url }}" class="btn btn-primary btn-block btn-footer">
-					<span class="fas fa-info-circle" aria-hidden="true"></span>
-					{{ 'pixel.shop::lang.frontend.moreinfo'|trans }}
-				</a>
+                    <a href="{{ product.url }}" class="btn btn-primary btn-block btn-footer">
+                        <span class="fas fa-info-circle" aria-hidden="true"></span>
+                        {{ 'pixel.shop::lang.frontend.moreinfo'|trans }}
+                    </a>
 				{% endif %}
 			</form>
 			{% else %}

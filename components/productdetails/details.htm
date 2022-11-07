@@ -12,7 +12,7 @@
 			<span class="label label-success">{{ 'pixel.shop::lang.frontend.instock'|trans }}</span>
 		{% endif %}
 
-		{% if not product.isInfiniteQuantity() and product.quantity == 0 %}
+		{% if not product.isInfiniteQuantity() and product.quantity <= 0 %}
 			<span class="label label-danger">{{ 'pixel.shop::lang.frontend.soldout'|trans }}</span>
 		{% endif %}
 	</div>
