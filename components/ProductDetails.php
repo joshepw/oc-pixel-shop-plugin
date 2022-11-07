@@ -49,7 +49,6 @@ class ProductDetails extends ComponentBase{
     	$product = Item::where('slug', $slug)->where("is_visible", 1)->first();
 
     	$this->addCss('/plugins/pixel/shop/assets/css/product.css');
-		$this->addJs('/plugins/pixel/shop/assets/js/product.js');
 
 		if ($product == null){
 			return redirect($this->property('productsPage'));

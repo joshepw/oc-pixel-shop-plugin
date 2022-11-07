@@ -167,7 +167,7 @@ trait PaymentTrait
 			$order->save();
 			$order->sendNotification();
 			Cart::clear();
-            
+
 			return ['#checkout-container' => $this->renderPartial('@order_summary', [
 				'order' => $order,
 				'settings' => $settings,
@@ -384,7 +384,7 @@ trait PaymentTrait
 				$order->reduceInventory();
 				$order->sendNotification();
 				Cart::clear();
-                
+
 				return ['#checkout-container' => $this->renderPartial('@order_summary', [
 					'order' => $order,
 					'settings' => $settings,
@@ -438,7 +438,7 @@ trait PaymentTrait
 		$order_content = urlencode($base64);
 		$fields = [
 			'pixelpay_key' => GatewaysSettings::get('pixelpay_app'),
-			
+
 			'order_cancel' => $this->controller->currentPageUrl() . "?order_id=$order->id&cancel=true",
 			'order_complete' => $this->controller->currentPageUrl() . "?order_id=$order->id&thanks=true",
 			'order_id' => $order->id,
@@ -483,7 +483,7 @@ trait PaymentTrait
 		$response->success = false;
 		$response->code = null;
 		$response->body = null;
-		
+
 
 		try {
 			$ch = curl_init();
@@ -535,7 +535,7 @@ trait PaymentTrait
 
 	protected function makePaymentWithCard($order, $cardParams)
 	{
-		
+
 		$pixelDomain = $this->getPixelDomain();
 		$url = $pixelDomain . '/api/v2/transaction/sale';
 		$data =
@@ -648,6 +648,7 @@ trait PaymentTrait
 	static function createOrder($data)
 	{
 		try {
+            Flash::error("entra createOrder");
 			$cart = Cart::load();
 			$formData = json_decode($data->formData);
 			$cartData = json_decode($data->cart);
@@ -689,7 +690,7 @@ trait PaymentTrait
 			$cart->total = $cartData->total;
 			$cart->tax_total = $cartData->tax_total;
 			$cart->save();
-            
+
 			$order = $cart->createOrderFromCart();
 			$order->status = 'await_pay';
 			$order->gateway = 'pixelpay';
@@ -723,7 +724,7 @@ trait PaymentTrait
 		}
 	}
 
-	
+
 
 	static function saveCardTokenToUser($data)
 	{
@@ -740,7 +741,7 @@ trait PaymentTrait
 				]
 			);
 			DB::table('system_settings')->insert(['item' => 'pixel_user_tokens', 'value' => $jsonData ]);
-			
+
 			return [
 				'success' => true,
 				'data' => [],
@@ -761,7 +762,7 @@ trait PaymentTrait
 			$userID = $data->userID;
 			$reference = $data->reference;
 
-			
+
 			$tokens = DB::table('system_settings')->where('item' , 'pixel_user_tokens')
 			->where('value->user_id',  $userID)
 			->where('value->card_reference',  $reference);
@@ -772,7 +773,7 @@ trait PaymentTrait
 					'data' => [],
 					'message' => "Token no encontrado"
 				];
-						
+
 			}
 
 			if($delete){

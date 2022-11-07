@@ -16,7 +16,7 @@
 							<input name="email" type="text" class="form-control" placeholder="{{ 'pixel.shop::component.default.email'|trans }}" required autofocus>
 
 							<br>
-                            
+
                             <input type="hidden" name="redirect" value="{{ input('origin') }}">
 
 							<button class="btn btn-lg btn-primary btn-block" type="submit">
@@ -39,7 +39,7 @@
 
 							<input name="username" type="text" class="form-control first" placeholder="{{ 'pixel.shop::component.default.email'|trans }}" required autofocus>
                             <input name="password" type="password" class="form-control last" placeholder="{{ 'pixel.shop::component.default.password'|trans }}" required>
-                            
+
                             <input type="hidden" name="redirect" value="{{ input('origin') }}">
 
 							<button class="btn btn-lg btn-primary btn-block" type="submit">
@@ -70,7 +70,7 @@
 
 							<input name="password" type="password" class="form-control first" placeholder="{{ 'pixel.shop::component.default.password'|trans }}" required>
 							<input name="password_confirmation" type="password" class="form-control last" placeholder="{{ 'pixel.shop::component.default.password_confirmation'|trans }}" required>
-                            
+
                             <input type="hidden" name="redirect" value="{{ input('origin') }}">
 
 							<button class="btn btn-lg btn-primary btn-block" type="submit">
@@ -96,14 +96,14 @@
 		{% endif %}
 
 
-		<ul class="nav nav-tabs">            
+		<ul class="nav nav-tabs">
             {% for tab in __SELF__.tabs %}
             <li {% if loop.first %}class="active"{% endif %}>
                 <a data-toggle="tab" href="#{{ tab.id }}">{{ tab.title|trans }}</a>
             </li>
             {% endfor %}
 
-			<li class="pull-right"><a href="#" data-request="onLogOut" data-request-success="location.reload()">{{ 'pixel.shop::component.user.logout'|trans }}</a></li>			
+			<li class="pull-right"><a href="#" data-request="onLogOut" data-request-success="location.reload()">{{ 'pixel.shop::component.user.logout'|trans }}</a></li>
 		</ul>
 
 		<div class="tab-content">
@@ -120,3 +120,6 @@
 	</div>
 
 {% endif %}
+
+<script type="text/javascript" src='/plugins/pixel/shop/assets/js/jquery.mask.min.js'></script>
+<script type="text/javascript" src='/plugins/pixel/shop/assets/js/user.js'></script>

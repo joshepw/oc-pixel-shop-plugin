@@ -155,7 +155,7 @@ class CartContainer extends ComponentBase
 
 					if ($hash == input('paymentHash')) {
 						if($order->status !== "await_fulfill"){
-							
+
 							$order->status = 'await_fulfill';
 							$order->is_paid = true;
 							$order->paid_at = Carbon::now();
@@ -164,7 +164,7 @@ class CartContainer extends ComponentBase
 							$order->sendNotification();
 							Cart::clear();
 						}
-						
+
 					} else {
 						$this->page['validationFailed'] = true;
 					}
@@ -189,7 +189,7 @@ class CartContainer extends ComponentBase
 
 		$shippingCountry = null;
 		$billingCountry = null;
-        
+
 		if (Country::isEnabled()->count() == 1) {
 			$onlyOneCountry = Country::isEnabled()->first();
 			$shippingCountry = $billingCountry = $onlyOneCountry;
@@ -216,7 +216,7 @@ class CartContainer extends ComponentBase
 
 		$this->page['billing_states'] = $billingCountry ? $billingCountry->states : null;
 		$this->page['shipping_states'] = $shippingCountry ? $shippingCountry->states : null;
-        
+
 		$this->page['methods_list'] = $billingCountry && isset($billingCountry->code) ? $this->getPaymentMethodsList($billingCountry->code) : null;
 		$this->page['method_country_code'] = $billingCountry->code ?? null;
 		$this->page['user'] = $this->user();
@@ -233,17 +233,6 @@ class CartContainer extends ComponentBase
 		$this->page['config'] = json_encode($this->page['config']);
 
 		$this->addCss('/plugins/pixel/shop/assets/css/cart.css');
-		$this->addJs('/plugins/pixel/shop/assets/js/jquery.mask.min.js');
-		$this->addJs('/plugins/pixel/shop/assets/js/jquery.validate.min.js');
-		$this->addJs('/plugins/pixel/shop/assets/js/jquery.steps.min.js');
-		$this->addJs('/plugins/pixel/shop/assets/js/cart.js');
-
-		
-		$this->addJs('https://unpkg.com/axios/dist/axios.min.js');
-		if($this->isTokenizationActive()){
-			$this->addJs('https://unpkg.com/@pixelpay/sdk');
-			$this->addJs('/plugins/pixel/shop/assets/js/3ds.js');
-		}
 	}
 
 	public function isTokenizationActive()
@@ -346,7 +335,7 @@ class CartContainer extends ComponentBase
 		$cart->save();
 
 		$methodCountry = request()->input('is_ship_same_bill') ? 'shipping' : 'billing';
-		
+
 		$cards = $this->getCardsByUser();
 		if ($cards) {
 			$cards = $cards['success'] ? $cards['data'] : [];
