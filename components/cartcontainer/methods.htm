@@ -1,6 +1,6 @@
 <div class="text-danger mt-5" data-validate-for="gateway"></div>
 <ul class="list-group">
-  {% for method in methods_list %} 
+  {% for method in methods_list %}
   	{% if method.gateway == 'pixelpay' %}
 		{% if tokenization == 0 %}
 			<li class="list-group-item">
@@ -9,9 +9,9 @@
 					<label for="method-pixelpay">PixelPay</label>
 				</div>
 				<div class="payment-info">
-					<div class="info">						
+					<div class="info">
 						<img src="{{ '/plugins/pixel/shop/assets/img/icon-pixelpay-gateway.svg'|app }}" width="50" height="50">
-						
+
 					{% autoescape false %}
 						<p>{{ 'pixel.shop::component.cart.pixelpay_comment'|trans }}</p>
 					{% endautoescape %}
@@ -21,7 +21,7 @@
 					<img src="{{ '/plugins/pixel/shop/assets/img/badge.png'|app }}" alt="Pagos Seguros con PixelPay" height="45" width="480" class="img-responsive">
 				</div>
 			</li>
-		{% else %}	
+		{% else %}
 			{% for
 			  card in cards %}
 			  <li

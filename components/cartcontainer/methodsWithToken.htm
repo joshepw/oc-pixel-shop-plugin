@@ -1,7 +1,7 @@
 <div class="text-danger mt-5" data-validate-for="gateway"></div>
 <ul class="list-group">
-  {% for method in methods_list %} 
-    {% if method.gateway == 'pixelpay' %} 
+  {% for method in methods_list %}
+    {% if method.gateway == 'pixelpay' %}
         {% for
         card in cards %}
         <li
@@ -29,7 +29,7 @@
             </label>
             </div>
         </li>
-        {% endfor %} 
+        {% endfor %}
     {% endif %}
   <li class="list-group-item" id="item-class" onclick="showDataHolder()">
     <div class="list-radio">
@@ -182,7 +182,7 @@
               {% if method.gateway == 'pixelpay' %}
               <div class="row {% if not user %}  mt-5 {% endif %}" >
                 <div class="col-sm-6">
-                    Este cobro es <strong>seguro</strong> gracias a nuestra certificacion 
+                    Este cobro es <strong>seguro</strong> gracias a nuestra certificacion
                    <span style="color:green"> <strong>PCI DSS </strong></span> para pagos con tarjetas de crédito y débito.
                 </div>
                 <div class="col-sm-6 text-right">
@@ -225,4 +225,7 @@
   </li>
   {% endfor %}
 </ul>
+
+<script type="text/javascript" src="https://unpkg.com/@pixelpay/sdk-core"></script>
+<script type="text/javascript" src="/plugins/pixel/shop/assets/js/3ds.js" config="JSON.parse(document.getElementById('config'))"></script>
 
