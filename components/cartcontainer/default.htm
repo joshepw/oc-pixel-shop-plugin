@@ -53,7 +53,6 @@
                     </div>
                 </div>
 
-
                 <div class="row" id="form-bag">
                     <div class="col-md-12 text-right">
                         <hr>
@@ -80,14 +79,6 @@
 </div>
 
 {% put scripts %}
-<script>
-    jQuery.extend(jQuery.validator.messages, {
-        required: "{{ 'pixel.shop::validation.jquery.required'|trans }}",
-        email: "{{ 'pixel.shop::validation.jquery.email'|trans }}",
-        maxlength: jQuery.validator.format("{{ 'pixel.shop::validation.jquery.maxlength'|trans }}"),
-        minlength: jQuery.validator.format("{{ 'pixel.shop::validation.jquery.minlength'|trans }}"),
-    });
-</script>
     <script type="text/javascript" src='/plugins/pixel/shop/assets/js/jquery.mask.min.js'></script>
     <script type="text/javascript" src='/plugins/pixel/shop/assets/js/jquery.validate.min.js'></script>
     <script type="text/javascript" src='/plugins/pixel/shop/assets/js/jquery.steps.min.js'></script>
