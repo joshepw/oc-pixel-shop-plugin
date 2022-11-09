@@ -1,14 +1,10 @@
-var config = JSON.parse(document.getElementById("config").value);
-if (config.save_card == 1) {
-  PixelPay.setup(config.key, config.hash, config.end_point);
-}
+var config_values = JSON.parse(config.value);
 
 
-var userToken = document.getElementById("user")?.value;
-
-if (userToken.length) {
-    userToken = JSON.parse(userToken);
-    createUser(userToken, userToken.pixel_token);
+if (config_values.save_card == 1) {
+    const settings = new Models.Settings();
+    settings.setupEndpoint(config_values.end_point);
+    settings.setupCredentials(config_values.key, config_values.hash);
 }
 
 function errorMessage(text) {
@@ -18,6 +14,7 @@ function errorMessage(text) {
         interval: 3,
     });
 }
+
 function logger(message, data) {
     message = `[pixelpay-easyshop-sdk] ${message}`;
 
@@ -26,17 +23,19 @@ function logger(message, data) {
     } else {
       console.log(message);
     }
-  
 }
+
 function setShippingsAddresses(cart, formData) {
 
   cart = JSON.parse(cart);
   cart.shipping_address.city = formData["shipping_address[city]"];
+  cart.shipping_address.state = formData["shipping_address[state]"];
   cart.shipping_address.first_line = formData["shipping_address[first_line]"];
   cart.shipping_address.second_line = formData["shipping_address[second_line]"];
   cart.shipping_address.zip = formData["shipping_address[zip]"];
 
   cart.billing_address.city = formData["billing_address[city]"];
+  cart.billing_address.state = formData["billing_address[state]"];
   cart.billing_address.first_line = formData["billing_address[first_line]"];
   cart.billing_address.second_line = formData["billing_address[second_line]"];
   cart.billing_address.zip = formData["billing_address[zip]"];
@@ -44,38 +43,29 @@ function setShippingsAddresses(cart, formData) {
   return cart;
 }
 
-function createUser(activeUser, customerToken) {
-  if (customerToken == null) {
-    PixelPay.tokenize()
-      .createCustomer(activeUser.email)
-      .then(function (response) {
-        token_user = response.data.token;
-        saveTokenToUser(token_user, activeUser.id);
-      })
-      .catch(function (err) {
-        reject(err);
-        errorMessage(err);
-      });
-  }
-}
-
 function tokenCardToUser(card, billing) {
-  return new Promise((resolve, reject) => {
-    PixelPay.tokenize()
-      .createCard(card, billing)
-      .then(function (response) {
-        console.log(response);
-        saveCardTokenInDB(response.data.token, response.data.mask)
-      })
-      .catch(function (err) {
+    const settings = new Models.Settings();
+    settings.setupEndpoint(config_values.end_point);
+    settings.setupCredentials(config_values.key, config_values.hash);
+
+    const tokenization = new Service.Tokenization(settings);
+
+    return tokenization.vaultCard(card_token).then((response) => {
+        if (CardResult.validateResponse(response)) {
+          const result = CardResult.fromResponse(response)
+          saveCardTokenInDB(response.data.token, response.data.mask)
+        } else {
+            errorMessage(err);
+        }
+    }).catch((error) => {
         errorMessage(err);
-      });
-  });
+    });
 }
 
 function isSaveCardActivated(saveCard) {
     return saveCard == 1 && document.querySelector("#set_default:checked")?.value == "on" ? true : false;
 }
+
 function saveCardTokenInDB(cardToken, reference) {
   const userID = userToken.id;
   axios
@@ -92,6 +82,7 @@ function saveCardTokenInDB(cardToken, reference) {
       errorMessage(error);
     });
 }
+
 function saveTokenToUser(token, userID) {
   axios
     .post("/saveTokenToUser", {
@@ -151,89 +142,109 @@ function openOrderResume(id, hash) {
 }
 
 function paymentWithToken(cart, hash) {
+    settings.setupEndpoint(config_values.end_point);
+    settings.setupCredentials(config_values.key, config_values.hash);
 
-  let order = PixelPay.newOrder();
-  order.setOrderID(cart.id);
-  order.setAmount(parseFloat(cart.total).toFixed(2));
-  order.setFullName(cart.customer_first_name + " " + cart.customer_last_name);
-  order.setEmail(cart.customer_email);
-  order.setCategory('october');
+  let order = new Models.Order();
+  order.id = cart.id;
+  order.currency = cart.currency;
+  order.customer_name = cart.customer_first_name + " " + cart.customer_last_name;
+  order.customer_email = cart.customer_email;
+  order.amount = parseFloat(cart.total).toFixed(2);
 
-  let card = PixelPay.newCard();
-  card.setToken(userToken.pixel_token, getCardTokenToPay());
-  order.addCard(card);
-  //return;
-  PixelPay.payOrder(order)
-    .then(function (response) {
-      logger(response);
-      $.oc.stripeLoadIndicator.hide();
-      openOrderResume(cart.id, hash);
-    })
-    .catch(function (err) {
-      console.error("Error: ", err);
-      $.oc.stripeLoadIndicator.hide();
-      errorMessage(err.message);
-    });
+  let sale = new Requests.SaleTransaction();
+
+  if(is3DS()) {
+    sale.withAuthenticationRequest();
+  }
+
+  sale.setOrder(order);
+  sale.setCardToken(getCardTokenToPay());
+  let service = new Services.Transaction(settings);
+
+  service.doSale(sale).then((response) => {
+    if (response.success) {
+        logger(response);
+        $.oc.stripeLoadIndicator.hide();
+        openOrderResume(cart.id, hash);
+    } else {
+        //alert(response.message);
+        throw response.message;
+    }
+  }).catch((error) => {
+    console.error("Error: ", error);
+    $.oc.stripeLoadIndicator.hide();
+    alert(error);
+    return;
+  });
 }
 
-function paymentWith3DS(cart, cardData, hash) {
-try {
-  let customerToken = userToken?.pixel_token;
+function paymentWithSDK(cart, cardData, hash) {
+    const settings = new Models.Settings();
+    settings.setupEndpoint(config_values.end_point);
+    settings.setupCredentials(config_values.key, config_values.hash);
 
-  let order = PixelPay.newOrder();
+    try {
+        let card = new Models.Card();
+        card.number = cardData.cc_number.split(" ").join("");
+        card.cvv2 = cardData.cc_cvv;
+        card.expire_month = cardData.cc_exp[0] + cardData.cc_exp[1];
+        card.expire_year = cardData.cc_exp[5] + cardData.cc_exp[6];
+        card.cardholder = cardData.cc_name;
 
-  order.setOrderID(cart.id);
-  order.setAmount(parseFloat(cart.total).toFixed(2));
-  order.setFullName(cart.customer_first_name + " " + cart.customer_last_name);
-  order.setEmail(cart.customer_email);
-  order.setCategory('october');
-  let card = PixelPay.newCard();
+        let billing = new Models.Billing()
+        billing.address = cart.billing_address.first_line;
+        billing.country = cart.billing_address.country;
+        billing.state = cart.billing_address.state;
+        billing.city = cart.billing_address.city;
+        billing.phone = cart.customer_phone;
+        if (cart.billing_address.zip) {
+            billing.zip = cart.billing_address.zip;
+        }
 
-  card.setCardNumber(cardData.cc_number.split(" ").join(""));
-  card.setCvv(cardData.cc_cvv);
-  card.setCardHolder(cardData.cc_name);
-  card.setExpirationDate(
-    cardData.cc_exp[0] +
-      cardData.cc_exp[1] +
-      "-" +
-      cardData.cc_exp[5] +
-      cardData.cc_exp[6]
-  );
+        let order = new Models.Order();
+        order.id = cart.id;
+        order.currency = cart.currency;
+        order.customer_name = cart.customer_first_name + " " + cart.customer_last_name;
+        order.customer_email = cart.customer_email;
+        order.amount = parseFloat(cart.total).toFixed(2);
 
-  order.addCard(card);
-  let billing = PixelPay.newBilling();
+        let sale = new Requests.SaleTransaction();
 
-  billing.setCity(cart.billing_address.city);
-  billing.setState(cart.billing_address.state);
-  billing.setCountry(cart.billing_address.country);
-  if (cart.billing_address.zip) {
-      billing.setZip(cart.billing_address.zip);
-  }
-  billing.setAddress(cart.billing_address.first_line);
-  billing.setPhoneNumber(cart.customer_phone);
-  order.addBilling(billing);
- 
-  	PixelPay.payOrder(order)
-		.then(function (response) {
-		$.oc.stripeLoadIndicator.hide();
-		logger(response);
-      openOrderResume(cart.id, hash);
-      if (isSaveCardActivated(config.save_card) && customerToken !== null) {
-        card.setCustomerToken(customerToken);
-        tokenCardToUser(card, billing);
-      }
-		})
-		.catch(function (err) {
-			logger('error ', err);
-		$.oc.stripeLoadIndicator.hide();
-		errorMessage(err.message);
-		});
+        if(is3DS()) {
+            sale.withAuthenticationRequest();
+        }
 
-	}catch(err) {
-		$.oc.stripeLoadIndicator.hide();
-		errorMessage(err.message);
-		logger(err);
-	}
+        sale.setOrder(order);
+        sale.order_amount = order.amount;
+        sale.setCard(card);
+        sale.setBilling(billing);
+
+        let service = new Services.Transaction(settings);
+        console.log(sale);
+        service.doSale(sale).then((response) => {
+            if (response.success) {
+                console.log(response);
+                $.oc.stripeLoadIndicator.hide();
+                logger(response);
+                openOrderResume(cart.id, hash);
+                if (isSaveCardActivated(config_values.save_card) && customerToken !== null) {
+                //card.setCustomerToken(customerToken);
+                tokenCardToUser(card, billing);
+                }
+            } else {
+                console.log(response);
+                throw response.message;
+            }
+        }).catch((error) => {
+            console.error("Error: ", error);
+            $.oc.stripeLoadIndicator.hide();
+            alert(error);
+            return;
+        });
+    } catch(e) {
+        console.log(e);
+    }
 }
 
 function isPaymentByToken() {
@@ -291,21 +302,25 @@ function createrOrder() {
             response.data.data,
             response.data.payment_hash,
           );
+        return true;
         } else {
-          paymentWith3DS(
+          paymentWithSDK(
             response.data.data,
             JSON.parse(formData),
             response.data.payment_hash,
           );
+        return true;
         }
       } else {
         $.oc.stripeLoadIndicator.hide();
         errorMessage(response.data.message);
+        return false;
       }
     })
     .catch(function (error) {
       $.oc.stripeLoadIndicator.hide();
       errorMessage(error);
+      return false;
     });
 }
 
@@ -315,7 +330,11 @@ function hiddenDataHolder() {
 	element.style.display = 'none';
 }
 
-function showDataHolder(){
+function showDataHolder() {
 	var element = document.getElementById('pixel_card_holder');
 	element.style.display = 'block';
+}
+
+function is3DS() {
+	return false;
 }

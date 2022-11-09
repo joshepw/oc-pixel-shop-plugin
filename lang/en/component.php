@@ -53,7 +53,7 @@ return [
 		'place_order' => 'Place Order',
 		'bank_transfer_comment' => 'Please transfer the total amount (:total) to our bank account.',
 		'cash_on_delivery_comment' => 'You pay for the merchandise upon delivery.',
-		'paypal_comment' => 'When you click <b>"Place Order"</b>, you will be taken to the <b>PayPal</b> website.',
+		'paypal_comment' => 'When you click "Place Order", you will be taken to the PayPal website.',
 		'pixelpay_comment' => 'On the next page your payment is processed through <b style="color: #226DF6">PixelPay&reg;</b><br>We do not store card data. The transaction is <b style="color: #226DF6">encrypted and secure</b>',
 
 		'name_card' => 'Name on card',
@@ -72,7 +72,7 @@ return [
 		'payment_method' => 'Payment Method',
 		'no_gateway_support' => 'This shop don\'t support and payment method in this country (:country).',
 
-		'pay_with_card' => 'Pay with credit card',
+		'pay_with_card' => 'PixelPay',
 		'add_new_card' => 'Add new card',
 		'save_card' => 'Save this card',
 		'card_info' => 'Card Info',

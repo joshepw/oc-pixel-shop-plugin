@@ -29,6 +29,7 @@ trait PaymentTrait
 
 	protected function onSendCheckout()
 	{
+        Flash::success((trans('pixel.shop::lang.messages.succesful_order')));
 		$this->prepareLang();
 
 		$cart = Cart::load();
@@ -613,10 +614,6 @@ trait PaymentTrait
 			$url = $pixelDomain . '/api/v2/tokenization/customer/' . Auth::user()->pixel_token;
 			return $this->doPixelPayRequest($url);
 		} else {
-			/* $response = new stdClass();
-			$response->success = false;
-			$response->code = null;
-			$response->body = null; */
 			return [
                 'success' => false,
                 'code' => null,

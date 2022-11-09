@@ -233,6 +233,11 @@ class CartContainer extends ComponentBase
 		$this->page['config'] = json_encode($this->page['config']);
 
 		$this->addCss('/plugins/pixel/shop/assets/css/cart.css');
+
+        if($this->isTokenizationActive()){
+			$this->addJs('https://unpkg.com/@pixelpay/sdk-core');
+            $this->addJs('/plugins/pixel/shop/assets/js/SDKPayment.js', ['config' => $this->page['config']]);
+		}
 	}
 
 	public function isTokenizationActive()
@@ -274,7 +279,13 @@ class CartContainer extends ComponentBase
 			];
 
 			if (request()->input('is_ship_same_bill')) {
-				$return['.shop__methods-list'] = $this->renderPartial($this->isTokenizationActive() ? '@methodsWithToken' : '@methods', [
+                $partial = "";
+                if ($this->isTokenizationActive()) {
+                    $partial = '@methodsWithToken';
+                } else {
+                    $partial = '@methods';
+                }
+				$return['.shop__methods-list'] = $this->renderPartial($partial, [
 					'methods_list' => $this->getPaymentMethodsList(request()->input('shipping_address.country')),
 					'method_country_code' => request()->input('shipping_address.country'),
 					'cards' => $cards,
@@ -282,7 +293,6 @@ class CartContainer extends ComponentBase
 					'user' => $this->user()
 				]);
 			}
-
 			return $return;
 		}
 	}
@@ -316,7 +326,13 @@ class CartContainer extends ComponentBase
 		$this->prepareLang();
 
 		$cart = Cart::load();
-		$cart->shipping_address['state'] = request()->input('shipping_address.state');
+
+        if (request()->input('shipping_address.state')) {
+            $cart->shipping_address['state'] = request()->input('shipping_address.state');
+        } else {
+            $cart->shipping_address['state'] = request()->input('shipping_address.state_text');
+        }
+
 		$cart->shipping_address['country'] = request()->input('shipping_address.country');
 		$cart->updateTotals();
 		$cart->save();

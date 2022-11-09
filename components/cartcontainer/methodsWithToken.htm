@@ -31,7 +31,7 @@
         </li>
         {% endfor %}
     {% endif %}
-  <li class="list-group-item" id="item-class" onclick="showDataHolder()">
+  <li class="list-group-item" id="item-class">
     <div class="list-radio">
       <input type="radio" value="{{ method.gateway }}" name="gateway"
       data-msg-required="{{ 'pixel.shop::validation.gateway.required'|trans }}"
@@ -89,7 +89,7 @@
                       name="cc_exp"
                       type="text"
                       class="form-control"
-                      placeholder="** / **"
+                      placeholder="** / ****"
                     />
                     <div
                       class="invalid-feedback"
@@ -182,8 +182,8 @@
               {% if method.gateway == 'pixelpay' %}
               <div class="row {% if not user %}  mt-5 {% endif %}" >
                 <div class="col-sm-6">
-                    Este cobro es <strong>seguro</strong> gracias a nuestra certificacion
-                   <span style="color:green"> <strong>PCI DSS </strong></span> para pagos con tarjetas de crédito y débito.
+                    Este cobro es <strong> seguro </strong> gracias a nuestra certificacion
+                   <span style="color:green"> <strong> PCI DSS </strong> </span> para pagos con tarjetas de crédito y débito.
                 </div>
                 <div class="col-sm-6 text-right">
                     <img
@@ -225,7 +225,4 @@
   </li>
   {% endfor %}
 </ul>
-
-<script type="text/javascript" src="https://unpkg.com/@pixelpay/sdk-core"></script>
-<script type="text/javascript" src="/plugins/pixel/shop/assets/js/3ds.js" config="JSON.parse(document.getElementById('config'))"></script>
 

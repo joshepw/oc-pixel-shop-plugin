@@ -18,15 +18,15 @@
 	<div class="col-billing col-md-3">
 		<div class="form-group">
 			<label>{{ 'pixel.shop::lang.fields.country'|trans }}</label>
-			<select 
-				class="form-control" 
-				name="billing_address[country]" 
+			<select
+				class="form-control"
+				name="billing_address[country]"
 				data-request="onBillingCountrySelect"
 				data-request-success="Cart.setBillingCountryOnSelect(data)">
 				<option value="">{{ 'pixel.shop::component.cart.choose'|trans }}</option>
 				{% for country in countries %}
-				<option 
-					value="{{ country.code }}" 
+				<option
+					value="{{ country.code }}"
 					{% if billing_country == country.code %}
 					selected="selected"
 					{% endif %}>
@@ -40,9 +40,7 @@
 	<div class="col-md-4">
 		<div class="form-group">
             <label>{{ 'pixel.shop::lang.fields.state'|trans }}</label>
-            <div class="billingStateContainer">
-                {% partial '@billing_states' %}
-            </div>
+            <input type="text" class="form-control" name="billing_address[state]" value="{{ user.billing_address.state ?: cart.billing_address.state }}" minlength="2" maxlength="90">
 			<div class="invalid-feedback" data-validate-for="billing_address.state"></div>
 		</div>
 	</div>
@@ -61,7 +59,7 @@
 		</div>
     </div>
     <input type="hidden" name="billing_zip_required">
-    
+
 </div>
 
 {% if __SELF__.prepareFields('billing') %}

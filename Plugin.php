@@ -110,7 +110,7 @@ class Plugin extends PluginBase
 						'url' => Backend::url('pixel/shop/coupons'),
 						'permissions' => ['pixel.shop.coupons'],
 					],
-					
+
 				]
 			]
 		];
@@ -390,11 +390,9 @@ class Plugin extends PluginBase
 		});
 
 		Validator::extend('ccexp', function ($attribute, $value, $parameters, $validator) {
-			$value = preg_replace('/\s/', '', $value);
 			$part =  explode('/', $value);
 			$new_date = $part[1] . '-' . $part[0];
-
-			$dt = \DateTime::createFromFormat('y-m', $new_date);
+			$dt =date_create_from_format('Y-m', $new_date);
 			$format = $dt->format('Y-m');
 			$new_format = explode('-', $format);
 			$exp = intval($new_format[0] . $new_format[1]);
@@ -407,16 +405,6 @@ class Plugin extends PluginBase
 				return true;
 
 			return;
-			/* $value = preg_replace('/\s/', '', $value);
-			$exp = intval( date('Ym', strtotime($value)) );
-
-			$now = intval( date('Ym') );
-			$limit = intval( date('Ym', strtotime('+20 years')) );
-
-			if($exp >= $now && $exp <= $limit)
-				return true;
-
-			return; */
 		});
 
 		Validator::extend('money', function ($attribute, $value, $parameters, $validator) {
