@@ -132,10 +132,10 @@ secondaryTabs:
         tab: 'pixel.shop::lang.fields.bank_transfer'
 
     bank_transfer_hide_customer_information:
-        label: 'pixel.shop::lang.fields.bank_hide_customer_information' 
-        type: checkbox 
-        span: left 
-        tab: 'pixel.shop::lang.fields.bank_transfer'    
+        label: 'pixel.shop::lang.fields.bank_hide_customer_information'
+        type: checkbox
+        span: left
+        tab: 'pixel.shop::lang.fields.bank_transfer'
 
     bank_transfer_countries:
         label: 'pixel.shop::lang.fields.allowed_countries'
@@ -204,9 +204,9 @@ secondaryTabs:
         tab: 'pixel.shop::lang.fields.paypal'
 
     paypal_use_sandbox:
-        label: 'Use Sandbox for testing?' 
-        type: checkbox 
-        span: left 
+        label: 'Use Sandbox for testing?'
+        type: checkbox
+        span: left
         tab: 'pixel.shop::lang.fields.paypal'
 
     paypal_countries:
@@ -255,9 +255,16 @@ secondaryTabs:
         span: auto
         placeholder: 'pixelpay.app'
         tab: 'pixel.shop::lang.fields.pixelpay'
-    
+
     pixelpay_savecard:
         label: 'pixel.shop::lang.fields.savecard'
+        type: switch
+        span: full
+        placeholder: 'pixelpay.app'
+        tab: 'pixel.shop::lang.fields.pixelpay'
+
+    pixelpay_is3ds:
+        label: 'pixel.shop::lang.fields.active3ds'
         type: switch
         span: full
         placeholder: 'pixelpay.app'

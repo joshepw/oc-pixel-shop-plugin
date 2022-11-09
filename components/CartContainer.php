@@ -229,6 +229,7 @@ class CartContainer extends ComponentBase
 				'hash' =>  md5(GatewaysSettings::get('pixelpay_hash')),
 				'end_point' => $this->isTokenizationActive() ? $this->getEndPoint() : null,
 				'save_card' => GatewaysSettings::get('pixelpay_savecard'),
+                'is_3ds' => GatewaysSettings::get('pixelpay_is3ds'),
 			];
 		$this->page['config'] = json_encode($this->page['config']);
 

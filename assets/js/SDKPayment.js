@@ -154,7 +154,7 @@ function paymentWithToken(cart, hash) {
 
   let sale = new Requests.SaleTransaction();
 
-  if(is3DS()) {
+  if(config_values.is3ds) {
     sale.withAuthenticationRequest();
   }
 
@@ -211,7 +211,7 @@ function paymentWithSDK(cart, cardData, hash) {
 
         let sale = new Requests.SaleTransaction();
 
-        if(is3DS()) {
+        if(config_values.is3ds) {
             sale.withAuthenticationRequest();
         }
 
@@ -335,6 +335,3 @@ function showDataHolder() {
 	element.style.display = 'block';
 }
 
-function is3DS() {
-	return false;
-}
