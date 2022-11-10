@@ -9,7 +9,7 @@
 				<span class="label label-success">{{ 'pixel.shop::lang.frontend.onsale'|trans }}</span>
 			{% endif %}
 
-			{% if product.quantity < 1 and product.quantity != null %}
+			{% if not product.isInfiniteQuantity() and product.quantity <= 0 %}
 				<span class="label label-danger">{{ 'pixel.shop::lang.frontend.soldout'|trans }}</span>
 			{% endif %}
 		</div>
@@ -31,7 +31,7 @@
 						{{ str_limit( product.name, 48,'...')  }}
 					</h4>
 					<h3 class="card-price shop__product-price">
-						{{ product.getPrice()|currency }}
+						{{ product.price|currency  }}
 					</h3>
 					{% if product.is_on_sale %}
 					<small class="shop__product-old-price">
@@ -45,11 +45,11 @@
 				</div>
 			</div>
 
-			{% if product.quantity > 0 or product.quantity == null %}
+			{% if product.isInfiniteQuantity() or product.quantity > 0 %}
 			<form data-request="onAddToCart" data-request-flash>
 				{% if product.is_with_variants and product.variants|length > 0 %}
 				<a href="{{ product.url }}" class="btn btn-primary btn-block btn-footer">
-					<span class="fas fa-info-circle" aria-hidden="true"></span> 
+					<span class="fas fa-info-circle" aria-hidden="true"></span>
 					{{ 'pixel.shop::lang.frontend.moreinfo'|trans }}
 				</a>
 				{% else %}
@@ -57,14 +57,14 @@
 				<input type="hidden" name="price" value="{{ product.price }}">
 				<input type="hidden" name="quantity" value="1">
 				<button type="submit" class="btn btn-primary btn-block btn-footer" data-attach-loading>
-					<span class="fas fa-shopping-cart" aria-hidden="true"></span> 
+					<span class="fas fa-shopping-cart" aria-hidden="true"></span>
 					{{ 'pixel.shop::lang.frontend.addtocart'|trans }}
 				</button>
 				{% endif %}
 			</form>
 			{% else %}
 			<a href="{{ product.url }}" class="btn btn-warning btn-block btn-footer">
-				<span class="fas fa-plus-circle" aria-hidden="true"></span> 
+				<span class="fas fa-plus-circle" aria-hidden="true"></span>
 				{{ 'pixel.shop::lang.frontend.order_reserve'|trans }}
 			</a>
 			{% endif %}

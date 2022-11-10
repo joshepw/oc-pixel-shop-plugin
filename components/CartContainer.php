@@ -155,7 +155,7 @@ class CartContainer extends ComponentBase
 
 					if ($hash == input('paymentHash')) {
 						if($order->status !== "await_fulfill"){
-							
+
 							$order->status = 'await_fulfill';
 							$order->is_paid = true;
 							$order->paid_at = Carbon::now();
@@ -164,7 +164,7 @@ class CartContainer extends ComponentBase
 							$order->sendNotification();
 							Cart::clear();
 						}
-						
+
 					} else {
 						$this->page['validationFailed'] = true;
 					}
@@ -189,7 +189,7 @@ class CartContainer extends ComponentBase
 
 		$shippingCountry = null;
 		$billingCountry = null;
-        
+
 		if (Country::isEnabled()->count() == 1) {
 			$onlyOneCountry = Country::isEnabled()->first();
 			$shippingCountry = $billingCountry = $onlyOneCountry;
@@ -216,7 +216,7 @@ class CartContainer extends ComponentBase
 
 		$this->page['billing_states'] = $billingCountry ? $billingCountry->states : null;
 		$this->page['shipping_states'] = $shippingCountry ? $shippingCountry->states : null;
-        
+
 		$this->page['methods_list'] = $billingCountry && isset($billingCountry->code) ? $this->getPaymentMethodsList($billingCountry->code) : null;
 		$this->page['method_country_code'] = $billingCountry->code ?? null;
 		$this->page['user'] = $this->user();
@@ -229,20 +229,15 @@ class CartContainer extends ComponentBase
 				'hash' =>  md5(GatewaysSettings::get('pixelpay_hash')),
 				'end_point' => $this->isTokenizationActive() ? $this->getEndPoint() : null,
 				'save_card' => GatewaysSettings::get('pixelpay_savecard'),
+                'is_3ds' => GatewaysSettings::get('pixelpay_is3ds'),
 			];
 		$this->page['config'] = json_encode($this->page['config']);
 
 		$this->addCss('/plugins/pixel/shop/assets/css/cart.css');
-		$this->addJs('/plugins/pixel/shop/assets/js/jquery.mask.min.js');
-		$this->addJs('/plugins/pixel/shop/assets/js/jquery.validate.min.js');
-		$this->addJs('/plugins/pixel/shop/assets/js/jquery.steps.min.js');
-		$this->addJs('/plugins/pixel/shop/assets/js/cart.js');
 
-		
-		$this->addJs('https://unpkg.com/axios/dist/axios.min.js');
-		if($this->isTokenizationActive()){
-			$this->addJs('https://unpkg.com/@pixelpay/sdk');
-			$this->addJs('/plugins/pixel/shop/assets/js/3ds.js');
+        if($this->isTokenizationActive()){
+			$this->addJs('https://unpkg.com/@pixelpay/sdk-core');
+            $this->addJs('/plugins/pixel/shop/assets/js/SDKPayment.js', ['config' => $this->page['config']]);
 		}
 	}
 
@@ -279,21 +274,28 @@ class CartContainer extends ComponentBase
 					'shipping_states' => $country->states,
 					'user' => $this->user(),
 					'cards' => $cards,
-					'tokenization' => GatewaysSettings::get('pixelpay_savecard')
+					'tokenization' => GatewaysSettings::get('pixelpay_savecard'),
+                    'is_3ds' => GatewaysSettings::get('pixelpay_is3ds'),
 				]),
 				'code' => $country->code
 			];
 
 			if (request()->input('is_ship_same_bill')) {
-				$return['.shop__methods-list'] = $this->renderPartial($this->isTokenizationActive() ? '@methodsWithToken' : '@methods', [
+                $partial = "";
+                if ($this->isTokenizationActive()) {
+                    $partial = '@methodsWithToken';
+                } else {
+                    $partial = '@methods';
+                }
+				$return['.shop__methods-list'] = $this->renderPartial($partial, [
 					'methods_list' => $this->getPaymentMethodsList(request()->input('shipping_address.country')),
 					'method_country_code' => request()->input('shipping_address.country'),
 					'cards' => $cards,
 					'tokenization' => GatewaysSettings::get('pixelpay_savecard'),
-					'user' => $this->user()
+					'user' => $this->user(),
+                    'is_3ds' => GatewaysSettings::get('pixelpay_is3ds'),
 				]);
 			}
-
 			return $return;
 		}
 	}
@@ -315,7 +317,8 @@ class CartContainer extends ComponentBase
 				'method_country_code' => request()->input('billing_address.country'),
 				'cards' => $cards,
 				'tokenization' => GatewaysSettings::get('pixelpay_savecard'),
-				'user' => $this->user()
+				'user' => $this->user(),
+                'is_3ds' => GatewaysSettings::get('pixelpay_is3ds'),
 			]);
 
 			return $return;
@@ -327,7 +330,13 @@ class CartContainer extends ComponentBase
 		$this->prepareLang();
 
 		$cart = Cart::load();
-		$cart->shipping_address['state'] = request()->input('shipping_address.state');
+
+        if (request()->input('shipping_address.state')) {
+            $cart->shipping_address['state'] = request()->input('shipping_address.state');
+        } else {
+            $cart->shipping_address['state'] = request()->input('shipping_address.state_text');
+        }
+
 		$cart->shipping_address['country'] = request()->input('shipping_address.country');
 		$cart->updateTotals();
 		$cart->save();
@@ -346,7 +355,7 @@ class CartContainer extends ComponentBase
 		$cart->save();
 
 		$methodCountry = request()->input('is_ship_same_bill') ? 'shipping' : 'billing';
-		
+
 		$cards = $this->getCardsByUser();
 		if ($cards) {
 			$cards = $cards['success'] ? $cards['data'] : [];
@@ -358,7 +367,8 @@ class CartContainer extends ComponentBase
 				'method_country_code' => request()->input($methodCountry . '_address.country'),
 				'cards' => $cards,
 				'tokenization' => GatewaysSettings::get('pixelpay_savecard'),
-				'user' => $this->user()
+				'user' => $this->user(),
+                'is_3ds' => GatewaysSettings::get('pixelpay_is3ds'),
 			])
 		];
 	}

@@ -10,5 +10,5 @@
         {% endfor %}
     </select>
 {% else %}
-    <input type="text" class="form-control" value="{{ user.shipping_address.state ?: cart.shipping_address.state }}" name="shipping_address[state]" minlength="2" maxlength="90" required>
+    <input type="text" class="form-control" data-request="onShippingStateSelect" name="shipping_address[state_text]"  value="{{ user.shipping_address.state ?: cart.shipping_address.state }}"  minlength="2" maxlength="90" required>
 {% endif %}

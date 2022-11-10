@@ -44,12 +44,11 @@ class ProductDetails extends ComponentBase{
 
 	public function onRun(){
         $this->prepareLang();
-        
+
     	$slug = $this->property('slug');
     	$product = Item::where('slug', $slug)->where("is_visible", 1)->first();
 
     	$this->addCss('/plugins/pixel/shop/assets/css/product.css');
-		$this->addJs('/plugins/pixel/shop/assets/js/product.js');
 
 		if ($product == null){
 			return redirect($this->property('productsPage'));
@@ -63,12 +62,12 @@ class ProductDetails extends ComponentBase{
         $this->page['relatedProducts'] = $this->getRelatedProducts($product);
 
 		$product->setUrl($this->page->code, $this->controller);
-		
+
 			/**
 			 * Quantity Event
 			 */
-			$newQuantity = Event::fire('pixel.shop.getQuantityProperty', [$this, $product]);
-			$product->quantity = !empty($newQuantity) > 0 ? $newQuantity[0]['quantity'] : $product->quantity;
+			//$newQuantity = Event::fire('pixel.shop.getQuantityProperty', [$this, $product]);
+			//$product->quantity = !empty($newQuantity) > 0 ? $newQuantity[0]['quantity'] : $product->quantity;
 
         if (isset($product)) {
             $this->page->meta_title = $product->meta_title;
@@ -93,7 +92,7 @@ class ProductDetails extends ComponentBase{
         \App::setLocale($lang);
     }
 
-    public function getRelatedProducts($product){	
+    public function getRelatedProducts($product){
 		$list = $product->categories->lists('id');
 
 		$products = Item::whereHas('categories', function($query) use ($list){
@@ -107,12 +106,12 @@ class ProductDetails extends ComponentBase{
 
 		foreach ($products as $product) {
 			$product->setUrl($this->page->code, $this->controller);
-		
+
 			/**
 			 * Quantity Event
 			 */
-			$newQuantity = Event::fire('pixel.shop.getQuantityProperty', [$this, $product]);
-			$product->quantity = !empty($newQuantity) > 0 ? $newQuantity[0]['quantity'] : $product->quantity;
+			// $newQuantity = Event::fire('pixel.shop.getQuantityProperty', [$this, $product]);
+			// $product->quantity = !empty($newQuantity) > 0 ? $newQuantity[0]['quantity'] : $product->quantity;
 		}
 
 		return $products;

@@ -1,5 +1,5 @@
 <div class="row">
-	 
+
 
 	<div class="col-2"></div>
 	<div class="col-md-8 col-md-offset-2 ">
@@ -7,13 +7,13 @@
 			<form data-request="{{ __SELF__ }}::onLoadCardUpdate" data-request-flash data-request-validate>
 				<br>
 				<div class="text-danger" data-validate-for="card_id"></div>
-				<ul class="list-group list-of-cards">     
+				<ul class="list-group list-of-cards">
 					<li class="list-group-item step-content" id="item-class" style="border:none !important">
 						 <div class="list-content ">
 							<div class="row">
 								<div class="col-12">
 									<legend class="shop__billing-elements">{{ 'pixel.shop::component.cart.card_info'|trans }}</legend>
-	
+
 								</div>
 								<div class="col-md-6 ">
 									<div class="form-group kobolg-input-wrapper">
@@ -36,7 +36,7 @@
 								<div class="col-md-3">
 									<div class="form-group kobolg-input-wrapper">
 										<label>{{ 'pixel.shop::component.cart.expiration'|trans }}</label>
-										<input name="cc_exp" type="text"  class="form-control" placeholder="** / **">
+										<input name="cc_exp" type="text"  class="form-control" placeholder="** / ****">
 										<div class="invalid-feedback" data-validate-for="cc_exp"></div>
 									</div>
 								</div>
@@ -51,7 +51,7 @@
 									<div class="form-group kobolg-input-wrapper">
 										<input type="hidden" name="cc_default" value="{{ settings.cc_default }}">
 										<input type="hidden" name="cc_token" value="{{ token }}">
-	
+
 										<label>{{ 'pixel.shop::component.cart.card_accept'|trans }}</label>
 										<br>
 										<img src="{{ '/plugins/pixel/shop/assets/img/icon-visa.svg'|app }}" alt="" width="32" height="32">
@@ -81,15 +81,15 @@
 									<div class="col-billing col-md-3">
 										<div class="form-group kobolg-input-wrapper">
 											<label>{{ 'pixel.shop::lang.fields.country'|trans }}</label>
-											<select 
-												class="form-control kobolg-input-wrapper" 
-												name="shipping_address[country]" 
-												data-request="onShippingCountrySelect" 
+											<select
+												class="form-control kobolg-input-wrapper"
+												name="shipping_address[country]"
+												data-request="onShippingCountrySelect"
 												data-request-success="Profile.setShippingCountryOnSelect(data)">
 												<option value="">{{ 'pixel.shop::component.cart.choose'|trans }}</option>
 												{% for country in countries %}
-												<option 
-													value="{{ country.code }}" 
+												<option
+													value="{{ country.code }}"
 													{% if card.country == country.code %}
 													selected="{{card.country}}"
 													{% endif %}>
@@ -107,7 +107,7 @@
 											height: 52px;
 											line-height: 50px;
 											background-color: #fff;
-											border-color: #fff;">										
+											border-color: #fff;">
 												{% partial '@states' fieldtype='shipping' states=billing_states user_state=card.state %}
 										</div>
 											<div class="invalid-feedback" data-validate-for="billing_address.state"></div>
@@ -127,16 +127,16 @@
 											<div class="invalid-feedback" data-validate-for="billing_address.zip"></div>
 										</div>
 									</div>
-									<input type="hidden" name="billing_zip_required">								
+									<input type="hidden" name="billing_zip_required">
 								</div>
 								</div>
 								<div class="col-sm-12 text-right">
 									<button  type="submit"  class="btn btn-success"> {{ 'pixel.shop::component.cart.update'|trans }}</button>
 								</div>
-							</div>				
-						</div>				  
+							</div>
+						</div>
 					</li>
-				</ul>		
+				</ul>
 			</form>
 		</div>
 		<a href="#" data-request="{{ __SELF__ }}::onLoadCards" class="btn btn-primary"><span class="fas fa-arrow-left"></span> {{ 'pixel.shop::component.cart.return'|trans }}</a>

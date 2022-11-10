@@ -3,7 +3,7 @@
 		{% if order %}
 			{% partial '@order_summary' %}
 		{% else %}
-        
+
 		<div class="col-md-4" id="shop__cart-partial">
 			{% partial '@cart' %}
 		</div>
@@ -52,40 +52,38 @@
                         </div>
                     </div>
                 </div>
-                
 
                 <div class="row" id="form-bag">
                     <div class="col-md-12 text-right">
+                        <input type="hidden" id="tokenization" value="{{ tokenization }}">
                         <hr>
                         <a href="{{ product_page|page }}" class="btn btn-link btn-back-shopping"><i class="fas fa-shopping-cart"></i> {{ 'pixel.shop::component.cart.continue_shopping'|trans }}</a>
                         <a href="javascript:;" class="btn btn-link btn-prev" style="display: none">{{ 'pixel.shop::lang.components.cart_prev'|trans }}</a>
                         <a href="javascript:;" class="btn btn-primary btn-next">{{ 'pixel.shop::lang.components.cart_next'|trans }}</a>
-                        {% if  is_tokenization_active == false  or ( secure == 0 and is_tokenization_active == true) %}
-                        <button class="btn btn-success btn-finish" type="submit" data-attach-loading style="display: none">
-                            <i class="fas fa-credit-card"></i> {{ 'pixel.shop::component.cart.place_order'|trans }} 
-                        </button>                       
-                        {% else %}
-                        <button class="btn btn-success btn-finish" onclick="createrOrder()"  type="button" data-attach-loading style="display: none">
-                            <i class="fas fa-credit-card"></i> {{ 'pixel.shop::component.cart.place_order'|trans }} 
-                        </button>
-                        
-                        {% endif %}
+                        <button id="yes_token" class="btn btn-success btn-finish" onclick="checkType()" type="submit" data-attach-loading style="display: none"><i class="fas fa-credit-card"></i>Pay Order</button>
                     </div>
 				</div>
 			</form>
 		</div>
-		
 		{% endif %}
+        {% scripts %}
 	</div>
-</div>	
-	
+</div>
+
 {% put scripts %}
-<script>
-    jQuery.extend(jQuery.validator.messages, {
-        required: "{{ 'pixel.shop::validation.jquery.required'|trans }}",
-        email: "{{ 'pixel.shop::validation.jquery.email'|trans }}",
-        maxlength: jQuery.validator.format("{{ 'pixel.shop::validation.jquery.maxlength'|trans }}"),
-        minlength: jQuery.validator.format("{{ 'pixel.shop::validation.jquery.minlength'|trans }}"),
-    });
-</script>
+
+    <script>
+        function checkType() {
+            if (document.getElementById("tokenization").value && (document.querySelector('input[name="gateway"]:checked').value == 'pixelpay')) {
+                createrOrder();
+            }
+            return true;
+        }
+    </script>
+
+    <script type="text/javascript" src='/plugins/pixel/shop/assets/js/jquery.mask.min.js'></script>
+    <script type="text/javascript" src='/plugins/pixel/shop/assets/js/jquery.validate.min.js'></script>
+    <script type="text/javascript" src='/plugins/pixel/shop/assets/js/jquery.steps.min.js'></script>
+    <script type="text/javascript" src='/plugins/pixel/shop/assets/js/cart.js'></script>
+    <script type="text/javascript" src='https://unpkg.com/axios/dist/axios.min.js'></script>
 {% endput %}

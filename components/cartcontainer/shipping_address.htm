@@ -19,14 +19,14 @@
 		<div class="form-group">
             <label>{{ 'pixel.shop::lang.fields.country'|trans }}</label> {{ cart.is_ship_same_bill }}
 			<select required
-				class="form-control" 
-				name="shipping_address[country]" 
-				data-request="onShippingCountrySelect" 
+				class="form-control"
+				name="shipping_address[country]"
+				data-request="onShippingCountrySelect"
 				data-request-success="Cart.setShippingCountryOnSelect(data)">
 				<option value="">{{ 'pixel.shop::component.cart.choose'|trans }}</option>
 				{% for country in countries %}
-				<option 
-					value="{{ country.code }}" 
+				<option
+					value="{{ country.code }}"
 					{% if shipping_country == country.code %}
 					selected="selected"
 					{% endif %}>
@@ -40,9 +40,7 @@
 	<div class="col-md-4">
 		<div class="form-group">
 			<label>{{ 'pixel.shop::lang.fields.state'|trans }}</label>
-			<div class="shippingStateContainer">
-				{% partial '@shipping_states' %}
-            </div>
+			<input type="text" class="form-control" name="shipping_address[state]" value="{{ user.shipping_address.state ?: cart.shipping_address.state }}" minlength="2" maxlength="90" required>
 			<div class="invalid-feedback" data-validate-for="shipping_address.state"></div>
 		</div>
 	</div>

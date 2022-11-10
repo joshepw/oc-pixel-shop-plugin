@@ -1,10 +1,10 @@
 <?php $var_id = @$variant['id'] ?? str_random(12); ?>
 <div class="variant-item" data-variant-pending>
-	<table class="table table-form table-hover wrapper-variants" data-delete-message="<?= trans('pixel.shop::lang.messages.delete_unique') ?>" id="<?= $id ?>">
+	<table id="variants-table" class="table table-form table-hover wrapper-variants" data-delete-message="<?= trans('pixel.shop::lang.messages.delete_unique') ?>">
 		<thead>
 			<tr>
 				<th>
-					<input type="hidden" class="input-option-id" value="<?= $id ?>">
+					<input type="hidden" class="input-option-id" value="variant">
 					<input
 						type="text"
                         name="<?= $name ?>"
@@ -59,7 +59,7 @@
 
 	<script>
 		jQuery(document).ready(function($) {
-			var dragger = tableDragger(document.getElementById('vr-<?= $var_id ?>'), {
+			var dragger = tableDragger(document.getElementById('variants-table'), {
 				mode: 'row',
 				dragHandler: '.handle',
 				onlyBody: true,

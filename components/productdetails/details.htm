@@ -12,7 +12,7 @@
 			<span class="label label-success">{{ 'pixel.shop::lang.frontend.instock'|trans }}</span>
 		{% endif %}
 
-		{% if not product.isInfiniteQuantity() and product.quantity == 0 %}
+		{% if not product.isInfiniteQuantity() and product.quantity <= 0 %}
 			<span class="label label-danger">{{ 'pixel.shop::lang.frontend.soldout'|trans }}</span>
 		{% endif %}
 	</div>
@@ -25,14 +25,13 @@
 
 	<div class="form-group">
 		<h3 id="product-price" class="shop__product-price">
-			<span class="shop__product-price-amount" data-currency="{{ product.getDefaultCurrencySymbol() }}">
-				{{ product.getPrice()|currency }}
+			<span class="shop__product-price-amount" id="price" data-currency="{{ product.getDefaultCurrencySymbol() }}">
+				{{ product.price|currency  }}
 			</span>
 
-			<input type="hidden" name="base_price" value="{{ product.getPrice(false) }}">
+			<input type="hidden" name="base_price" value="{{ product.price }}">
 			<input type="hidden" name="old_price" value="{{ product.getOldPrice(false) }}">
-
-			<input type="hidden" name="base_price_with_tax" value="{{ product.getPrice() }}">
+			<input type="hidden" name="base_price_with_tax" value="{{ product.price }}">
 			<input type="hidden" name="old_price_with_tax" value="{{ product.getOldPrice() }}">
 
 			{% if product.is_on_sale %}
@@ -80,7 +79,7 @@
 			<div class="form-group row">
 				<label class="col-md-3 text-right">{{ variant.variant }}</label>
 				<div class="col-md-6">
-					<select name="option[{{ product.slugOption(variant.variant) }}]" class="form-control shop__product-option" data-label="{{ variant.variant }}" data-slug="{{ variant.id }}">
+					<select id="option-select" name="option[{{ product.slugOption(variant.variant) }}]" class="form-control shop__product-option" data-label="{{ variant.variant }}" data-slug="{{ variant.id }}">
 						<option value="" data-quantity="">{{ 'pixel.shop::lang.frontend.select_option'|trans }}</option>
 
 						{% for option in variant.items %}
@@ -117,7 +116,7 @@
 		<input type="hidden" name="options" value="">
 		<input type="hidden" name="options_index" value="">
 		<button type="submit" class="btn btn-primary btn-block btn-footer" data-attach-loading>
-			<span class="fas fa-shopping-cart" aria-hidden="true"></span> 
+			<span class="fas fa-shopping-cart" aria-hidden="true"></span>
 			{{ 'pixel.shop::lang.frontend.addtocart'|trans }}
 		</button>
 	{% endif %}

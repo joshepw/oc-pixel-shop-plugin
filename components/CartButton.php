@@ -69,7 +69,6 @@ class CartButton extends ComponentBase
 		$this->page['cart_count'] = count($cart->items);
 
 		$this->addCss('/plugins/pixel/shop/assets/css/button.css');
-		$this->addJs('/plugins/pixel/shop/assets/js/button.js');
 
 		$this->page['cart_position'] = $this->property('position');
 		$this->page['cart_color_bg'] = $this->property('colorBG');
@@ -77,7 +76,7 @@ class CartButton extends ComponentBase
         $this->page['cart_page'] = $this->property('cartPage');
         $this->page['hide_on_empty'] = $this->property('hideOnEmpty');
     }
-    
+
     protected function prepareLang(){
         $lang = \Config::get('app.locale', 'en');
 

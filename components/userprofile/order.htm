@@ -28,11 +28,11 @@
 						{{ order.billing_address.first_line }} <br>
 
 						{% if order.billing_address.city %}
-						{{ order.billing_address.city }}, 
+						{{ order.billing_address.city }},
 						{% endif %}
 
 						{% if order.billing_address.state %}
-						{{ order.billing_address.state }}, 
+						{{ order.billing_address.state }},
 						{% endif %}
 
 						{% if order.billing_address.country %}
@@ -65,20 +65,22 @@
 				</div>
 			</div>
         </div>
-        
+
         {% if order.custom_fields.customer %}
         <div class="row">
-            {% for field in order.custom_fields.customer if field.value %}
-            <div class="col-md-3">
-                <div class="text-left">
-                    <label>{{ field.label }}</label>
-                    <p>{{ field.value }}</p>
-                </div>
-            </div>
+            {% for field in order.custom_fields.customer %}
+                {% if field.value %}
+                    <div class="col-md-3">
+                        <div class="text-left">
+                            <label>{{ field.label }}</label>
+                            <p>{{ field.value }}</p>
+                        </div>
+                    </div>
+                {% endif %}
             {% endfor %}
         </div>
         {% endif %}
-        
+
 
 		<div class="order-items">
 			<table class="table">
@@ -171,7 +173,7 @@
 				</tbody>
 			</table>
         </div>
-        
+
         {% if order.custom_fields.shipping %}
         <div class="row">
             {% for field in order.custom_fields.shipping if field.value %}

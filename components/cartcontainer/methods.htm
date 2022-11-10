@@ -1,27 +1,20 @@
 <div class="text-danger mt-5" data-validate-for="gateway"></div>
 <ul class="list-group">
-  {% for method in methods_list %} 
-  	{% if method.gateway == 'pixelpay' %}
-		{% if tokenization == 0 %}
+  {% for method in methods_list %}
 			<li class="list-group-item">
 				<div class="list-radio">
-					<input type="radio" value="pixelpay" name="gateway" data-msg-required="Por favor, elija un método de pago primero" checked="checked" id="method-pixelpay" required="">
-					<label for="method-pixelpay">PixelPay</label>
-				</div>
-				<div class="payment-info">
-					<div class="info">						
-						<img src="{{ '/plugins/pixel/shop/assets/img/icon-pixelpay-gateway.svg'|app }}" width="50" height="50">
-						
-					{% autoescape false %}
-						<p>{{ 'pixel.shop::component.cart.pixelpay_comment'|trans }}</p>
-					{% endautoescape %}
-
-					</div>
-					<hr>
-					<img src="{{ '/plugins/pixel/shop/assets/img/badge.png'|app }}" alt="Pagos Seguros con PixelPay" height="45" width="480" class="img-responsive">
-				</div>
-			</li>
-		{% else %}	
+					<input type="radio" value="{{ method.gateway }}" name="gateway" data-msg-required="{{ 'pixel.shop::validation.gateway.required'|trans }}"
+                    {% if method.gateway == cart.gateway or methods_list|length == 1 %}
+                    checked="checked"
+                    {% endif %}
+                    id="method-{{ method.gateway }}" required>
+					<label for="method-{{ method.gateway }}">{{ method.title }}</label>
+		</div>
+		<div class="list-partial">
+			{{ method.partial|raw }}
+		</div>
+    </li>
+		{% else %}
 			{% for
 			  card in cards %}
 			  <li
@@ -50,7 +43,5 @@
 				  </div>
 			  </li>
 			{% endfor %}
-		{% endif %}
-	{% endif %}
   {% endfor %}
 </ul>

@@ -21,12 +21,12 @@
 			<small class="text-muted">{{ item.description }}</small>
 			<br>
             {% endif %}
-            
+
 			<small>{{ item.price|currency }} x{{ item.quantity }}</small>
 
-			<a href="#" 
-				class="text-danger shop__cart-delete-item" 
-				data-request="onDeleteFromCart" 
+			<a href="#"
+				class="text-danger shop__cart-delete-item"
+				data-request="onDeleteFromCart"
 				data-request-data="index: {{ loop.index0 }}"
 				data-request-flash>
 				<i class="fas fa-trash-alt"></i>
@@ -54,9 +54,9 @@
 			<h5 class="shop__cart-item-title">{{ 'pixel.shop::component.cart.promo_code'|trans }}</h5>
 			<small>{{ cart.coupon.code }}</small>
 		</div>
-		<a href="#" 
-			class="text-danger shop__cart-delete-item" 
-			data-request="onClearCoupon" 
+		<a href="#"
+			class="text-danger shop__cart-delete-item"
+			data-request="onClearCoupon"
 			data-request-flash>
 			<i class="fas fa-trash-alt"></i>
         </a>
@@ -82,9 +82,9 @@
 	</li>
 
 	{% if cart.items|length > 0 %}
-	<a href="#" 
-		data-request="onClearCart" 
-		data-request-flash 
+	<a href="#"
+		data-request="onClearCart"
+		data-request-flash
 		data-attach-loading
 		class="list-group-item list-group-item-action list-group-item-danger active text-center">
 		{{ 'pixel.shop::component.cart.empty_the_cart'|trans }}

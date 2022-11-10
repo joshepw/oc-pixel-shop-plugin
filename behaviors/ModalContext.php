@@ -20,14 +20,14 @@ class ModalContext extends ControllerBehavior {
 		$this->config->modelClass = Str::normalizeClassName($this->config->modelClass);
 
 	}
-	
+
 
     public function onCreateForm(){
 		$this->controller->asExtension('FormController')->create(post('record_id'));
 		$this->controller->vars['recordId'] = post('record_id');
 		$this->controller->vars['layout'] = $layout = post('layout');
 		$this->controller->vars['sidebar'] = $layout = post('sidebar');
-		return $this->controller->makePartial('$/pixel/shop/partials/_create.htm');		
+		return $this->controller->makePartial('$/pixel/shop/partials/_create.htm');
 	}
 	public function onCreateFormZones(){
 		$this->controller->asExtension('FormController')->create(post('record_id'));
@@ -48,7 +48,7 @@ class ModalContext extends ControllerBehavior {
 		$this->controller->asExtension('FormController')->update(post('record_id'));
 		$this->controller->vars['recordId'] = post('record_id');
 
-		
+
 
 		// $this->controller->vars['layout'] = $layout = post('layout');
 		// $this->controller->vars['sidebar'] = $layout = post('sidebar');
@@ -72,7 +72,7 @@ class ModalContext extends ControllerBehavior {
 		return $this->controller->makePartial('$/pixel/shop/partials/_updateZones.htm');
 	}
 
-	
+
 	public function onUpdateModal(){
 		$this->controller->asExtension('FormController')->update_onSave(post('record_id'));
 		return $this->controller->listRefresh();
@@ -91,7 +91,7 @@ class ModalContext extends ControllerBehavior {
 		$this->controller->asExtension('FormController')->update_onDelete(post('record_id'));
 		return $this->controller->listRefresh();
 	}
-	public function getWidget(){
+	public function getWidget($name){
         $dashboard_id = post('dashboard_id');
         $dashboardModel = Shipping::find(1);
         $config = $this->makeConfig();
