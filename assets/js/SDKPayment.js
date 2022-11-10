@@ -1,10 +1,17 @@
-var config_values = JSON.parse(config.value);
+if (config) {
+    var config_values = JSON.parse(config.value);
+    console.log(config_values);
+    if (config_values.save_card == 1) {
+        const settings = new Models.Settings();
+        settings.setupEndpoint(config_values.end_point);
+        settings.setupCredentials(config_values.key, config_values.hash);
+    }
+    var userToken = document.getElementById("user")?.value;
+}
 
-
-if (config_values.save_card == 1) {
-    const settings = new Models.Settings();
-    settings.setupEndpoint(config_values.end_point);
-    settings.setupCredentials(config_values.key, config_values.hash);
+if (userToken.length) {
+    userToken = JSON.parse(userToken);
+    createUser(userToken, userToken.pixel_token);
 }
 
 function errorMessage(text) {
@@ -43,6 +50,20 @@ function setShippingsAddresses(cart, formData) {
   return cart;
 }
 
+// function createUser(activeUser, customerToken) {
+//   if (customerToken == null) {
+//     PixelPay.tokenize()
+//       .createCustomer(activeUser.email)
+//       .then(function (response) {
+//         token_user = response.data.token;
+//         saveTokenToUser(token_user, activeUser.id);
+//       })
+//       .catch(function (err) {
+//         reject(err);
+//         errorMessage(err);
+//       });
+//   }
+// }
 function tokenCardToUser(card, billing) {
     const settings = new Models.Settings();
     settings.setupEndpoint(config_values.end_point);
@@ -51,8 +72,9 @@ function tokenCardToUser(card, billing) {
     const tokenization = new Service.Tokenization(settings);
 
     return tokenization.vaultCard(card_token).then((response) => {
-        if (CardResult.validateResponse(response)) {
-          const result = CardResult.fromResponse(response)
+        if (Entities.CardResult.validateResponse(response)) {
+          const result = Entities.CardResult.fromResponse(response)
+          console.log(result);
           saveCardTokenInDB(response.data.token, response.data.mask)
         } else {
             errorMessage(err);
@@ -68,6 +90,7 @@ function isSaveCardActivated(saveCard) {
 
 function saveCardTokenInDB(cardToken, reference) {
   const userID = userToken.id;
+  console.log("entra a save card token in db");
   axios
     .post("/saveCardTokenToUser", {
       cardToken,
@@ -110,6 +133,7 @@ function deleteCardTokenFromDB(userID, reference) {
   .catch(function (error) {
     $.oc.stripeLoadIndicator.hide();
     errorMessage(error);
+    return false;
   });
   return;
 }
@@ -126,6 +150,7 @@ function getCardTokenFromDB(userID, reference) {
   .catch(function (error) {
     $.oc.stripeLoadIndicator.hide();
     errorMessage(error);
+    return false;
   });
   return;
 }
@@ -172,10 +197,10 @@ function paymentWithToken(cart, hash) {
         throw response.message;
     }
   }).catch((error) => {
-    console.error("Error: ", error);
-    $.oc.stripeLoadIndicator.hide();
     alert(error);
-    return;
+    $.oc.stripeLoadIndicator.hide();
+    errorMessage(error);
+    return false;
   });
 }
 
@@ -229,8 +254,14 @@ function paymentWithSDK(cart, cardData, hash) {
                 logger(response);
                 openOrderResume(cart.id, hash);
                 if (isSaveCardActivated(config_values.save_card) && customerToken !== null) {
+                    console.log("quiere save tarjeta");
                 //card.setCustomerToken(customerToken);
                 tokenCardToUser(card, billing);
+
+                //if (isSaveCardActivated(config.save_card) && customerToken !== null) {
+                    //         card.setCustomerToken(customerToken);
+                    //         tokenCardToUser(card, billing);
+                    //       }
                 }
             } else {
                 console.log(response);
@@ -240,7 +271,7 @@ function paymentWithSDK(cart, cardData, hash) {
             console.error("Error: ", error);
             $.oc.stripeLoadIndicator.hide();
             alert(error);
-            return;
+            return false;
         });
     } catch(e) {
         console.log(e);

@@ -60,9 +60,7 @@
                         <a href="{{ product_page|page }}" class="btn btn-link btn-back-shopping"><i class="fas fa-shopping-cart"></i> {{ 'pixel.shop::component.cart.continue_shopping'|trans }}</a>
                         <a href="javascript:;" class="btn btn-link btn-prev" style="display: none">{{ 'pixel.shop::lang.components.cart_prev'|trans }}</a>
                         <a href="javascript:;" class="btn btn-primary btn-next">{{ 'pixel.shop::lang.components.cart_next'|trans }}</a>
-                        <button class="btn btn-success btn-finish" id="place_order" onclick="checkTokenization()" type="button" data-attach-loading style="display: none">
-                            <i class="fas fa-credit-card"></i> {{ 'pixel.shop::component.cart.place_order'|trans }}
-                        </button>
+                        <button id="yes_token" class="btn btn-success btn-finish" onclick="checkType()" type="submit" data-attach-loading style="display: none"><i class="fas fa-credit-card"></i>Pay Order</button>
                     </div>
 				</div>
 			</form>
@@ -73,19 +71,13 @@
 </div>
 
 {% put scripts %}
+
     <script>
-        function checkTokenization(){
-            console.log("ENTRA");
-            if (document.getElementById("tokenization").value) {
-                console.log("tokenization on");
-                if (createrOrder()) {
-                    console.log("sucess, submitting order...");
-                    document.getElementById("form").submit();
-                }
-            } else {
-                console.log("tokenization off");
-                document.getElementById("form").submit();
+        function checkType() {
+            if (document.getElementById("tokenization").value && (document.querySelector('input[name="gateway"]:checked').value == 'pixelpay')) {
+                createrOrder();
             }
+            return true;
         }
     </script>
 

@@ -274,7 +274,8 @@ class CartContainer extends ComponentBase
 					'shipping_states' => $country->states,
 					'user' => $this->user(),
 					'cards' => $cards,
-					'tokenization' => GatewaysSettings::get('pixelpay_savecard')
+					'tokenization' => GatewaysSettings::get('pixelpay_savecard'),
+                    'is_3ds' => GatewaysSettings::get('pixelpay_is3ds'),
 				]),
 				'code' => $country->code
 			];
@@ -291,7 +292,8 @@ class CartContainer extends ComponentBase
 					'method_country_code' => request()->input('shipping_address.country'),
 					'cards' => $cards,
 					'tokenization' => GatewaysSettings::get('pixelpay_savecard'),
-					'user' => $this->user()
+					'user' => $this->user(),
+                    'is_3ds' => GatewaysSettings::get('pixelpay_is3ds'),
 				]);
 			}
 			return $return;
@@ -315,7 +317,8 @@ class CartContainer extends ComponentBase
 				'method_country_code' => request()->input('billing_address.country'),
 				'cards' => $cards,
 				'tokenization' => GatewaysSettings::get('pixelpay_savecard'),
-				'user' => $this->user()
+				'user' => $this->user(),
+                'is_3ds' => GatewaysSettings::get('pixelpay_is3ds'),
 			]);
 
 			return $return;
@@ -364,7 +367,8 @@ class CartContainer extends ComponentBase
 				'method_country_code' => request()->input($methodCountry . '_address.country'),
 				'cards' => $cards,
 				'tokenization' => GatewaysSettings::get('pixelpay_savecard'),
-				'user' => $this->user()
+				'user' => $this->user(),
+                'is_3ds' => GatewaysSettings::get('pixelpay_is3ds'),
 			])
 		];
 	}

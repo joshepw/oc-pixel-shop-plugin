@@ -29,7 +29,8 @@ trait PaymentTrait
 
 	protected function onSendCheckout()
 	{
-        Flash::success((trans('pixel.shop::lang.messages.succesful_order')));
+
+        Flash::success(trans('pixel.shop::lang.messages.succesful_order'));
 		$this->prepareLang();
 
 		$cart = Cart::load();
@@ -248,7 +249,6 @@ trait PaymentTrait
 				'cancel_return_url' => $this->controller->currentPageUrl() . "?order_id=$order->id&cancel=true"
 			])];
 		}
-
 		return [Flash::success('Jobs done!'), '#shop__cart-partial' => $this->renderPartial('@cart', ['cart' => $cart])];
 	}
 

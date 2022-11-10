@@ -16,7 +16,6 @@ $('[data-variant-new]').click(function(event) {
     });
 });
 
-
 Variant.init = function(){
 	this.onRefreshUI();
 	this.onRefreshValues();
@@ -73,18 +72,17 @@ Variant.onRefreshUI = function(){
 	});
 
 	$('[data-option-pending]').each(function(index, el) {
-		$(this).find('.input-option-price-diff').maskMoney({ allowNegative: true });
+		$(this).find('.input-option-price').maskMoney({ allowNegative: true });
 		$(this).find('.input-option-quantity').mask('00,000', { reverse: true });
 
-		if($(this).find('.input-option-price-diff').attr('data-price')){
+		if($(this).find('.input-option-price').attr('data-price')){
 			var dataPrice = $(this).find('.input-option-price-diff').attr('data-price');
-			$(this).find('.input-option-price-diff').val(parseFloat(dataPrice).toFixed(2));
+			$(this).find('.product-price').val(parseFloat(dataPrice).toFixed(2));
 		}
 
 		$(this).find('[data-option-delete]').click(function(event) {
             event.preventDefault();
             let rows = document.querySelectorAll('.item-option').length;
-            console.log("rows before delete ",rows);
 			if(rows > 1){
 				$(this).closest('.item-option').remove();
                 rows = document.querySelectorAll('.item-option').length;

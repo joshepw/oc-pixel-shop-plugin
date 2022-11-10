@@ -71,7 +71,7 @@ class UserProfile extends ComponentBase
 		$this->prepareLang();
 
 		$this->addCss('/plugins/pixel/shop/assets/css/user.css');
-		$this->addCss('/plugins/pixel/shop/assets/css/products.css');s
+		$this->addCss('/plugins/pixel/shop/assets/css/products.css');
 
 		// Extend Tabs and content
 		$this->addComponentTab('orders', [

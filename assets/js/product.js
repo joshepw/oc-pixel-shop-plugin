@@ -21,9 +21,9 @@ var formatMoney = function(n, c, d, t) {
 jQuery(document).ready(function($) {
 	$('.xzoom, .xzoom-gallery').xzoom({
 		// zoomWidth: 100,
-		openOnSmall: false, 
-		title: true, 
-		tint: '#333', 
+		openOnSmall: false,
+		title: true,
+		tint: '#333',
 		Xoffset: 15
 	});
 
@@ -79,5 +79,6 @@ jQuery(document).ready(function($) {
 
 		$('[name="options"]').val(options.join(', '));
 		$('[name="options_index"]').val(options_index.join(','));
+        $('.product-price').val(total);
 	});
 });
