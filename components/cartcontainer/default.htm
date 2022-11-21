@@ -66,24 +66,20 @@
 			</form>
 		</div>
 		{% endif %}
-        {% scripts %}
 	</div>
-</div>
-
-{% put scripts %}
-
-    <script>
-        function checkType() {
-            if (document.getElementById("tokenization").value && (document.querySelector('input[name="gateway"]:checked').value == 'pixelpay')) {
-                createrOrder();
-            }
-            return true;
-        }
-    </script>
-
     <script type="text/javascript" src='/plugins/pixel/shop/assets/js/jquery.mask.min.js'></script>
     <script type="text/javascript" src='/plugins/pixel/shop/assets/js/jquery.validate.min.js'></script>
     <script type="text/javascript" src='/plugins/pixel/shop/assets/js/jquery.steps.min.js'></script>
     <script type="text/javascript" src='/plugins/pixel/shop/assets/js/cart.js'></script>
-    <script type="text/javascript" src='https://unpkg.com/axios/dist/axios.min.js'></script>
-{% endput %}
+</div>
+
+
+
+<script>
+    function checkType() {
+        if (document.getElementById("tokenization").value && (document.querySelector('input[name="gateway"]:checked').value == 'pixelpay')) {
+            createrOrder();
+        }
+        return true;
+    }
+</script>

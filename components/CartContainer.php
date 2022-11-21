@@ -234,6 +234,7 @@ class CartContainer extends ComponentBase
 		$this->page['config'] = json_encode($this->page['config']);
 
 		$this->addCss('/plugins/pixel/shop/assets/css/cart.css');
+        $this->addJs('https://unpkg.com/axios/dist/axios.min.js');
 
         if($this->isTokenizationActive()){
 			$this->addJs('https://unpkg.com/@pixelpay/sdk-core');
