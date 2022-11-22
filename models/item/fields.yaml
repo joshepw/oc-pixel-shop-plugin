@@ -122,10 +122,9 @@ tabs:
             type: shop-variants
             tab: 'pixel.shop::lang.fields.variants'
         description:
-            span: full
-            type: richeditor
             tab: 'pixel.shop::lang.fields.description'
-            stretch: true
+            type: richeditor
+            size: huge
         _size:
             label: 'pixel.shop::lang.fields.size'
             type: section
